@@ -1,0 +1,352 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+/* Navigation Bar */
+.navBarContainer {
+  width: 100%;
+}
+.contactContainer {
+  width: 96%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+.leftContactItemsContainer {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: flex-start;
+}
+.phoneNumber {
+  font-size: 12;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+  margin-right: 6%;
+}
+.email {
+  font-size: 12;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+}
+.rightContactItemsContainer {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: flex-end;
+  height: 100%;
+}
+.aboutUs {
+  text-decoration: none;
+  color: rgba(106, 152, 60, 1);
+  font-size: 12;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+}
+.componentContainer {
+  width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
+  border-top: 1px solid #3030304d;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1%;
+  padding-bottom: 2%;
+}
+.leftComponentContainer {
+  display: flex;
+  flex-direction: row;
+  width: 15%;
+}
+.leftComponentContainer img {
+  max-width: 100%;
+}
+.searchContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+.rightComponentContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 15%;
+}
+.rightComponentContainer img {
+  cursor: pointer;
+}
+.searchBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
+  border: 1px solid rgba(209, 209, 209, 1);
+  background-color: rgba(249, 249, 249, 1);
+  border-radius: 12px;
+  width: 34%;
+}
+.searchInput {
+  margin-left: 1%;
+  background-color: inherit;
+  border: none;
+  outline: none;
+  font-size: 14;
+}
+.filterContainer {
+  padding-right: 4%;
+  border-right: 1px solid rgba(209, 209, 209, 1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.categoryFilter {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+.dropdownCategory {
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  margin-top: 40px;
+  padding: 6%;
+  min-width: 160px;
+  visibility: hidden;
+}
+.itemContainer {
+  display: flex;
+  flex-direction: row;
+  margin-left: 2%;
+}
+.itemLabel {
+  margin-left: 4%;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+}
+
+/* Login, Register screen */
+.loginConatiner {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+.loginImgConatiner {
+  width: 60%;
+}
+.loginImgConatiner img {
+  width: 100%;
+}
+.loginInputAreaContainer {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  overflow: hidden;
+}
+.loginTitle {
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-size: 30px;
+  margin-bottom: 2%;
+}
+.authInput {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  padding-top: 1.5%;
+  padding-bottom: 1.5%;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+.loginBtn {
+  margin-top: 2%;
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
+  outline: none;
+  border: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(73, 37, 251, 1),
+    rgba(119, 37, 251, 1)
+  );
+  color: white;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 5%;
+  padding-right: 5%;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.loginMoreActionText {
+  cursor: pointer;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
+  margin-top: 3%;
+}
+.loginCancelBtn {
+  color: rgb(191, 189, 189);
+}
+
+/* Product display screen */
+.productDisplayContainer {
+  display: flex;
+  flex-direction: row;
+}
+.productDisplayLeftPanel {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+}
+.productDisplayRightPanel {
+  width: 80%;
+  background-color: black;
+}
+.productDisplayFilterContainer {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.productDisplayFilterContainer p {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+}
+.categoryFilterItem {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  margin-bottom: 4%;
+}
+.categoryFilterItemQuantity {
+  background-color: rgba(244, 248, 236, 1);
+  color: #6a983c;
+  padding-left: 4%;
+  padding-right: 4%;
+  font-weight: 600;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brandFilterItemContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  margin-bottom: 4%;
+}
+.brandFilterItemName {
+  margin-left: 2%;
+}
+.ratingFilterItemContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 4%;
+  align-items: center;
+  justify-content: flex-start;
+}
+.ratingFilterItemCheckbox {
+  margin-right: 4%;
+}
+.priceFilterInputContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.priceFilterInputContainer input {
+  width: 32%;
+  border: 1px solid rgba(209, 209, 209, 1);
+  outline: none;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  outline: none;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 4%;
+}
+.priceFilterInputContainer div {
+  font-size: 20px;
+}
+.filterBtnContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15%;
+  margin-bottom: 10%;
+}
+.filterBtnContainer button {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  padding: 3%;
+  border-radius: 12px;
+  outline: none;
+  margin-left: 2%;
+  margin-right: 2%;
+  cursor: pointer;
+}
+.applyFilterBtn {
+  border: 2px solid #46760a;
+  background-color: #6a983c;
+  color: white;
+}
+.resetFilterBtn {
+  border: 2px solid #aba9a9;
+  background-color: #ffffff;
+  color: #a9a9a9;
+}
+
+#loadingLayer {
+  margin-top: 0;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.747);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}
+#loadingLayer img {
+  width: 10%;
+}
+
+.checked {
+  color: orange;
+}
