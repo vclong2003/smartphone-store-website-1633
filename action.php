@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-function getBrandName()
+function queryMySql($tableName)
 {
     $arr = array();
     $servername = "localhost";
@@ -12,7 +12,7 @@ function getBrandName()
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    $sql = "SELECT * FROM brand";
+    $sql = "SELECT * FROM $tableName";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -26,8 +26,9 @@ function getBrandName()
     echo json_encode($arr);
 }
 
-if ($_POST['functionname'] == "queryBrand") {
-    getBrandName();
-} else if ($_POST['functionname'] == "test") {
-    echo json_encode($_POST['param']);
+
+if ($_POST['functionname'] == "queryMySql") {
+    queryMySql($_POST['tableName']);
+} else if ($_POST['functionname'] == "queryCategory") {
+    queryMySql('category');
 }

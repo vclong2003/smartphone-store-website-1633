@@ -49,7 +49,7 @@ window.onload = () => {
     type: "POST",
     url: "action.php",
     dataType: "json",
-    data: { functionname: "queryBrand", param: "test value" },
+    data: { functionname: "queryCategory" },
     success: function (data) {
       console.log(data);
     },

@@ -33,17 +33,7 @@ class ProductDisplay {
       { name: "Android Phones", quantity: 10 },
       { name: "Windows Phone", quantity: 1 },
     ];
-    const brandList = [];
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: { functionname: "queryBrand" },
-      success: function (data) {
-        brandList.push(...data);
-      },
-    });
-    console.log(brandList);
+
     this.$viewArea = document.createElement("div");
     this.$container = document.createElement("div");
     this.$container.classList.add("productDisplayContainer");
@@ -60,25 +50,51 @@ class ProductDisplay {
     this.$categoryFilterLabel = document.createElement("p");
     this.$categoryFilterLabel.innerHTML = "Categories";
     this.$categoryFilterContainer.appendChild(this.$categoryFilterLabel);
-    categoriesList.map((category) => {
-      const $itemContainer = document.createElement("div");
-      $itemContainer.classList.add("categoryFilterItem");
-      const $categoryName = document.createElement("div");
-      $categoryName.innerHTML = category.name;
-      const $quantity = document.createElement("div");
-      $quantity.classList.add("categoryFilterItemQuantity");
-      $quantity.innerHTML = category.quantity;
-      $itemContainer.appendChild($categoryName);
-      $itemContainer.appendChild($quantity);
+    // categoriesList.map((category) => {
+    //   const $itemContainer = document.createElement("div");
+    //   $itemContainer.classList.add("categoryFilterItem");
+    //   const $categoryName = document.createElement("div");
+    //   $categoryName.innerHTML = category.name;
+    //   const $quantity = document.createElement("div");
+    //   $quantity.classList.add("categoryFilterItemQuantity");
+    //   $quantity.innerHTML = category.quantity;
+    //   $itemContainer.appendChild($categoryName);
+    //   $itemContainer.appendChild($quantity);
 
-      this.$categoryFilterContainer.appendChild($itemContainer);
-    });
+    //   this.$categoryFilterContainer.appendChild($itemContainer);
+    // });
 
     this.$brandFilterContainer = document.createElement("div");
     this.$brandFilterContainer.classList.add("productDisplayFilterContainer");
     this.$brandFilterLabel = document.createElement("p");
     this.$brandFilterLabel.innerHTML = "Brands";
     this.$brandFilterContainer.appendChild(this.$brandFilterLabel);
+    this.getData("brand", (data) => {
+      data.map((item) => {
+        const $itemContainer = document.createElement("div");
+        $itemContainer.classList.add("brandFilterItemContainer");
+        const $checkBox = document.createElement("input");
+        $checkBox.type = "checkbox";
+        $checkBox.value = item.brandID;
+        const $brandName = document.createElement("div");
+        $brandName.classList.add("brandFilterItemName");
+        $brandName.innerHTML = item.brandName;
+
+        $checkBox.addEventListener("change", () => {
+          if ($checkBox.checked) {
+            console.log(`${$checkBox.value}, ${$brandName.innerText} checked`);
+          } else {
+            console.log(
+              `${$checkBox.value}, ${$brandName.innerText} unchecked`
+            );
+          }
+        });
+
+        $itemContainer.appendChild($checkBox);
+        $itemContainer.appendChild($brandName);
+        this.$brandFilterContainer.appendChild($itemContainer);
+      });
+    });
     // brandsList.map((brand) => {
     //   const $itemContainer = document.createElement("div");
     //   $itemContainer.classList.add("brandFilterItemContainer");
@@ -156,6 +172,18 @@ class ProductDisplay {
     this.$viewArea.appendChild(this.$container);
 
     return this.$viewArea;
+  }
+
+  getData(tableName = "", _callback) {
+    jQuery.ajax({
+      type: "POST",
+      url: "action.php",
+      dataType: "json",
+      data: { functionname: "queryMySql", tableName: tableName },
+      success: function (data) {
+        _callback(data);
+      },
+    });
   }
 }
 
