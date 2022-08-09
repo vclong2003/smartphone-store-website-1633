@@ -33,23 +33,15 @@ const navigate = (screen) => {
   }
 };
 
-navigate("productDisplayScreen");
+navigate("consoleScreen");
 
 window.onload = () => {
-  // jQuery.ajax({
-  //   type: "POST",
-  //   url: "action.php",
-  //   dataType: "json",
-  //   data: { functionname: "queryBrand" },
-  //   success: function (data) {
-  //     console.log(data);
-  //   },
-  // });
+  // for testing purpose
   jQuery.ajax({
     type: "POST",
     url: "action.php",
     dataType: "json",
-    data: { functionname: "queryCategory" },
+    data: { functionname: "queryMySql", tableName: "category" },
     success: function (data) {
       console.log(data);
     },

@@ -50,19 +50,21 @@ class ProductDisplay {
     this.$categoryFilterLabel = document.createElement("p");
     this.$categoryFilterLabel.innerHTML = "Categories";
     this.$categoryFilterContainer.appendChild(this.$categoryFilterLabel);
-    // categoriesList.map((category) => {
-    //   const $itemContainer = document.createElement("div");
-    //   $itemContainer.classList.add("categoryFilterItem");
-    //   const $categoryName = document.createElement("div");
-    //   $categoryName.innerHTML = category.name;
-    //   const $quantity = document.createElement("div");
-    //   $quantity.classList.add("categoryFilterItemQuantity");
-    //   $quantity.innerHTML = category.quantity;
-    //   $itemContainer.appendChild($categoryName);
-    //   $itemContainer.appendChild($quantity);
 
-    //   this.$categoryFilterContainer.appendChild($itemContainer);
-    // });
+    this.getData("category", (data) => {
+      data.map((item) => {
+        const $itemContainer = document.createElement("div");
+        $itemContainer.classList.add("categoryFilterItem");
+        const $categoryName = document.createElement("div");
+        $categoryName.innerHTML = item.categoryName;
+        const $quantity = document.createElement("div");
+        $quantity.classList.add("categoryFilterItemQuantity");
+        $quantity.innerHTML = item.quantity;
+        $itemContainer.appendChild($categoryName);
+        $itemContainer.appendChild($quantity);
+        this.$categoryFilterContainer.appendChild($itemContainer);
+      });
+    });
 
     this.$brandFilterContainer = document.createElement("div");
     this.$brandFilterContainer.classList.add("productDisplayFilterContainer");
@@ -95,19 +97,7 @@ class ProductDisplay {
         this.$brandFilterContainer.appendChild($itemContainer);
       });
     });
-    // brandsList.map((brand) => {
-    //   const $itemContainer = document.createElement("div");
-    //   $itemContainer.classList.add("brandFilterItemContainer");
-    //   const $checkBox = document.createElement("input");
-    //   $checkBox.type = "checkbox";
-    //   const $brandName = document.createElement("div");
-    //   $brandName.classList.add("brandFilterItemName");
-    //   $brandName.innerHTML = brand;
-    //   $itemContainer.appendChild($checkBox);
-    //   $itemContainer.appendChild($brandName);
-
-    //   this.$brandFilterContainer.appendChild($itemContainer);
-    // });
+    
 
     this.$ratingFilterContainer = document.createElement("div");
     this.$ratingFilterContainer.classList.add("productDisplayFilterContainer");

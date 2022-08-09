@@ -19,9 +19,7 @@ class NavBar {
 
   $searchBox;
   $searchInput;
-  $filterContainer;
-  $categoryFilter;
-  $dropdownCategory;
+  $searchIconImg;
 
   $logo;
 
@@ -72,23 +70,18 @@ class NavBar {
     this.$searchInput.addEventListener("input", () => {
       console.log(this.$searchInput.value);
     });
-    this.$filterContainer = document.createElement("div");
-    this.$categoryFilter = document.createElement("div");
-    this.$dropdownCategory = document.createElement("div");
-    this.$filterContainer.appendChild(this.$categoryFilter);
-    this.$filterContainer.appendChild(this.$dropdownCategory);
-    this.$searchBox.appendChild(this.$filterContainer);
     this.$searchBox.appendChild(this.$searchInput);
     this.$searchInput.type = "text";
     this.$searchInput.placeholder = "Search Products...";
     this.$searchContainer.appendChild(this.$searchBox);
     this.$searchBox.classList.add("searchBox");
     this.$searchInput.classList.add("searchInput");
-    this.$filterContainer.classList.add("filterContainer");
-    this.$categoryFilter.classList.add("categoryFilter");
-    this.$dropdownCategory.classList.add("dropdownCategory");
-    this.$categoryFilter.addEventListener("click", () => {
-      toggleElement(this.$dropdownCategory);
+
+    this.$searchIconImg = document.createElement("img");
+    this.$searchIconImg.style = "cursor: pointer;";
+    this.$searchBox.appendChild(this.$searchIconImg);
+    this.$searchIconImg.addEventListener("click", () => {
+      alert(`You typed "${this.$searchInput.value}"`);
     });
 
     this.$logo = document.createElement("img");
@@ -102,32 +95,6 @@ class NavBar {
     this.$cartIcon = document.createElement("img");
     this.$rightComponentContainer.appendChild(this.$profileIcon);
     this.$rightComponentContainer.appendChild(this.$cartIcon);
-
-    const testData = ["iPhone", "Android phone", "Windows phone"];
-    testData.map((item) => {
-      const $itemContainer = document.createElement("div");
-      const $itemLabel = document.createElement("p");
-      const $input = document.createElement("input");
-
-      $itemLabel.innerHTML = item;
-
-      $input.type = "checkbox";
-      $input.id = item;
-      $input.addEventListener("change", () => {
-        if ($input.checked) {
-          console.log(`${$input.id} is checked`);
-        } else {
-          console.log(`${$input.id} is unchecked`);
-        }
-      });
-
-      $itemLabel.classList.add("itemLabel");
-      $itemContainer.appendChild($input);
-      $itemContainer.appendChild($itemLabel);
-      $itemContainer.classList.add("itemContainer");
-
-      this.$dropdownCategory.appendChild($itemContainer);
-    });
   }
   render() {
     this.$phoneNumber.innerHTML = "0888827768";
@@ -137,8 +104,7 @@ class NavBar {
     this.$logo.src = "././Assets/Img/verizon_logo.png";
     this.$profileIcon.src = "././Assets/Icons/ic-actions-user.png";
     this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
-
-    this.$categoryFilter.innerHTML = "Category";
+    this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
 
     this.$container.appendChild(this.$contactContainer);
     this.$container.appendChild(this.$componentContainer);
