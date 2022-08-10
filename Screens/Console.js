@@ -13,6 +13,15 @@ class Console {
 
   $addTabContainer;
   $addTabLabel;
+  $addTabContent;
+
+  $editTabContainer;
+  $editTabLabel;
+  $editTabContent;
+
+  $viewTabContainer;
+  $viewTabLabel;
+  $viewTabContent;
 
   $addCategoryContainer;
   $categoryNameInput;
@@ -32,12 +41,6 @@ class Console {
   $productPriceInput;
   $productQuantityInput;
 
-  $editTabContainer;
-  $editTabLabel;
-
-  $viewTabContainer;
-  $viewTabLabel;
-
   //<input type="file" accept="image/*">
 
   $test;
@@ -45,9 +48,12 @@ class Console {
 
   constructor() {
     this.$container = document.createElement("div");
+    this.$container.classList.add("consoleContainer");
 
     this.$leftPanel = document.createElement("div");
     this.$rightPanel = document.createElement("div");
+    this.$leftPanel.classList.add("consoleLeftPanel");
+    this.$rightPanel.classList.add("consoleRightPanel");
 
     this.$addTabContainer = document.createElement("div");
     this.$editTabContainer = document.createElement("div");
@@ -98,6 +104,14 @@ class Console {
     this.$addProductContainer.appendChild(this.$productPriceInput.render());
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
 
+    this.$addTabContent = document.createElement("div");
+    this.$addTabContent.classList.add("consoleAddTabContent");
+    this.$addTabContent.appendChild(this.$addCategoryContainer);
+    this.$addTabContent.appendChild(this.$addBrandContainer);
+    this.$addTabContent.appendChild(this.$addProductContainer);
+
+    this.$rightPanel.appendChild(this.$addTabContent);
+
     // this.$test = document.createElement("input");
     // this.$test.type = "file";
     // this.$test.accept = "image/*";
@@ -117,6 +131,9 @@ class Console {
     // });
   }
   render() {
+    this.$container.appendChild(this.$leftPanel);
+    this.$container.appendChild(this.$rightPanel);
+
     return this.$container;
   }
 }
