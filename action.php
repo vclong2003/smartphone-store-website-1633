@@ -56,6 +56,19 @@ function addNewCategory($categoryName)
     $conn->query($sql);
     $conn->close();
 }
+function addNewProduct($catID, $brandID, $name, $description, $imageUrl, $price, $quantity)
+{
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "smartphonestoredb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $sql = "INSERT INTO `product`(`catID`, `brandID`, `Name`, `Description`, `ImageUrl`, `Price`, `quantity`) VALUES ('$catID', '$brandID', '$name', '$description', '$imageUrl', '$price', '$quantity')";
+
+    $conn->query($sql);
+    $conn->close();
+}
 
 if ($_POST['functionname'] == "queryMySql") {
     queryMySql($_POST['tableName']);
@@ -63,4 +76,6 @@ if ($_POST['functionname'] == "queryMySql") {
     addNewBrand($_POST['brandName'], $_POST['brandDescription']);
 } else if ($_POST['functionname'] == "addNewCategory") {
     addNewCategory($_POST['categoryName']);
+} else if ($_POST['functionname'] == "addNewProduct") {
+    addNewProduct($_POST['catID'], $_POST['brandID'], $_POST['name'], $_POST['description'], $_POST['imageUrl'], $_POST['price'], $_POST['quantity']);
 }

@@ -35,6 +35,7 @@ class Console {
   $productNameInput;
   $productDescriptionInput;
   $productImageUploadContainer;
+  $imageUploadLabel;
   $imageInput;
   $productPriceInput;
   $productQuantityInput;
@@ -154,9 +155,15 @@ class Console {
     this.$productNameInput = new Input("Product name");
     this.$productDescriptionInput = new Input("Product description");
     this.$productImageUploadContainer = document.createElement("div");
+    this.$productImageUploadContainer.classList.add(
+      "productImageUploadContainer"
+    );
+    this.$imageUploadLabel = document.createElement("p");
+    this.$imageUploadLabel.innerHTML = "Image:";
     this.$imageInput = document.createElement("input");
     this.$imageInput.type = "file";
     this.$imageInput.accept = "image/*";
+    this.$productImageUploadContainer.appendChild(this.$imageUploadLabel);
     this.$productImageUploadContainer.appendChild(this.$imageInput);
     this.$productPriceInput = new Input("Price");
     this.$productQuantityInput = new Input("Quantity");
@@ -167,6 +174,22 @@ class Console {
         console.log(this.$imageInput.files[0].name);
         this.uploadImage(this.$imageInput.files[0], (url) => {
           console.log(url);
+          // $_POST['catID'], $_POST['brandID'], $_POST['name'], $_POST['description'], $_POST['imageUrl'], $_POST['price'], $_POST['quantity']
+          jQuery.ajax({
+            type: "POST",
+            url: "action.php",
+            dataType: "json",
+            data: {
+              functionname: "addNewProduct",
+              catID: this.$productCategorySelection.value,
+              brandID: this.$productBrandSelection.value,
+              name: this.$productNameInput.getValue(),
+              description: this.$productDescriptionInput.getValue(),
+              imageUrl: url,
+              price: this.$productPriceInput.getValue(),
+              quantity: this.$productQuantityInput.getValue(),
+            },
+          });
         });
       } else {
         console.log("No file added!");
@@ -192,12 +215,14 @@ class Console {
 
     this.$rightPanel.appendChild(this.$addTabContent);
   }
+
   render() {
     this.$container.appendChild(this.$leftPanel);
     this.$container.appendChild(this.$rightPanel);
 
     return this.$container;
   }
+
   getData(tableName = "", _function) {
     jQuery.ajax({
       type: "POST",
@@ -209,6 +234,7 @@ class Console {
       },
     });
   }
+
   uploadImage(file, _function) {
     const storageRef = ref(storage, "productImages/" + file.name);
     uploadBytes(storageRef, file).then((snapshot) => {
