@@ -103,20 +103,20 @@
 }
 
 /* Login, Register screen -------------------------------------------------- */
-.loginConatiner {
+.authContainer {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: row;
   overflow: hidden;
 }
-.loginImgConatiner {
+.authImgContainer {
   width: 60%;
 }
-.loginImgConatiner img {
+.authImgContainer img {
   width: 100%;
 }
-.loginInputAreaContainer {
+.authInputAreaContainer {
   width: 40%;
   display: flex;
   flex-direction: column;
@@ -125,13 +125,13 @@
   background-color: black;
   overflow: hidden;
 }
-.loginTitle {
+.authTitle {
   color: white;
   font-family: "Inter", sans-serif;
   font-size: 30px;
   margin-bottom: 2%;
 }
-.authInput {
+.authInputAreaContainer input {
   margin-top: 1%;
   margin-bottom: 1%;
   border-radius: 6px;
@@ -143,7 +143,7 @@
   padding-left: 2%;
   padding-right: 2%;
 }
-.loginBtn {
+.authBtn {
   margin-top: 2%;
   font-family: "Lato", sans-serif;
   font-size: 14px;
@@ -162,14 +162,14 @@
   border-radius: 6px;
   cursor: pointer;
 }
-.loginMoreActionText {
+.authMoreActionText {
   cursor: pointer;
   color: white;
   font-family: "Lato", sans-serif;
   font-size: 16px;
   margin-top: 3%;
 }
-.loginCancelBtn {
+.authCancelBtn {
   color: rgb(191, 189, 189);
 }
 
@@ -321,7 +321,6 @@
   height: 100vh;
   display: flex;
   flex-direction: row;
-  background-color: rgba(244, 248, 236, 1);
 }
 .consoleLeftPanel {
   width: 15%;
@@ -330,15 +329,34 @@
   padding-top: 10%;
 }
 .consoleLeftPanel div {
-  width: 84%;
+  width: 80%;
   cursor: pointer;
-  padding: 8%;
-  background-color: rgba(244, 248, 236, 1);
   font-family: "Poppins", sans-serif;
   text-align: center;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  padding-top: 4%;
+  padding-bottom: 4%;
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+  font-size: 18px;
+}
+.consoleLeftPanel div:hover{
+  background-color: rgba(241, 241, 241, 0.633);
 }
 .consoleRightPanel {
   width: 85%;
+}
+.consoleAddTabContent{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.addContentContainer{
+  width: 35%;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 3%;
+  background-color: #f7f7f79a;
+  border-radius: 15px;
 }

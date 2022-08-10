@@ -3,7 +3,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
-import { AddProductInput } from "../Components/addProductInput.js";
+import { Input } from "../Components/Input.js";
 import { storage } from "../firebaseConfig.js";
 class Console {
   $container;
@@ -37,6 +37,7 @@ class Console {
   $productImageUploadContainer;
   $productPriceInput;
   $productQuantityInput;
+  $addProductBtn;
 
   //<input type="file" accept="image/*">
 
@@ -65,7 +66,8 @@ class Console {
     this.$leftPanel.appendChild(this.$viewTab);
 
     this.$addCategoryContainer = document.createElement("div");
-    this.$categoryNameInput = new AddProductInput("Category Name");
+    this.$addCategoryContainer.classList.add("addContentContainer");
+    this.$categoryNameInput = new Input("Category Name");
     this.$addCategoryBtn = document.createElement("button");
     this.$addCategoryBtn.innerHTML = "Add category";
 
@@ -73,8 +75,9 @@ class Console {
     this.$addCategoryContainer.appendChild(this.$addCategoryBtn);
 
     this.$addBrandContainer = document.createElement("div");
-    this.$brandNameInput = new AddProductInput("Brand name");
-    this.$brandDescriptionInput = new AddProductInput("Brand description");
+    this.$addBrandContainer.classList.add("addContentContainer");
+    this.$brandNameInput = new Input("Brand name");
+    this.$brandDescriptionInput = new Input("Brand description");
     this.$addBrandBtn = document.createElement("button");
     this.$addBrandBtn.innerHTML = "Add brand";
 
@@ -83,13 +86,16 @@ class Console {
     this.$addBrandContainer.appendChild(this.$addBrandBtn);
 
     this.$addProductContainer = document.createElement("div");
+    this.$addProductContainer.classList.add("addContentContainer");
     this.$productCategorySelection = document.createElement("select");
     this.$productBrandSelection = document.createElement("select");
-    this.$productNameInput = new AddProductInput("Product name");
-    this.$productDescriptionInput = new AddProductInput("Product description");
+    this.$productNameInput = new Input("Product name");
+    this.$productDescriptionInput = new Input("Product description");
     this.$productImageUploadContainer = document.createElement("div");
-    this.$productPriceInput = new AddProductInput("Price");
-    this.$productQuantityInput = new AddProductInput("Quantity");
+    this.$productPriceInput = new Input("Price");
+    this.$productQuantityInput = new Input("Quantity");
+    this.$addProductBtn = document.createElement("button");
+    this.$addProductBtn.innerHTML = "Add product";
 
     this.$addProductContainer.appendChild(this.$productCategorySelection);
     this.$addProductContainer.appendChild(this.$productBrandSelection);
@@ -100,6 +106,7 @@ class Console {
     this.$addProductContainer.appendChild(this.$productImageUploadContainer);
     this.$addProductContainer.appendChild(this.$productPriceInput.render());
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
+    this.$addBrandContainer.appendChild(this.$addProductBtn);
 
     this.$addTabContent = document.createElement("div");
     this.$addTabContent.classList.add("consoleAddTabContent");

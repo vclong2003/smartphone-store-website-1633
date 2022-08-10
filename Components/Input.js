@@ -1,10 +1,9 @@
-class AddProductInput {
+class Input {
   $input;
   constructor(placeholder = "", type = "text", width = "") {
     this.$input = document.createElement("input");
     this.$input.type = type;
     this.$input.placeholder = placeholder;
-    this.$input.classList.add("addProductInput");
     this.$input.style.width = width;
   }
   render() {
@@ -13,6 +12,12 @@ class AddProductInput {
   getValue() {
     return this.$input.value;
   }
+  setError(state = true) {
+    if (state) {
+      this.$input.style.color = "red";
+    } else {
+      this.$input.style.color = "";
+    }
+  }
 }
-
-export { AddProductInput };
+export { Input };

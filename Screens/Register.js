@@ -1,7 +1,7 @@
 import { navigate } from "../navigator.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { auth } from "../firebaseConfig.js";
-import { AuthInput } from "../Components/AuthInput.js";
+import { Input } from "../Components/Input.js";
 import { LoadingLayer } from "../Components/LoadingLayer.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 class Register {
@@ -25,32 +25,32 @@ class Register {
 
   constructor() {
     this.$container = document.createElement("div");
-    this.$container.classList.add("loginConatiner");
+    this.$container.classList.add("authContainer");
 
     this.$loadingLayer = new LoadingLayer();
 
     this.$imgContainer = document.createElement("div");
     this.$img = document.createElement("img");
-    this.$imgContainer.classList.add("loginImgConatiner");
+    this.$imgContainer.classList.add("authImgContainer");
 
     this.$inputAreaContainer = document.createElement("div");
-    this.$inputAreaContainer.classList.add("loginInputAreaContainer");
+    this.$inputAreaContainer.classList.add("authInputAreaContainer");
 
     this.$title = document.createElement("div");
     this.$title.innerHTML = "Register";
-    this.$title.classList.add("loginTitle");
+    this.$title.classList.add("authTitle");
 
-    this.$nameInput = new AuthInput("Name");
-    this.$emailInput = new AuthInput("Email");
-    this.$passwordInput = new AuthInput("Password", "password");
-    this.$repeatPasswordInput = new AuthInput("Repeat password", "password");
+    this.$nameInput = new Input("Name");
+    this.$emailInput = new Input("Email");
+    this.$passwordInput = new Input("Password", "password");
+    this.$repeatPasswordInput = new Input("Repeat password", "password");
 
     this.$registerBtn = document.createElement("button");
     this.$registerBtn.innerHTML = "Register";
-    this.$registerBtn.classList.add("loginBtn");
+    this.$registerBtn.classList.add("authBtn");
     this.$backToLogin = document.createElement("div");
     this.$backToLogin.innerHTML = "Back to login";
-    this.$backToLogin.classList.add("loginMoreActionText");
+    this.$backToLogin.classList.add("authMoreActionText");
 
     this.$backToLogin.addEventListener("click", () => {
       navigate("loginScreen");
