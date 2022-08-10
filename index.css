@@ -317,7 +317,7 @@
 
 /* Console screen -------------------------------------------------- */
 .consoleContainer {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -329,7 +329,7 @@
   padding-top: 10%;
 }
 .consoleLeftPanel div {
-  width: 80%;
+  width: 90%;
   cursor: pointer;
   font-family: "Poppins", sans-serif;
   text-align: center;
@@ -339,24 +339,69 @@
   border-bottom-right-radius: 18px;
   font-size: 18px;
 }
-.consoleLeftPanel div:hover{
+.consoleLeftPanel div:hover {
   background-color: rgba(241, 241, 241, 0.633);
 }
 .consoleRightPanel {
   width: 85%;
+  overflow-y: scroll;
 }
-.consoleAddTabContent{
+.consoleAddTabContent {
+  padding-top: 1%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.addContentContainer{
-  width: 35%;
-  background-color: black;
+.addContentContainer {
+  width: 40%;
   display: flex;
   flex-direction: column;
-  padding: 3%;
-  background-color: #f7f7f79a;
+  align-items: center;
+  justify-content: center;
+  padding: 2%;
+  background-color: rgba(244, 248, 236, 1);
   border-radius: 15px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+.addContentContainer input {
+  width: 96%;
+  padding: 2%;
+  border: none;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  outline: none;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+.addContentContainer input:focus {
+  outline: 1px solid rgb(124, 241, 252);
+}
+.addContentContainer button {
+  width: 30%;
+  border: none;
+  outline: none;
+  padding: 2%;
+  border-radius: 8px;
+  margin-top: 2%;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  background-color: #6a983cc4;
+  color: white;
+}
+.addContentContainer button:hover{
+  background-color: #6a983c;
+}
+.addContentContainer select{
+  outline: none;
+  border: none;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  padding: 2%;
+  border-radius: 8px;
+  align-self: flex-start;
+  font-family: "Poppins", sans-serif;
 }

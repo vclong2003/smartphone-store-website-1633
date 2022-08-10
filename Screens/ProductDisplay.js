@@ -164,14 +164,14 @@ class ProductDisplay {
     return this.$viewArea;
   }
 
-  getData(tableName = "", _callback) {
+  getData(tableName = "", _function) {
     jQuery.ajax({
       type: "POST",
       url: "action.php",
       dataType: "json",
       data: { functionname: "queryMySql", tableName: tableName },
       success: function (data) {
-        _callback(data);
+        _function(data);
       },
     });
   }

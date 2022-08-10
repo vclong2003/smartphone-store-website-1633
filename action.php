@@ -9,7 +9,6 @@ function queryMySql($tableName)
     $password = "";
     $dbname = "smartphonestoredb";
 
-    // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     $sql = "SELECT * FROM $tableName";
@@ -26,9 +25,42 @@ function queryMySql($tableName)
     echo json_encode($arr);
 }
 
+function addNewBrand($brandName, $brandDescription)
+{
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "smartphonestoredb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($brandDescription == "") {
+        $sql = "INSERT INTO `brand`(`brandName`) VALUES ('$brandName')";
+    } else {
+        $sql = "INSERT INTO `brand`(`brandName`, `Description`) VALUES ('$brandName', '$brandDescription')";
+    }
+    $conn->query($sql);
+    $conn->close();
+}
+
+function addNewCategory($categoryName)
+{
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "smartphonestoredb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $sql = "INSERT INTO `category`(`categoryName`) VALUES ('$categoryName')";
+
+    $conn->query($sql);
+    $conn->close();
+}
 
 if ($_POST['functionname'] == "queryMySql") {
     queryMySql($_POST['tableName']);
-} else if ($_POST['functionname'] == "queryCategory") {
-    queryMySql('category');
+} else if ($_POST['functionname'] == "addNewBrand") {
+    addNewBrand($_POST['brandName'], $_POST['brandDescription']);
+} else if ($_POST['functionname'] == "addNewCategory") {
+    addNewCategory($_POST['categoryName']);
 }

@@ -35,7 +35,7 @@ const navigate = (screen) => {
 
 navigate("consoleScreen");
 
-/* window.onload = () => {
+window.onload = () => {
   // for testing purpose
   jQuery.ajax({
     type: "POST",
@@ -46,6 +46,6 @@ navigate("consoleScreen");
       console.log(data);
     },
   });
-}; */
+};
 
 export { navigate };

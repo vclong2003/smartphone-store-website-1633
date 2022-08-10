@@ -35,6 +35,7 @@ class Console {
   $productNameInput;
   $productDescriptionInput;
   $productImageUploadContainer;
+  $imageInput;
   $productPriceInput;
   $productQuantityInput;
   $addProductBtn;
@@ -70,6 +71,22 @@ class Console {
     this.$categoryNameInput = new Input("Category Name");
     this.$addCategoryBtn = document.createElement("button");
     this.$addCategoryBtn.innerHTML = "Add category";
+    this.$addCategoryBtn.addEventListener("click", () => {
+      const categoryName = this.$categoryNameInput.getValue();
+      if (categoryName != "") {
+        jQuery.ajax({
+          type: "POST",
+          url: "action.php",
+          dataType: "json",
+          data: {
+            functionname: "addNewCategory",
+            categoryName: categoryName,
+          },
+        });
+      } else {
+        alert("Please enter category name!");
+      }
+    });
 
     this.$addCategoryContainer.appendChild(this.$categoryNameInput.render());
     this.$addCategoryContainer.appendChild(this.$addCategoryBtn);
@@ -80,6 +97,24 @@ class Console {
     this.$brandDescriptionInput = new Input("Brand description");
     this.$addBrandBtn = document.createElement("button");
     this.$addBrandBtn.innerHTML = "Add brand";
+    this.$addBrandBtn.addEventListener("click", () => {
+      const brandName = this.$brandNameInput.getValue();
+      const brandDescription = this.$brandDescriptionInput.getValue();
+      if (brandName != "") {
+        jQuery.ajax({
+          type: "POST",
+          url: "action.php",
+          dataType: "json",
+          data: {
+            functionname: "addNewBrand",
+            brandName: brandName,
+            brandDescription: brandDescription,
+          },
+        });
+      } else {
+        alert("Please enter brand name!");
+      }
+    });
 
     this.$addBrandContainer.appendChild(this.$brandNameInput.render());
     this.$addBrandContainer.appendChild(this.$brandDescriptionInput.render());
@@ -87,15 +122,56 @@ class Console {
 
     this.$addProductContainer = document.createElement("div");
     this.$addProductContainer.classList.add("addContentContainer");
+
     this.$productCategorySelection = document.createElement("select");
+    this.$productCategorySelection.addEventListener("change", () => {
+      console.log(`${this.$productCategorySelection.value} selected`);
+    });
+    this.getData("category", (data = []) => {
+      data.map((item) => {
+        const $option = document.createElement("option");
+        $option.value = item.catID;
+        $option.innerHTML = item.categoryName;
+
+        this.$productCategorySelection.appendChild($option);
+      });
+    });
+
     this.$productBrandSelection = document.createElement("select");
+    this.$productBrandSelection.addEventListener("change", () => {
+      console.log(`${this.$productBrandSelection.value} selected`);
+    });
+    this.getData("brand", (data = []) => {
+      data.map((item) => {
+        const $option = document.createElement("option");
+        $option.value = item.brandID;
+        $option.innerHTML = item.brandName;
+
+        this.$productBrandSelection.appendChild($option);
+      });
+    });
+
     this.$productNameInput = new Input("Product name");
     this.$productDescriptionInput = new Input("Product description");
     this.$productImageUploadContainer = document.createElement("div");
+    this.$imageInput = document.createElement("input");
+    this.$imageInput.type = "file";
+    this.$imageInput.accept = "image/*";
+    this.$productImageUploadContainer.appendChild(this.$imageInput);
     this.$productPriceInput = new Input("Price");
     this.$productQuantityInput = new Input("Quantity");
     this.$addProductBtn = document.createElement("button");
     this.$addProductBtn.innerHTML = "Add product";
+    this.$addProductBtn.addEventListener("click", () => {
+      if (this.$imageInput.files[0]) {
+        console.log(this.$imageInput.files[0].name);
+        this.uploadImage(this.$imageInput.files[0], (url) => {
+          console.log(url);
+        });
+      } else {
+        console.log("No file added!");
+      }
+    });
 
     this.$addProductContainer.appendChild(this.$productCategorySelection);
     this.$addProductContainer.appendChild(this.$productBrandSelection);
@@ -106,7 +182,7 @@ class Console {
     this.$addProductContainer.appendChild(this.$productImageUploadContainer);
     this.$addProductContainer.appendChild(this.$productPriceInput.render());
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
-    this.$addBrandContainer.appendChild(this.$addProductBtn);
+    this.$addProductContainer.appendChild(this.$addProductBtn);
 
     this.$addTabContent = document.createElement("div");
     this.$addTabContent.classList.add("consoleAddTabContent");
@@ -115,24 +191,6 @@ class Console {
     this.$addTabContent.appendChild(this.$addProductContainer);
 
     this.$rightPanel.appendChild(this.$addTabContent);
-
-    // this.$test = document.createElement("input");
-    // this.$test.type = "file";
-    // this.$test.accept = "image/*";
-    // this.$test.addEventListener("change", () => {
-    //   console.log(this.$test.files[0].name);
-    // });
-
-    // this.$testBtn = document.createElement("button");
-    // this.$testBtn.innerHTML = "up";
-    // this.$testBtn.addEventListener("click", () => {
-    //   const storageRef = ref(storage, "test/" + this.$test.files[0].name);
-    //   uploadBytes(storageRef, this.$test.files[0]).then((snapshot) => {
-    //     getDownloadURL(snapshot.ref).then((downloadURL) => {
-    //       console.log("File available at", downloadURL);
-    //     });
-    //   });
-    // });
   }
   render() {
     this.$container.appendChild(this.$leftPanel);
@@ -140,6 +198,34 @@ class Console {
 
     return this.$container;
   }
+  getData(tableName = "", _function) {
+    jQuery.ajax({
+      type: "POST",
+      url: "action.php",
+      dataType: "json",
+      data: { functionname: "queryMySql", tableName: tableName },
+      success: function (data) {
+        _function(data);
+      },
+    });
+  }
+  uploadImage(file, _function) {
+    const storageRef = ref(storage, "productImages/" + file.name);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        _function(downloadURL);
+      });
+    });
+  }
 }
 
 export { Console };
+
+/*
+<select name="cars" id="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+</select>
+*/
