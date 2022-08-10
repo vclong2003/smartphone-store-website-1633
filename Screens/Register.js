@@ -57,26 +57,18 @@ class Register {
     });
 
     this.$registerBtn.addEventListener("click", () => {
-      toggleElement(this.$loadingLayer.render());
-      createUserWithEmailAndPassword(
-        auth,
-        this.$emailInput.getValue(),
-        this.$passwordInput.getValue()
-      )
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          toggleElement(this.$loadingLayer.render());
-          navigate("introScreen");
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-          toggleElement(this.$loadingLayer.render());
-          // ..
-        });
+      const name = this.$nameInput.getValue();
+      const email = this.$emailInput.getValue();
+      const password = this.$passwordInput.getValue();
+      const passwordRepeat = this.$repeatPasswordInput.getValue();
+
+      if (email == "") {
+        alert("Please enter email!");
+      } else if (password != passwordRepeat) {
+        alert("Password not match!");
+      } else {
+        this.createNewAccount(email, password);
+      }
     });
   }
 
@@ -97,6 +89,25 @@ class Register {
     this.$container.appendChild(this.$inputAreaContainer);
 
     return this.$container;
+  }
+
+  createNewAccount(email, password) {
+    toggleElement(this.$loadingLayer.render());
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        toggleElement(this.$loadingLayer.render());
+        navigate("introScreen");
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        toggleElement(this.$loadingLayer.render());
+        // ..
+      });
   }
 }
 

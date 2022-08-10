@@ -33,7 +33,7 @@ const navigate = (screen) => {
   }
 };
 
-navigate("consoleScreen");
+navigate("productDisplayScreen");
 
 window.onload = () => {
   // for testing purpose

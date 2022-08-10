@@ -1,5 +1,10 @@
 import { navigate } from "../navigator.js";
 import { toggleElement } from "./ToggleElement.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import { auth } from "../firebaseConfig.js";
 class NavBar {
   $container;
 
@@ -25,6 +30,7 @@ class NavBar {
 
   $profileIcon;
   $cartIcon;
+  $authStateText;
 
   constructor() {
     this.$container = document.createElement("div");
@@ -87,12 +93,40 @@ class NavBar {
     this.$logo = document.createElement("img");
     this.$leftComponentContainer.appendChild(this.$logo);
 
+    this.$authStateText = document.createElement("div");
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.$authStateText.innerHTML = user.email;
+        this.$authStateText.addEventListener("click", () => {
+          signOut(auth)
+            .then(() => {
+              // Sign-out successful.
+              navigate("productDisplayScreen");
+            })
+            .catch((error) => {
+              // An error happened.
+              console.log(error);
+            });
+        });
+      } else {
+        // User is signed out
+        // ...
+        this.$authStateText.innerHTML = "Login";
+        this.$authStateText.addEventListener("click", () => {
+          navigate("loginScreen");
+        });
+      }
+    });
+
     this.$profileIcon = document.createElement("img");
     this.$profileIcon.title = "Profile";
     this.$profileIcon.addEventListener("click", () => {
       navigate("loginScreen");
     });
     this.$cartIcon = document.createElement("img");
+    this.$rightComponentContainer.appendChild(this.$authStateText);
     this.$rightComponentContainer.appendChild(this.$profileIcon);
     this.$rightComponentContainer.appendChild(this.$cartIcon);
   }

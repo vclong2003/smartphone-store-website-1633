@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-function queryMySql($tableName)
+function queryMySql($tableName, $condition = "1 = 1")
 {
     $arr = array();
     $servername = "localhost";
@@ -11,7 +11,7 @@ function queryMySql($tableName)
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    $sql = "SELECT * FROM $tableName";
+    $sql = "SELECT * FROM $tableName WHERE $condition";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

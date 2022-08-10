@@ -58,6 +58,7 @@ class Console {
     this.$addTab = document.createElement("div");
     this.$editTab = document.createElement("div");
     this.$viewTab = document.createElement("div");
+    this.$addTab.style.backgroundColor = "rgba(244, 248, 236, 1)";
 
     this.$addTab.innerHTML = "Add";
     this.$editTab.innerHTML = "Edit";
