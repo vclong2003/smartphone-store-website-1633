@@ -11,16 +11,13 @@ class Console {
   $leftPanel;
   $rightPanel;
 
-  $addTabContainer;
-  $addTabLabel;
+  $addTab;
   $addTabContent;
 
-  $editTabContainer;
-  $editTabLabel;
+  $editTab;
   $editTabContent;
 
-  $viewTabContainer;
-  $viewTabLabel;
+  $viewTab;
   $viewTabContent;
 
   $addCategoryContainer;
@@ -55,17 +52,17 @@ class Console {
     this.$leftPanel.classList.add("consoleLeftPanel");
     this.$rightPanel.classList.add("consoleRightPanel");
 
-    this.$addTabContainer = document.createElement("div");
-    this.$editTabContainer = document.createElement("div");
-    this.$viewTabContainer = document.createElement("div");
+    this.$addTab = document.createElement("div");
+    this.$editTab = document.createElement("div");
+    this.$viewTab = document.createElement("div");
 
-    this.$addTabLabel = document.createElement("p");
-    this.$editTabLabel = document.createElement("p");
-    this.$viewTabLabel = document.createElement("p");
+    this.$addTab.innerHTML = "Add";
+    this.$editTab.innerHTML = "Edit";
+    this.$viewTab.innerHTML = "View";
 
-    this.$addTabLabel.innerHTML = "Add";
-    this.$editTabLabel.innerHTML = "Edit";
-    this.$viewTabLabel.innerHTML = "View";
+    this.$leftPanel.appendChild(this.$addTab);
+    this.$leftPanel.appendChild(this.$editTab);
+    this.$leftPanel.appendChild(this.$viewTab);
 
     this.$addCategoryContainer = document.createElement("div");
     this.$categoryNameInput = new AddProductInput("Category Name");
