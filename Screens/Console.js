@@ -10,15 +10,14 @@ class Console {
   $leftPanel;
   $rightPanel;
 
-  $orderActionTabContainer;
-  $pendingApprovalOrders;
-  $onGoingOrder;
-  $cancelledOrders;
-
   $addTabContainer;
-  $addCategoryTab;
-  $addBrandTab;
-  $addProductTab;
+  $addTabLabel;
+
+  $editTabContainer;
+  $editTabLabel;
+
+  $viewTabContainer;
+  $viewTabLabel;
 
   //<input type="file" accept="image/*">
 
@@ -31,30 +30,37 @@ class Console {
     this.$leftPanel = document.createElement("div");
     this.$rightPanel = document.createElement("div");
 
-    this.$orderActionTabContainer = document.createElement("div");
+    this.$addTabContainer = document.createElement("div");
+    this.$editTabContainer = document.createElement("div");
+    this.$viewTabContainer = document.createElement("div");
 
-    this.$test = document.createElement("input");
-    this.$test.type = "file";
-    this.$test.accept = "image/*";
-    this.$test.addEventListener("change", () => {
-      console.log(this.$test.files[0].name);
-    });
+    this.$addTabLabel = document.createElement("p");
+    this.$editTabLabel = document.createElement("p");
+    this.$viewTabLabel = document.createElement("p");
 
-    this.$testBtn = document.createElement("button");
-    this.$testBtn.innerHTML = "up";
-    this.$testBtn.addEventListener("click", () => {
-      const storageRef = ref(storage, "test/" + this.$test.files[0].name);
-      uploadBytes(storageRef, this.$test.files[0]).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
-      });
-    });
+    this.$addTabLabel.innerHTML = "Add";
+    this.$editTabLabel.innerHTML = "Edit";
+    this.$viewTabLabel.innerHTML = "View";
+
+    // this.$test = document.createElement("input");
+    // this.$test.type = "file";
+    // this.$test.accept = "image/*";
+    // this.$test.addEventListener("change", () => {
+    //   console.log(this.$test.files[0].name);
+    // });
+
+    // this.$testBtn = document.createElement("button");
+    // this.$testBtn.innerHTML = "up";
+    // this.$testBtn.addEventListener("click", () => {
+    //   const storageRef = ref(storage, "test/" + this.$test.files[0].name);
+    //   uploadBytes(storageRef, this.$test.files[0]).then((snapshot) => {
+    //     getDownloadURL(snapshot.ref).then((downloadURL) => {
+    //       console.log("File available at", downloadURL);
+    //     });
+    //   });
+    // });
   }
   render() {
-    this.$container.appendChild(this.$test);
-    this.$container.appendChild(this.$testBtn);
-
     return this.$container;
   }
 }
