@@ -14,40 +14,21 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-left: 2%;
   margin-right: 2%;
 }
-.leftContactItemsContainer {
-  display: flex;
-  flex-direction: row;
-  width: 50%;
-  justify-content: flex-start;
-}
-.phoneNumber {
-  font-size: 12;
-  font-weight: 400;
+.navBarAuthStateText {
   font-family: "Open Sans", sans-serif;
-  margin-right: 6%;
-}
-.email {
-  font-size: 12;
-  font-weight: 400;
-  font-family: "Open Sans", sans-serif;
-}
-.rightContactItemsContainer {
-  display: flex;
-  flex-direction: row;
-  width: 50%;
-  justify-content: flex-end;
-  height: 100%;
-}
-.aboutUs {
-  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
   color: rgba(106, 152, 60, 1);
-  font-size: 12;
-  font-weight: 400;
-  font-family: "Open Sans", sans-serif;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+.navBarAuthStateTextLoggedIn {
+  font-weight: normal;
+  color: black;
 }
 .componentContainer {
   width: 96%;
@@ -64,10 +45,10 @@
 .leftComponentContainer {
   display: flex;
   flex-direction: row;
-  width: 15%;
+  width: 10%;
 }
 .leftComponentContainer img {
-  max-width: 80%;
+  max-width: 90%;
 }
 .searchContainer {
   display: flex;
@@ -78,8 +59,9 @@
 .rightComponentContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  width: 15%;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
 }
 .rightComponentContainer img {
   cursor: pointer;
@@ -92,7 +74,7 @@
   border: 1px solid rgba(209, 209, 209, 1);
   background-color: rgba(249, 249, 249, 1);
   border-radius: 12px;
-  width: 28%;
+  width: 30%;
 }
 .searchInput {
   width: 90%;
@@ -418,5 +400,5 @@
   display: flex;
   flex-direction: row;
   font-family: "Poppins", sans-serif;
-  font-size: 14px ;
+  font-size: 14px;
 }

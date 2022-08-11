@@ -9,13 +9,9 @@ class NavBar {
   $container;
 
   $contactContainer;
-  $leftContactItemsContainer;
-  $rightContactItemsContainer;
 
-  $phoneNumber;
-  $email;
-
-  $aboutUs;
+  $authStateText;
+  authState = false;
 
   $componentContainer;
   $leftComponentContainer;
@@ -29,35 +25,13 @@ class NavBar {
   $logo;
 
   $cartIcon;
-  $authStateText;
-  authState = false;
 
   constructor() {
     this.$container = document.createElement("div");
     this.$container.classList.add("navBarContainer");
 
     this.$contactContainer = document.createElement("div");
-    this.$leftContactItemsContainer = document.createElement("div");
-    this.$rightContactItemsContainer = document.createElement("div");
-    this.$contactContainer.appendChild(this.$leftContactItemsContainer);
-    this.$contactContainer.appendChild(this.$rightContactItemsContainer);
     this.$contactContainer.classList.add("contactContainer");
-    this.$leftContactItemsContainer.classList.add("leftContactItemsContainer");
-    this.$rightContactItemsContainer.classList.add(
-      "rightContactItemsContainer"
-    );
-
-    this.$phoneNumber = document.createElement("p");
-    this.$email = document.createElement("p");
-    this.$leftContactItemsContainer.appendChild(this.$phoneNumber);
-    this.$leftContactItemsContainer.appendChild(this.$email);
-    this.$phoneNumber.classList.add("phoneNumber");
-    this.$email.classList.add("email");
-
-    this.$aboutUs = document.createElement("a");
-    this.$aboutUs.innerHTML = "About us";
-    this.$rightContactItemsContainer.appendChild(this.$aboutUs);
-    this.$aboutUs.classList.add("aboutUs");
 
     this.$componentContainer = document.createElement("div");
     this.$leftComponentContainer = document.createElement("div");
@@ -94,6 +68,8 @@ class NavBar {
     this.$leftComponentContainer.appendChild(this.$logo);
 
     this.$authStateText = document.createElement("div");
+    this.$authStateText.classList.add("navBarAuthStateText");
+    this.$contactContainer.appendChild(this.$authStateText);
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
         signOut(auth);
@@ -103,7 +79,6 @@ class NavBar {
     });
 
     this.$cartIcon = document.createElement("img");
-    this.$rightComponentContainer.appendChild(this.$authStateText);
     this.$rightComponentContainer.appendChild(this.$cartIcon);
   }
   render() {
@@ -112,18 +87,16 @@ class NavBar {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         this.$authStateText.innerHTML = user.email;
+        this.$authStateText.classList.add("navBarAuthStateTextLoggedIn");
         this.authState = true;
       } else {
         // User is signed out
         // ...
+        this.$authStateText.classList.remove("navBarAuthStateTextLoggedIn");
         this.$authStateText.innerHTML = "Login";
         this.authState = false;
       }
     });
-
-    this.$phoneNumber.innerHTML = "0888827768";
-    this.$email.innerHTML = "longvcgch210092@fpt.edu.vn";
-    this.$aboutUs.href = "#";
 
     this.$logo.src = "././Assets/Img/verizon_logo.png";
     this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
