@@ -28,9 +28,9 @@ class NavBar {
 
   $logo;
 
-  $profileIcon;
   $cartIcon;
   $authStateText;
+  authState = false;
 
   constructor() {
     this.$container = document.createElement("div");
@@ -94,49 +94,38 @@ class NavBar {
     this.$leftComponentContainer.appendChild(this.$logo);
 
     this.$authStateText = document.createElement("div");
+    this.$authStateText.addEventListener("click", () => {
+      if (this.authState) {
+        signOut(auth);
+      } else {
+        navigate("loginScreen");
+      }
+    });
+
+    this.$cartIcon = document.createElement("img");
+    this.$rightComponentContainer.appendChild(this.$authStateText);
+    this.$rightComponentContainer.appendChild(this.$cartIcon);
+  }
+  render() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         this.$authStateText.innerHTML = user.email;
-        this.$authStateText.addEventListener("click", () => {
-          signOut(auth)
-            .then(() => {
-              // Sign-out successful.
-              navigate("productDisplayScreen");
-            })
-            .catch((error) => {
-              // An error happened.
-              console.log(error);
-            });
-        });
+        this.authState = true;
       } else {
         // User is signed out
         // ...
         this.$authStateText.innerHTML = "Login";
-        this.$authStateText.addEventListener("click", () => {
-          navigate("loginScreen");
-        });
+        this.authState = false;
       }
     });
 
-    this.$profileIcon = document.createElement("img");
-    this.$profileIcon.title = "Profile";
-    this.$profileIcon.addEventListener("click", () => {
-      navigate("loginScreen");
-    });
-    this.$cartIcon = document.createElement("img");
-    this.$rightComponentContainer.appendChild(this.$authStateText);
-    this.$rightComponentContainer.appendChild(this.$profileIcon);
-    this.$rightComponentContainer.appendChild(this.$cartIcon);
-  }
-  render() {
     this.$phoneNumber.innerHTML = "0888827768";
     this.$email.innerHTML = "longvcgch210092@fpt.edu.vn";
     this.$aboutUs.href = "#";
 
     this.$logo.src = "././Assets/Img/verizon_logo.png";
-    this.$profileIcon.src = "././Assets/Icons/ic-actions-user.png";
     this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
     this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
 

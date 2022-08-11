@@ -237,7 +237,7 @@ class Console {
   }
 
   uploadImage(file, _function) {
-    const storageRef = ref(storage, "productImages/" + file.name);
+    const storageRef = ref(storage, "productThunbnails/" + file.name);
     uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         _function(downloadURL);
