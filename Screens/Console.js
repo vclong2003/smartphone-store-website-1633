@@ -33,10 +33,12 @@ class Console {
   $productCategorySelection;
   $productBrandSelection;
   $productNameInput;
+  $productSmallDescriptionInput;
   $productDescriptionInput;
-  $productImageUploadContainer;
+  $productThumbnailUploadContainer;
   $thumbnailUploadLabel;
   $thumbnailInput;
+  $productImageUploadContainer;
   $imageUploadLabel;
   $imageInput;
   $productPriceInput;
@@ -163,7 +165,23 @@ class Console {
     });
 
     this.$productNameInput = new Input("Product name");
+    this.$productSmallDescriptionInput = new Input("Small description");
     this.$productDescriptionInput = new Input("Product description");
+
+    this.$productThumbnailUploadContainer = document.createElement("div");
+    this.$productThumbnailUploadContainer.classList.add(
+      "productImageUploadContainer"
+    );
+    this.$thumbnailUploadLabel = document.createElement("p");
+    this.$thumbnailUploadLabel.innerHTML = "Thumbnail:";
+    this.$thumbnailInput = document.createElement("input");
+    this.$thumbnailInput.type = "file";
+    this.$thumbnailInput.accept = "image/*";
+    this.$productThumbnailUploadContainer.appendChild(
+      this.$thumbnailUploadLabel
+    );
+    this.$productThumbnailUploadContainer.appendChild(this.$thumbnailInput);
+
     this.$productImageUploadContainer = document.createElement("div");
     this.$productImageUploadContainer.classList.add(
       "productImageUploadContainer"
@@ -180,28 +198,52 @@ class Console {
     this.$addProductBtn = document.createElement("button");
     this.$addProductBtn.innerHTML = "Add product";
     this.$addProductBtn.addEventListener("click", () => {
-      if (this.$imageInput.files[0]) {
-        console.log(this.$imageInput.files[0].name);
-        this.uploadImage(this.$imageInput.files[0], (url) => {
-          console.log(url);
-          jQuery.ajax({
-            type: "POST",
-            url: "action.php",
-            dataType: "json",
-            data: {
-              functionname: "addNewProduct",
-              catID: this.$productCategorySelection.value,
-              brandID: this.$productBrandSelection.value,
-              name: this.$productNameInput.getValue(),
-              description: this.$productDescriptionInput.getValue(),
-              imageUrl: url,
-              price: this.$productPriceInput.getValue(),
-              quantity: this.$productQuantityInput.getValue(),
-            },
-          });
+      let thumbnailUrl;
+      let imageUrl;
+      const catID = this.$productCategorySelection.value;
+      const brandID = this.$productBrandSelection.value;
+      const name = this.$productNameInput.getValue();
+      const smallDescription = this.$productSmallDescriptionInput.getValue();
+      const description = this.$productDescriptionInput.getValue();
+      const price = this.$productPriceInput.getValue();
+
+      if (this.$thumbnailInput.files[0]) {
+        this.uploadImage(this.$thumbnailInput.files[0], (url) => {
+          thumbnailUrl = url;
+          if (this.$imageInput.files[0]) {
+            this.uploadImage(this.$imageInput.files[0], (url) => {
+              imageUrl = url;
+              console.log(thumbnailUrl);
+              console.log(imageUrl);
+              jQuery.ajax({
+                type: "POST",
+                url: "action.php",
+                dataType: "json",
+                data: {
+                  functionname: "addData",
+                  query:
+                    "INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`) VALUES ('" +
+                    catID +
+                    "','" +
+                    brandID +
+                    "','" +
+                    name +
+                    "','" +
+                    smallDescription +
+                    "','" +
+                    description +
+                    "','" +
+                    thumbnailUrl +
+                    "','" +
+                    imageUrl +
+                    "','" +
+                    price +
+                    "')",
+                },
+              });
+            });
+          }
         });
-      } else {
-        console.log("No file added!");
       }
     });
 
@@ -209,7 +251,13 @@ class Console {
     this.$addProductContainer.appendChild(this.$productBrandSelection);
     this.$addProductContainer.appendChild(this.$productNameInput.render());
     this.$addProductContainer.appendChild(
+      this.$productSmallDescriptionInput.render()
+    );
+    this.$addProductContainer.appendChild(
       this.$productDescriptionInput.render()
+    );
+    this.$addProductContainer.appendChild(
+      this.$productThumbnailUploadContainer
     );
     this.$addProductContainer.appendChild(this.$productImageUploadContainer);
     this.$addProductContainer.appendChild(this.$productPriceInput.render());
@@ -244,9 +292,9 @@ class Console {
     });
   }
 
-  uploadImage(thumbnail, image, _function) {
-    const storageRef = ref(storage, "productThunbnails/" + thumbnail.name);
-    uploadBytes(storageRef, thumbnail).then((snapshot) => {
+  uploadImage(file, _function) {
+    const storageRef = ref(storage, "productImages/" + file.name);
+    uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         _function(downloadURL);
       });
