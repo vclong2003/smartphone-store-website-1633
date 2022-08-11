@@ -41,7 +41,7 @@ window.onload = () => {
     type: "POST",
     url: "action.php",
     dataType: "json",
-    data: { functionname: "queryMySql", tableName: "category" },
+    data: { functionname: "getData", query: "SELECT * FROM `brand`" },
     success: function (data) {
       console.log(data);
     },

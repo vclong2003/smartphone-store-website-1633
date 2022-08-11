@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-function queryMySql($tableName, $condition = "1 = 1")
+function getData($query)
 {
     $arr = array();
     $servername = "localhost";
@@ -11,20 +11,17 @@ function queryMySql($tableName, $condition = "1 = 1")
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    $sql = "SELECT * FROM $tableName WHERE $condition";
-    $result = $conn->query($sql);
+    $result = $conn->query("$query");
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             array_push($arr, $row);
         }
-    } else {
-        echo "0 results";
     }
     $conn->close();
     echo json_encode($arr);
 }
-
+    
 function addNewBrand($brandName, $brandDescription)
 {
     $servername = "localhost";
@@ -70,8 +67,8 @@ function addNewProduct($catID, $brandID, $name, $description, $imageUrl, $price,
     $conn->close();
 }
 
-if ($_POST['functionname'] == "queryMySql") {
-    queryMySql($_POST['tableName']);
+if ($_POST['functionname'] == 'getData') {
+    getData($_POST['query']);
 } else if ($_POST['functionname'] == "addNewBrand") {
     addNewBrand($_POST['brandName'], $_POST['brandDescription']);
 } else if ($_POST['functionname'] == "addNewCategory") {

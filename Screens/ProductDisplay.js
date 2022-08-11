@@ -28,10 +28,19 @@ class ProductDisplay {
   $resetFilterBtn;
 
   constructor() {
-    const categoriesList = [
-      { name: "iPhone", quantity: 5 },
-      { name: "Android Phones", quantity: 10 },
-      { name: "Windows Phone", quantity: 1 },
+    const testData = [
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
     ];
 
     this.$viewArea = document.createElement("div");
@@ -51,7 +60,7 @@ class ProductDisplay {
     this.$categoryFilterLabel.innerHTML = "Categories";
     this.$categoryFilterContainer.appendChild(this.$categoryFilterLabel);
 
-    this.getData("category", (data) => {
+    this.getData("SELECT * FROM `category`", (data) => {
       data.map((item) => {
         const $itemContainer = document.createElement("div");
         $itemContainer.classList.add("categoryFilterItem");
@@ -71,7 +80,7 @@ class ProductDisplay {
     this.$brandFilterLabel = document.createElement("p");
     this.$brandFilterLabel.innerHTML = "Brands";
     this.$brandFilterContainer.appendChild(this.$brandFilterLabel);
-    this.getData("brand", (data) => {
+    this.getData("SELECT * FROM `brand`", (data) => {
       data.map((item) => {
         const $itemContainer = document.createElement("div");
         $itemContainer.classList.add("brandFilterItemContainer");
@@ -97,7 +106,6 @@ class ProductDisplay {
         this.$brandFilterContainer.appendChild($itemContainer);
       });
     });
-    
 
     this.$ratingFilterContainer = document.createElement("div");
     this.$ratingFilterContainer.classList.add("productDisplayFilterContainer");
@@ -147,6 +155,18 @@ class ProductDisplay {
     this.$filterBtnContainer.appendChild(this.$applyFilterBtn);
     this.$filterBtnContainer.appendChild(this.$resetFilterBtn);
 
+    testData.map((item) => {
+      this.$rightPanel.appendChild(
+        this.renderProductItem(
+          item.name,
+          item.smallDes,
+          item.thumbNailUrl,
+          undefined,
+          item.price
+        )
+      );
+    });
+
     const navigationBar = new NavBar();
     this.$viewArea.appendChild(navigationBar.render());
   }
@@ -164,16 +184,45 @@ class ProductDisplay {
     return this.$viewArea;
   }
 
-  getData(tableName = "", _function) {
+  getData(query = "", _function) {
     jQuery.ajax({
       type: "POST",
       url: "action.php",
       dataType: "json",
-      data: { functionname: "queryMySql", tableName: tableName },
+      data: { functionname: "getData", query: query },
       success: function (data) {
         _function(data);
       },
     });
+  }
+
+  renderProductItem(name, smallDescription, thumbnailUrl, rating = 0, price) {
+    const $productContainer = document.createElement("div");
+    const $productThumbnailConainer = document.createElement("div");
+    const $productThumbnail = document.createElement("img");
+    const $productName = document.createElement("div");
+    const $productSmallDescription = document.createElement("div");
+    const $productRatingContainer = document.createElement("div");
+
+    const $productSubContainer = document.createElement("div");
+    const $productPrice = document.createElement("div");
+    const $addToCartBtn = document.createElement("button");
+
+    $productThumbnail.src = thumbnailUrl;
+    $productName.innerHTML = name;
+    $productSmallDescription.innerHTML = smallDescription;
+    $productPrice.innerHTML = price;
+
+    $productThumbnailConainer.appendChild($productThumbnail);
+    $productSubContainer.appendChild($productPrice);
+    $productSubContainer.appendChild($addToCartBtn);
+
+    $productContainer.appendChild($productThumbnailConainer);
+    $productContainer.appendChild($productName);
+    $productContainer.appendChild($productSmallDescription);
+    $productContainer.appendChild($productSubContainer);
+
+    return $productContainer;
   }
 }
 
