@@ -76,6 +76,11 @@ class Register {
     this.$img.src = "./Assets/Img/auth_background.png";
     this.$imgContainer.appendChild(this.$img);
 
+    this.$nameInput.clearValue();
+    this.$emailInput.clearValue();
+    this.$passwordInput.clearValue();
+    this.$repeatPasswordInput.clearValue();
+
     this.$inputAreaContainer.appendChild(this.$title);
     this.$inputAreaContainer.appendChild(this.$nameInput.render());
     this.$inputAreaContainer.appendChild(this.$emailInput.render());

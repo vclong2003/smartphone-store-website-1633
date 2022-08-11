@@ -12,6 +12,9 @@ class Input {
   getValue() {
     return this.$input.value;
   }
+  clearValue() {
+    this.$input.value = "";
+  }
   setError(state = true) {
     if (state) {
       this.$input.style.color = "red";

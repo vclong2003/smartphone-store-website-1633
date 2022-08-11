@@ -1,5 +1,7 @@
 import { Input } from "../Components/Input.js";
+import { auth } from "../firebaseConfig.js";
 import { navigate } from "../navigator.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 class Login {
   $container;
   $loadingLayer;
@@ -40,6 +42,25 @@ class Login {
     this.$loginBtn = document.createElement("button");
     this.$loginBtn.innerHTML = "Login";
     this.$loginBtn.classList.add("authBtn");
+    this.$loginBtn.addEventListener("click", () => {
+      const email = this.$emailInput.getValue();
+      const password = this.$passwordInput.getValue();
+      if (email == "" || password == "") {
+        alert("Please enter email and password!");
+      } else {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("productDisplayScreen");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          });
+      }
+    });
 
     this.$forgotPwd = document.createElement("div");
     this.$forgotPwd.innerHTML = "Forgot password?";
@@ -58,13 +79,13 @@ class Login {
     this.$createNewAccount.addEventListener("click", () => {
       navigate("registerScreen");
     });
-    this.$loginBtn.addEventListener("click", () => {
-      console.log("clicked");
-    });
   }
   render() {
     this.$img.src = "./Assets/Img/auth_background.png";
     this.$imgContainer.appendChild(this.$img);
+
+    this.$emailInput.clearValue();
+    this.$passwordInput.clearValue();
 
     this.$inputAreaContainer.appendChild(this.$title);
     this.$inputAreaContainer.appendChild(this.$emailInput.render());
