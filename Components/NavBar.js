@@ -47,8 +47,11 @@ class NavBar {
 
     this.$searchBox = document.createElement("div");
     this.$searchInput = document.createElement("input");
-    this.$searchInput.addEventListener("input", () => {
-      console.log(this.$searchInput.value);
+    this.$searchInput.addEventListener("focusin", () => {
+      this.$searchBox.classList.add("searchBoxInFocus");
+    });
+    this.$searchInput.addEventListener("focusout", () => {
+      this.$searchBox.classList.remove("searchBoxInFocus");
     });
     this.$searchBox.appendChild(this.$searchInput);
     this.$searchInput.type = "text";

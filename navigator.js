@@ -33,7 +33,7 @@ const navigate = (screen) => {
   }
 };
 
-navigate("productDisplayScreen");
+navigate("consoleScreen");
 
 window.onload = () => {
   // for testing purpose
@@ -41,7 +41,7 @@ window.onload = () => {
     type: "POST",
     url: "action.php",
     dataType: "json",
-    data: { functionname: "getData", query: "SELECT * FROM `brand`" },
+    data: { functionname: "getData", query: "SELECT * FROM `category`" },
     success: function (data) {
       console.log(data);
     },

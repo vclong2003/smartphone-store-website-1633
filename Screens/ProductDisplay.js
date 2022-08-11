@@ -41,6 +41,138 @@ class ProductDisplay {
         thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
         price: "2000",
       },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Samsung S22 Ultra",
+        smallDes: "sj333 sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/s22uThumb.webp",
+        price: "2000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
+      {
+        name: "Google Pixel 6",
+        smallDes: "sjdjkds sjdjdf jdsfhjdsjk djsfhj sfdj",
+        thumbNailUrl: "./Assets/testImg/pixel6Thumb.webp",
+        price: "1000",
+      },
     ];
 
     this.$viewArea = document.createElement("div");
@@ -198,7 +330,8 @@ class ProductDisplay {
 
   renderProductItem(name, smallDescription, thumbnailUrl, rating = 0, price) {
     const $productContainer = document.createElement("div");
-    const $productThumbnailConainer = document.createElement("div");
+    const $productInfoContainer = document.createElement("div");
+    const $productThumbnailContainer = document.createElement("div");
     const $productThumbnail = document.createElement("img");
     const $productName = document.createElement("div");
     const $productSmallDescription = document.createElement("div");
@@ -208,18 +341,28 @@ class ProductDisplay {
     const $productPrice = document.createElement("div");
     const $addToCartBtn = document.createElement("button");
 
+    $productContainer.classList.add("productContainer");
+    $productInfoContainer.classList.add("productInfoContainer");
+    $productThumbnailContainer.classList.add("productThumbnailContainer");
+    $productName.classList.add("productItemName");
+    $productSmallDescription.classList.add("productSmallDescription");
+    $productSubContainer.classList.add("productSubContainer");
+
     $productThumbnail.src = thumbnailUrl;
     $productName.innerHTML = name;
     $productSmallDescription.innerHTML = smallDescription;
-    $productPrice.innerHTML = price;
+    $productPrice.innerHTML = price + "$";
 
-    $productThumbnailConainer.appendChild($productThumbnail);
+    $productThumbnailContainer.appendChild($productThumbnail);
     $productSubContainer.appendChild($productPrice);
     $productSubContainer.appendChild($addToCartBtn);
+    $addToCartBtn.innerHTML = "Add to cart";
 
-    $productContainer.appendChild($productThumbnailConainer);
-    $productContainer.appendChild($productName);
-    $productContainer.appendChild($productSmallDescription);
+    $productInfoContainer.appendChild($productThumbnailContainer);
+    $productInfoContainer.appendChild($productName);
+    $productInfoContainer.appendChild($productSmallDescription);
+
+    $productContainer.appendChild($productInfoContainer);
     $productContainer.appendChild($productSubContainer);
 
     return $productContainer;

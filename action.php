@@ -21,7 +21,19 @@ function getData($query)
     $conn->close();
     echo json_encode($arr);
 }
-    
+
+function addData($query)
+{
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "smartphonestoredb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("$query");
+    $conn->close();
+}
+
 function addNewBrand($brandName, $brandDescription)
 {
     $servername = "localhost";
@@ -69,10 +81,6 @@ function addNewProduct($catID, $brandID, $name, $description, $imageUrl, $price,
 
 if ($_POST['functionname'] == 'getData') {
     getData($_POST['query']);
-} else if ($_POST['functionname'] == "addNewBrand") {
-    addNewBrand($_POST['brandName'], $_POST['brandDescription']);
-} else if ($_POST['functionname'] == "addNewCategory") {
-    addNewCategory($_POST['categoryName']);
-} else if ($_POST['functionname'] == "addNewProduct") {
-    addNewProduct($_POST['catID'], $_POST['brandID'], $_POST['name'], $_POST['description'], $_POST['imageUrl'], $_POST['price'], $_POST['quantity']);
+} else if ($_POST['functionname'] == "addData") {
+    addData($_POST['query']);
 }

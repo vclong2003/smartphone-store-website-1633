@@ -35,6 +35,8 @@ class Console {
   $productNameInput;
   $productDescriptionInput;
   $productImageUploadContainer;
+  $thumbnailUploadLabel;
+  $thumbnailInput;
   $imageUploadLabel;
   $imageInput;
   $productPriceInput;
@@ -81,8 +83,11 @@ class Console {
           url: "action.php",
           dataType: "json",
           data: {
-            functionname: "addNewCategory",
-            categoryName: categoryName,
+            functionname: "addData",
+            query:
+              "INSERT INTO `category`(`categoryName`) VALUES ('" +
+              categoryName +
+              "')",
           },
         });
       } else {
@@ -108,9 +113,13 @@ class Console {
           url: "action.php",
           dataType: "json",
           data: {
-            functionname: "addNewBrand",
-            brandName: brandName,
-            brandDescription: brandDescription,
+            functionname: "addData",
+            query:
+              "INSERT INTO `brand`(`brandName`, `Description`) VALUES ('" +
+              brandName +
+              "','" +
+              brandDescription +
+              "')",
           },
         });
       } else {
@@ -129,7 +138,7 @@ class Console {
     this.$productCategorySelection.addEventListener("change", () => {
       console.log(`${this.$productCategorySelection.value} selected`);
     });
-    this.getData("category", (data = []) => {
+    this.getData("SELECT * FROM `category`", (data = []) => {
       data.map((item) => {
         const $option = document.createElement("option");
         $option.value = item.catID;
@@ -143,7 +152,7 @@ class Console {
     this.$productBrandSelection.addEventListener("change", () => {
       console.log(`${this.$productBrandSelection.value} selected`);
     });
-    this.getData("brand", (data = []) => {
+    this.getData("SELECT * FROM `brand`", (data = []) => {
       data.map((item) => {
         const $option = document.createElement("option");
         $option.value = item.brandID;
@@ -175,7 +184,6 @@ class Console {
         console.log(this.$imageInput.files[0].name);
         this.uploadImage(this.$imageInput.files[0], (url) => {
           console.log(url);
-          // $_POST['catID'], $_POST['brandID'], $_POST['name'], $_POST['description'], $_POST['imageUrl'], $_POST['price'], $_POST['quantity']
           jQuery.ajax({
             type: "POST",
             url: "action.php",
@@ -224,21 +232,21 @@ class Console {
     return this.$container;
   }
 
-  getData(tableName = "", _function) {
+  getData(query = "", _function) {
     jQuery.ajax({
       type: "POST",
       url: "action.php",
       dataType: "json",
-      data: { functionname: "queryMySql", tableName: tableName },
+      data: { functionname: "getData", query: query },
       success: function (data) {
         _function(data);
       },
     });
   }
 
-  uploadImage(file, _function) {
-    const storageRef = ref(storage, "productThunbnails/" + file.name);
-    uploadBytes(storageRef, file).then((snapshot) => {
+  uploadImage(thumbnail, image, _function) {
+    const storageRef = ref(storage, "productThunbnails/" + thumbnail.name);
+    uploadBytes(storageRef, thumbnail).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         _function(downloadURL);
       });
