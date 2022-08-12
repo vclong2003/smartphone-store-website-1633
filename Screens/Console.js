@@ -205,8 +205,12 @@ class Console {
       const catID = this.$productCategorySelection.value;
       const brandID = this.$productBrandSelection.value;
       const name = this.$productNameInput.getValue();
-      const smallDescription = this.$productSmallDescriptionInput.getValue();
-      const description = this.$productDescriptionInput.getValue();
+      const smallDescription = this.$productSmallDescriptionInput
+        .getValue()
+        .replace(`'`, `''`);
+      const description = this.$productDescriptionInput
+        .getValue()
+        .replace(`'`, `''`);
       const price = this.$productPriceInput.getValue();
       const quantity = this.$productQuantityInput.getValue();
 
@@ -216,8 +220,6 @@ class Console {
           if (this.$imageInput.files[0]) {
             this.uploadImage(this.$imageInput.files[0], (url) => {
               imageUrl = url;
-              console.log(thumbnailUrl);
-              console.log(imageUrl);
               jQuery.ajax({
                 type: "POST",
                 url: "action.php",
@@ -233,9 +235,9 @@ class Console {
                     name +
                     "','" +
                     smallDescription +
-                    "',`" +
+                    "','" +
                     description +
-                    "`,'" +
+                    "','" +
                     thumbnailUrl +
                     "','" +
                     imageUrl +
