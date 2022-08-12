@@ -92,8 +92,9 @@ class Console {
               "')",
           },
         });
+        alertify.notify("Successful!", "success");
       } else {
-        alert("Please enter category name!");
+        alertify.notify("PLease enter category name!", "error", 2);
       }
     });
 
@@ -124,8 +125,9 @@ class Console {
               "')",
           },
         });
+        alertify.notify("Successful!", "success");
       } else {
-        alert("Please enter brand name!");
+        alertify.notify("PLease enter brand name!", "error", 2);
       }
     });
 
@@ -206,6 +208,7 @@ class Console {
       const smallDescription = this.$productSmallDescriptionInput.getValue();
       const description = this.$productDescriptionInput.getValue();
       const price = this.$productPriceInput.getValue();
+      const quantity = this.$productQuantityInput.getValue();
 
       if (this.$thumbnailInput.files[0]) {
         this.uploadImage(this.$thumbnailInput.files[0], (url) => {
@@ -222,7 +225,7 @@ class Console {
                 data: {
                   functionname: "addData",
                   query:
-                    "INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`) VALUES ('" +
+                    "INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`, `quantity`) VALUES ('" +
                     catID +
                     "','" +
                     brandID +
@@ -230,17 +233,20 @@ class Console {
                     name +
                     "','" +
                     smallDescription +
-                    "','" +
+                    "',`" +
                     description +
-                    "','" +
+                    "`,'" +
                     thumbnailUrl +
                     "','" +
                     imageUrl +
                     "','" +
                     price +
+                    "', '" +
+                    quantity +
                     "')",
                 },
               });
+              alertify.notify("Successful!", "success");
             });
           }
         });

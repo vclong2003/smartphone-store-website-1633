@@ -466,3 +466,12 @@
 .checked {
   color: orange;
 }
+
+.alertify-notifier .ajs-message.ajs-success {
+  font-family: "Poppins", sans-serif;
+  border-radius: 8px;
+}
+.alertify-notifier .ajs-message.ajs-error {
+  font-family: "Poppins", sans-serif;
+  border-radius: 8px;
+}
