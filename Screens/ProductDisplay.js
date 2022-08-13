@@ -1,3 +1,4 @@
+import { Input } from "../Components/Input.js";
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
 class ProductDisplay {
@@ -28,6 +29,7 @@ class ProductDisplay {
   $resetFilterBtn;
 
   $paginationContainer;
+  filterParam = { catID: "", brandID: [], priceLow: "", priceHigh: "" };
 
   constructor() {
     this.$viewArea = document.createElement("div");
@@ -50,20 +52,39 @@ class ProductDisplay {
     this.$categoryFilterLabel.innerHTML = "Categories";
     this.$categoryFilterContainer.appendChild(this.$categoryFilterLabel);
 
-    this.getData("SELECT * FROM `category`", (data) => {
-      data.map((item) => {
-        const $itemContainer = document.createElement("div");
-        $itemContainer.classList.add("categoryFilterItem");
-        const $categoryName = document.createElement("div");
-        $categoryName.innerHTML = item.categoryName;
-        const $quantity = document.createElement("div");
-        $quantity.classList.add("categoryFilterItemQuantity");
-        $quantity.innerHTML = item.quantity;
-        $itemContainer.appendChild($categoryName);
-        $itemContainer.appendChild($quantity);
-        this.$categoryFilterContainer.appendChild($itemContainer);
-      });
-    });
+    this.getData(
+      "SELECT `category`.*, COUNT(`product`.`productID`) as quantity FROM `category` LEFT JOIN `product`ON `category`.`catID` = `product`.`catID` GROUP BY `category`.`catID`;",
+      (data) => {
+        let previous = null;
+        data.map((item) => {
+          const $itemContainer = document.createElement("div");
+          $itemContainer.classList.add("categoryFilterItem");
+          const $categoryName = document.createElement("div");
+          $categoryName.innerHTML = item.categoryName;
+          const $quantity = document.createElement("div");
+          $quantity.classList.add("categoryFilterItemQuantity");
+          $quantity.innerHTML = item.quantity;
+          $itemContainer.appendChild($categoryName);
+          $itemContainer.appendChild($quantity);
+          $itemContainer.addEventListener("click", () => {
+            if (previous == $itemContainer) {
+              previous.classList.remove("categoryFilterItem_active");
+              this.filterParam.catID = "";
+              previous = null;
+            } else {
+              if (previous) {
+                previous.classList.remove("categoryFilterItem_active");
+              }
+              this.filterParam.catID = item.catID;
+              $itemContainer.classList.add("categoryFilterItem_active");
+              previous = $itemContainer;
+            }
+            this.loadItems();
+          });
+          this.$categoryFilterContainer.appendChild($itemContainer);
+        });
+      }
+    );
 
     this.$brandFilterContainer = document.createElement("div");
     this.$brandFilterContainer.classList.add("productDisplayFilterContainer");
@@ -76,18 +97,22 @@ class ProductDisplay {
         $itemContainer.classList.add("brandFilterItemContainer");
         const $checkBox = document.createElement("input");
         $checkBox.type = "checkbox";
-        $checkBox.value = item.brandID;
         const $brandName = document.createElement("div");
         $brandName.classList.add("brandFilterItemName");
         $brandName.innerHTML = item.brandName;
 
         $checkBox.addEventListener("change", () => {
           if ($checkBox.checked) {
-            console.log(`${$checkBox.value}, ${$brandName.innerText} checked`);
+            this.filterParam.brandID.push(item.brandID);
+            this.loadItems();
           } else {
-            console.log(
-              `${$checkBox.value}, ${$brandName.innerText} unchecked`
-            );
+            if (this.filterParam.brandID.indexOf(item.brandID) != -1) {
+              this.filterParam.brandID.splice(
+                this.filterParam.brandID.indexOf(item.brandID),
+                1
+              );
+            }
+            this.loadItems();
           }
         });
 
@@ -145,25 +170,23 @@ class ProductDisplay {
     this.$filterBtnContainer.appendChild(this.$applyFilterBtn);
     this.$filterBtnContainer.appendChild(this.$resetFilterBtn);
 
+    this.$applyFilterBtn.addEventListener("click", () => {
+      this.filterParam.priceLow = this.$minPriceInput.value;
+      this.filterParam.priceHigh = this.$maxPriceInput.value;
+      this.loadItems();
+    });
+    this.$resetFilterBtn.addEventListener("click", () => {
+      this.filterParam.priceLow = this.$minPriceInput.value = "";
+      this.filterParam.priceHigh = this.$maxPriceInput.value = "";
+      this.loadItems();
+    });
+
     this.loadItems();
 
     const navigationBar = new NavBar((searchValue) => {
       this.loadItems(undefined, searchValue);
     });
     this.$viewArea.appendChild(navigationBar.render());
-  }
-
-  render() {
-    this.$leftPanel.appendChild(this.$categoryFilterContainer);
-    this.$leftPanel.appendChild(this.$brandFilterContainer);
-    this.$leftPanel.appendChild(this.$ratingFilterContainer);
-    this.$leftPanel.appendChild(this.$priceFilterContainer);
-    this.$leftPanel.appendChild(this.$filterBtnContainer);
-    this.$container.appendChild(this.$leftPanel);
-    this.$container.appendChild(this.$rightPanel);
-    this.$viewArea.appendChild(this.$container);
-
-    return this.$viewArea;
   }
 
   loadItems(condition = " 1 = 1 ", searchValue = "") {
@@ -177,19 +200,18 @@ class ProductDisplay {
         data.map((item) => {
           const itemSearchString = item.brandName + " " + item.Name;
           if (
-            itemSearchString.toLowerCase().includes(searchValue.toLowerCase())
+            itemSearchString
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) &&
+            (this.filterParam.catID == "" ||
+              item.catID == this.filterParam.catID) &&
+            (this.filterParam.brandID.length == 0 ||
+              this.filterParam.brandID.indexOf(item.brandID) > -1) &&
+            (this.filterParam.priceLow == "" ||
+              Number(item.Price) > Number(this.filterParam.priceLow)) &&
+            (this.filterParam.priceHigh == "" ||
+              Number(item.Price) < Number(this.filterParam.priceHigh))
           ) {
-            // this.$rightPanel.appendChild(
-            //   this.renderProductItem(
-            //     item.productID,
-            //     item.Name,
-            //     item.brandName,
-            //     item.smallDescription,
-            //     item.thumbnailUrl,
-            //     undefined,
-            //     item.Price
-            //   )
-            // );
             paginationData.push(
               this.renderProductItem(
                 item.productID,
@@ -198,7 +220,9 @@ class ProductDisplay {
                 item.smallDescription,
                 item.thumbnailUrl,
                 undefined,
-                item.Price
+                item.Price,
+                item.catID,
+                item.brandID
               )
             );
           }
@@ -227,7 +251,7 @@ class ProductDisplay {
     let initialpage;
     const splicedData = [];
     while (rawData.length) {
-      splicedData.push(rawData.splice(0, 8));
+      splicedData.push(rawData.splice(0, 12));
     }
     splicedData.map((item, index) => {
       const paginateItem = document.createElement("div");
@@ -242,13 +266,16 @@ class ProductDisplay {
         this.$rightPanel.appendChild(this.$paginationContainer);
         if (previous) {
           previous.classList.remove("paginateItem_active");
+          window.scrollTo(0, 150);
         }
         paginateItem.classList.add("paginateItem_active");
         previous = paginateItem;
       });
       this.$paginationContainer.appendChild(paginateItem);
+      if (paginateItem.id == 0) {
+        paginateItem.click();
+      }
     });
-
     this.$rightPanel.appendChild(this.$paginationContainer);
   }
 
@@ -259,7 +286,9 @@ class ProductDisplay {
     smallDescription,
     thumbnailUrl,
     rating = 0,
-    price
+    price,
+    catID,
+    brandID
   ) {
     const $productContainer = document.createElement("div");
     const $productInfoContainer = document.createElement("div");
@@ -284,6 +313,8 @@ class ProductDisplay {
     $productName.innerHTML = brand + " " + name;
     $productSmallDescription.innerHTML = smallDescription;
     $productPrice.innerHTML = price + "$";
+    $productContainer.dataset.catID = catID;
+    $productContainer.dataset.brandID = brandID;
 
     $productThumbnailContainer.appendChild($productThumbnail);
     $productSubContainer.appendChild($productPrice);
@@ -298,6 +329,19 @@ class ProductDisplay {
     $productContainer.appendChild($productSubContainer);
 
     return $productContainer;
+  }
+
+  render() {
+    this.$leftPanel.appendChild(this.$categoryFilterContainer);
+    this.$leftPanel.appendChild(this.$brandFilterContainer);
+    // this.$leftPanel.appendChild(this.$ratingFilterContainer); // under development
+    this.$leftPanel.appendChild(this.$priceFilterContainer);
+    this.$leftPanel.appendChild(this.$filterBtnContainer);
+    this.$container.appendChild(this.$leftPanel);
+    this.$container.appendChild(this.$rightPanel);
+    this.$viewArea.appendChild(this.$container);
+
+    return this.$viewArea;
   }
 }
 

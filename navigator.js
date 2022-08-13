@@ -49,20 +49,19 @@ navigate("productDisplayScreen");
 // );
 
 // for testing purpose
-// window.onload = () => {
-//   jQuery.ajax({
-//     type: "POST",
-//     url: "action.php",
-//     dataType: "json",
-//     data: {
-//       functionname: "getData",
-//       query:
-//         "SELECT `product`.*, `brand`.`brandName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` WHERE 1 = 1 ORDER BY `product`.`Price` DESC;",
-//     },
-//     success: function (data) {
-//       console.log(data);
-//     },
-//   });
-// };
+window.onload = () => {
+  jQuery.ajax({
+    type: "POST",
+    url: "action.php",
+    dataType: "json",
+    data: {
+      functionname: "getData",
+      query: "SELECT COUNT(*) FROM `product` WHERE `catID` = 2;",
+    },
+    success: function (data) {
+      console.log(data);
+    },
+  });
+};
 
 export { navigate };
