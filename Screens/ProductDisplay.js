@@ -287,7 +287,7 @@ class ProductDisplay {
     this.$filterBtnContainer.appendChild(this.$applyFilterBtn);
     this.$filterBtnContainer.appendChild(this.$resetFilterBtn);
 
-    testData.map((item) => {
+    /* testData.map((item) => {
       this.$rightPanel.appendChild(
         this.renderProductItem(
           item.name,
@@ -297,9 +297,15 @@ class ProductDisplay {
           item.price
         )
       );
-    });
+    }); */
 
-    const navigationBar = new NavBar();
+    this.loadItems();
+    const test = document.getElementsByClassName("productContainer");
+    console.log(test);
+
+    const navigationBar = new NavBar((searchValue) => {
+      this.loadItems(undefined, searchValue);
+    });
     this.$viewArea.appendChild(navigationBar.render());
   }
 
@@ -316,6 +322,42 @@ class ProductDisplay {
     return this.$viewArea;
   }
 
+  loadItems(condition = " 1 = 1 ", searchValue = "") {
+    this.$rightPanel.innerHTML = "";
+    this.getData(
+      "SELECT * FROM `product` WHERE" +
+        condition +
+        "ORDER BY `product`.`Price` DESC",
+      (data) => {
+        data.map((item) => {
+          this.getData(
+            "SELECT * FROM `brand` WHERE `brandID` = " + item.brandID,
+            (brandData) => {
+              if (
+                item.Name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                brandData[0].brandName
+                  .toLowerCase()
+                  .includes(searchValue.toLowerCase())
+              ) {
+                this.$rightPanel.appendChild(
+                  this.renderProductItem(
+                    item.productID,
+                    item.Name,
+                    brandData[0].brandName,
+                    item.smallDescription,
+                    item.thumbnailUrl,
+                    undefined,
+                    item.Price
+                  )
+                );
+              }
+            }
+          );
+        });
+      }
+    );
+  }
+
   getData(query = "", _function) {
     jQuery.ajax({
       type: "POST",
@@ -328,7 +370,15 @@ class ProductDisplay {
     });
   }
 
-  renderProductItem(name, smallDescription, thumbnailUrl, rating = 0, price) {
+  renderProductItem(
+    id,
+    name,
+    brand,
+    smallDescription,
+    thumbnailUrl,
+    rating = 0,
+    price
+  ) {
     const $productContainer = document.createElement("div");
     const $productInfoContainer = document.createElement("div");
     const $productThumbnailContainer = document.createElement("div");
@@ -349,7 +399,7 @@ class ProductDisplay {
     $productSubContainer.classList.add("productSubContainer");
 
     $productThumbnail.src = thumbnailUrl;
-    $productName.innerHTML = name;
+    $productName.innerHTML = brand + " " + name;
     $productSmallDescription.innerHTML = smallDescription;
     $productPrice.innerHTML = price + "$";
 

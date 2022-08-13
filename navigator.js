@@ -34,26 +34,30 @@ const navigate = (screen) => {
   }
 };
 
-navigate("consoleScreen");
+navigate("productDisplayScreen");
 
+// alertify.prompt(
+//   "",
+//   "Enter category name",
+//   "test",
+//   function (evt, value) {
+//     alertify.success("You entered: " + value);
+//   },
+//   function () {
+//     alertify.error("Cancel");
+//   }
+// );
+
+// for testing purpose
 window.onload = () => {
-  // for testing purpose
-  // alertify.prompt(
-  //   "",
-  //   "Enter category name",
-  //   "test",
-  //   function (evt, value) {
-  //     alertify.success("You entered: " + value);
-  //   },
-  //   function () {
-  //     alertify.error("Cancel");
-  //   }
-  // );
   jQuery.ajax({
     type: "POST",
     url: "action.php",
     dataType: "json",
-    data: { functionname: "getData", query: "SELECT * FROM `category`" },
+    data: {
+      functionname: "getData",
+      query: "SELECT * FROM `brand`",
+    },
     success: function (data) {
       console.log(data);
     },

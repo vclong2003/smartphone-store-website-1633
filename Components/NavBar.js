@@ -26,7 +26,7 @@ class NavBar {
 
   $cartIcon;
 
-  constructor() {
+  constructor(_searchFunction) {
     this.$container = document.createElement("div");
     this.$container.classList.add("navBarContainer");
 
@@ -64,7 +64,7 @@ class NavBar {
     this.$searchIconImg.style = "cursor: pointer;";
     this.$searchBox.appendChild(this.$searchIconImg);
     this.$searchIconImg.addEventListener("click", () => {
-      alert(`You typed "${this.$searchInput.value}"`);
+      _searchFunction(this.$searchInput.value);
     });
 
     this.$logo = document.createElement("img");
