@@ -27,7 +27,7 @@ class ProductDisplay {
   $applyFilterBtn;
   $resetFilterBtn;
 
-  paginationData = [];
+  $paginationContainer;
 
   constructor() {
     this.$viewArea = document.createElement("div");
@@ -38,6 +38,9 @@ class ProductDisplay {
     this.$rightPanel = document.createElement("div");
     this.$leftPanel.classList.add("productDisplayLeftPanel");
     this.$rightPanel.classList.add("productDisplayRightPanel");
+
+    this.$paginationContainer = document.createElement("div");
+    this.$paginationContainer.classList.add("paginationContainer");
 
     this.$categoryFilterContainer = document.createElement("div");
     this.$categoryFilterContainer.classList.add(
@@ -170,13 +173,24 @@ class ProductDisplay {
         condition +
         " ORDER BY `product`.`Price` DESC;",
       (data) => {
+        let paginationData = [];
         data.map((item) => {
           const itemSearchString = item.brandName + " " + item.Name;
-
           if (
             itemSearchString.toLowerCase().includes(searchValue.toLowerCase())
           ) {
-            this.$rightPanel.appendChild(
+            // this.$rightPanel.appendChild(
+            //   this.renderProductItem(
+            //     item.productID,
+            //     item.Name,
+            //     item.brandName,
+            //     item.smallDescription,
+            //     item.thumbnailUrl,
+            //     undefined,
+            //     item.Price
+            //   )
+            // );
+            paginationData.push(
               this.renderProductItem(
                 item.productID,
                 item.Name,
@@ -189,6 +203,8 @@ class ProductDisplay {
             );
           }
         });
+        console.log(paginationData);
+        this.paginateData(paginationData);
       }
     );
   }
@@ -203,6 +219,37 @@ class ProductDisplay {
         _function(data);
       },
     });
+  }
+
+  paginateData(rawData = []) {
+    this.$paginationContainer.innerHTML = "";
+    let previous = null;
+    let initialpage;
+    const splicedData = [];
+    while (rawData.length) {
+      splicedData.push(rawData.splice(0, 8));
+    }
+    splicedData.map((item, index) => {
+      const paginateItem = document.createElement("div");
+      paginateItem.innerHTML = index + 1;
+      paginateItem.id = index;
+      paginateItem.classList.add("paginateItem");
+      paginateItem.addEventListener("click", () => {
+        this.$rightPanel.innerHTML = "";
+        item.map((_item) => {
+          this.$rightPanel.appendChild(_item);
+        });
+        this.$rightPanel.appendChild(this.$paginationContainer);
+        if (previous) {
+          previous.classList.remove("paginateItem_active");
+        }
+        paginateItem.classList.add("paginateItem_active");
+        previous = paginateItem;
+      });
+      this.$paginationContainer.appendChild(paginateItem);
+    });
+
+    this.$rightPanel.appendChild(this.$paginationContainer);
   }
 
   renderProductItem(
@@ -250,7 +297,6 @@ class ProductDisplay {
     $productContainer.appendChild($productInfoContainer);
     $productContainer.appendChild($productSubContainer);
 
-    this.paginationData.push($productContainer);
     return $productContainer;
   }
 }
