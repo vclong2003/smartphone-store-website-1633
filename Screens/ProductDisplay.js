@@ -287,18 +287,6 @@ class ProductDisplay {
     this.$filterBtnContainer.appendChild(this.$applyFilterBtn);
     this.$filterBtnContainer.appendChild(this.$resetFilterBtn);
 
-    /* testData.map((item) => {
-      this.$rightPanel.appendChild(
-        this.renderProductItem(
-          item.name,
-          item.smallDes,
-          item.thumbNailUrl,
-          undefined,
-          item.price
-        )
-      );
-    }); */
-
     this.loadItems();
 
     const navigationBar = new NavBar((searchValue) => {
