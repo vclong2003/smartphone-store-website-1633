@@ -5,6 +5,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
 import { Input } from "../Components/Input.js";
 import { storage } from "../firebaseConfig.js";
+import { navigate } from "../navigator.js";
 class Console {
   $container;
 
@@ -19,6 +20,8 @@ class Console {
 
   $viewTab;
   $viewTabContent;
+
+  $exitTab;
 
   $addCategoryContainer;
   $categoryNameInput;
@@ -62,15 +65,23 @@ class Console {
     this.$addTab = document.createElement("div");
     this.$editTab = document.createElement("div");
     this.$viewTab = document.createElement("div");
+    this.$exitTab = document.createElement("div");
     this.$addTab.style.backgroundColor = "rgba(244, 248, 236, 1)";
 
     this.$addTab.innerHTML = "Add";
     this.$editTab.innerHTML = "Edit";
     this.$viewTab.innerHTML = "View";
+    this.$exitTab.innerHTML = "Exit";
+
+    this.$exitTab.id = "consoleExitTab";
+    this.$exitTab.addEventListener("click", () => {
+      navigate("productDisplayScreen");
+    });
 
     this.$leftPanel.appendChild(this.$addTab);
     this.$leftPanel.appendChild(this.$editTab);
     this.$leftPanel.appendChild(this.$viewTab);
+    this.$leftPanel.appendChild(this.$exitTab);
 
     this.$addCategoryContainer = document.createElement("div");
     this.$addCategoryContainer.classList.add("addContentContainer");

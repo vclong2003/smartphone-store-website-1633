@@ -49,19 +49,19 @@ navigate("productDisplayScreen");
 // );
 
 // for testing purpose
-window.onload = () => {
-  jQuery.ajax({
-    type: "POST",
-    url: "action.php",
-    dataType: "json",
-    data: {
-      functionname: "getData",
-      query: "SELECT * FROM `brand`",
-    },
-    success: function (data) {
-      console.log(data);
-    },
-  });
-};
+// window.onload = () => {
+//   jQuery.ajax({
+//     type: "POST",
+//     url: "action.php",
+//     dataType: "json",
+//     data: {
+//       functionname: "getData",
+//       query: "SELECT * FROM `brand`",
+//     },
+//     success: function (data) {
+//       console.log(data);
+//     },
+//   });
+// };
 
 export { navigate };

@@ -118,6 +118,8 @@ class NavBar {
         this.$authStateText.classList.remove("navBarAuthStateTextLoggedIn");
         this.$authStateText.innerHTML = "Login";
         this.authState = false;
+
+        this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
       }
     });
 
