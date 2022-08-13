@@ -93,6 +93,7 @@ class Console {
           },
         });
         alertify.notify("Successful!", "success");
+        this.updateCategorySelection();
       } else {
         alertify.notify("PLease enter category name!", "error", 2);
       }
@@ -126,6 +127,7 @@ class Console {
           },
         });
         alertify.notify("Successful!", "success");
+        this.updateBrandSelection();
       } else {
         alertify.notify("PLease enter brand name!", "error", 2);
       }
@@ -142,29 +144,13 @@ class Console {
     this.$productCategorySelection.addEventListener("change", () => {
       console.log(`${this.$productCategorySelection.value} selected`);
     });
-    this.getData("SELECT * FROM `category`", (data = []) => {
-      data.map((item) => {
-        const $option = document.createElement("option");
-        $option.value = item.catID;
-        $option.innerHTML = item.categoryName;
-
-        this.$productCategorySelection.appendChild($option);
-      });
-    });
+    this.updateCategorySelection();
 
     this.$productBrandSelection = document.createElement("select");
     this.$productBrandSelection.addEventListener("change", () => {
       console.log(`${this.$productBrandSelection.value} selected`);
     });
-    this.getData("SELECT * FROM `brand`", (data = []) => {
-      data.map((item) => {
-        const $option = document.createElement("option");
-        $option.value = item.brandID;
-        $option.innerHTML = item.brandName;
-
-        this.$productBrandSelection.appendChild($option);
-      });
-    });
+    this.updateBrandSelection();
 
     this.$productNameInput = new Input("Product name");
     this.$productSmallDescriptionInput = new Input("Small description");
@@ -305,6 +291,29 @@ class Console {
     uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         _function(downloadURL);
+      });
+    });
+  }
+
+  updateCategorySelection() {
+    this.$productCategorySelection.innerHTML = "";
+    this.getData("SELECT * FROM `category`", (data = []) => {
+      data.map((item) => {
+        const $option = document.createElement("option");
+        $option.value = item.catID;
+        $option.innerHTML = item.categoryName;
+        this.$productCategorySelection.appendChild($option);
+      });
+    });
+  }
+  updateBrandSelection() {
+    this.$productBrandSelection.innerHTML = "";
+    this.getData("SELECT * FROM `brand`", (data = []) => {
+      data.map((item) => {
+        const $option = document.createElement("option");
+        $option.value = item.brandID;
+        $option.innerHTML = item.brandName;
+        this.$productBrandSelection.appendChild($option);
       });
     });
   }
