@@ -24,9 +24,11 @@ class NavBar {
 
   $logo;
 
+  $consoleScreenIcon;
   $cartIcon;
 
   constructor(_searchFunction) {
+    let searching = false;
     this.$container = document.createElement("div");
     this.$container.classList.add("navBarContainer");
 
@@ -62,9 +64,19 @@ class NavBar {
 
     this.$searchIconImg = document.createElement("img");
     this.$searchIconImg.style = "cursor: pointer;";
+    this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
     this.$searchBox.appendChild(this.$searchIconImg);
     this.$searchIconImg.addEventListener("click", () => {
-      _searchFunction(this.$searchInput.value);
+      if (!searching) {
+        searching = true;
+        this.$searchIconImg.src = "././Assets/Icons/cancel_icon.png";
+        _searchFunction(this.$searchInput.value);
+      } else {
+        searching = false;
+        this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
+        this.$searchInput.value = "";
+        _searchFunction("");
+      }
     });
 
     this.$logo = document.createElement("img");
@@ -81,7 +93,13 @@ class NavBar {
       }
     });
 
+    this.$consoleScreenIcon = document.createElement("img");
+    this.$consoleScreenIcon.src = "././Assets/Icons/editor_icon.png";
+    this.$consoleScreenIcon.addEventListener("click", () => {
+      navigate("consoleScreen");
+    });
     this.$cartIcon = document.createElement("img");
+    this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
     this.$rightComponentContainer.appendChild(this.$cartIcon);
   }
   render() {
@@ -92,6 +110,8 @@ class NavBar {
         this.$authStateText.innerHTML = user.email;
         this.$authStateText.classList.add("navBarAuthStateTextLoggedIn");
         this.authState = true;
+
+        this.$rightComponentContainer.appendChild(this.$consoleScreenIcon);
       } else {
         // User is signed out
         // ...
@@ -101,9 +121,7 @@ class NavBar {
       }
     });
 
-    this.$logo.src = "././Assets/Img/verizon_logo.png";
-    this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
-    this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
+    this.$logo.src = "././Assets/Img/VCL-logos_black.png";
 
     this.$container.appendChild(this.$contactContainer);
     this.$container.appendChild(this.$componentContainer);

@@ -300,8 +300,6 @@ class ProductDisplay {
     }); */
 
     this.loadItems();
-    const test = document.getElementsByClassName("productContainer");
-    console.log(test);
 
     const navigationBar = new NavBar((searchValue) => {
       this.loadItems(undefined, searchValue);

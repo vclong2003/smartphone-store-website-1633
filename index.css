@@ -60,12 +60,13 @@
 .rightComponentContainer {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 10%;
 }
 .rightComponentContainer img {
   cursor: pointer;
+  width: 20%;
 }
 .searchBox {
   display: flex;
@@ -86,6 +87,9 @@
   border: none;
   outline: none;
   font-size: 15px;
+}
+.searchBox img{
+  width: 5%;
 }
 
 /* Login, Register screen -------------------------------------------------- */
