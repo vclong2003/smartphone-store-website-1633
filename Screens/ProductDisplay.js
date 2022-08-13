@@ -27,6 +27,8 @@ class ProductDisplay {
   $applyFilterBtn;
   $resetFilterBtn;
 
+  paginationData = [];
+
   constructor() {
     this.$viewArea = document.createElement("div");
     this.$container = document.createElement("div");
@@ -164,34 +166,28 @@ class ProductDisplay {
   loadItems(condition = " 1 = 1 ", searchValue = "") {
     this.$rightPanel.innerHTML = "";
     this.getData(
-      "SELECT * FROM `product` WHERE" +
+      "SELECT `product`.*, `brand`.`brandName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` WHERE " +
         condition +
-        "ORDER BY `product`.`Price` DESC",
+        " ORDER BY `product`.`Price` DESC;",
       (data) => {
         data.map((item) => {
-          this.getData(
-            "SELECT * FROM `brand` WHERE `brandID` = " + item.brandID,
-            (brandData) => {
-              if (
-                item.Name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                brandData[0].brandName
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase())
-              ) {
-                this.$rightPanel.appendChild(
-                  this.renderProductItem(
-                    item.productID,
-                    item.Name,
-                    brandData[0].brandName,
-                    item.smallDescription,
-                    item.thumbnailUrl,
-                    undefined,
-                    item.Price
-                  )
-                );
-              }
-            }
-          );
+          const itemSearchString = item.brandName + " " + item.Name;
+
+          if (
+            itemSearchString.toLowerCase().includes(searchValue.toLowerCase())
+          ) {
+            this.$rightPanel.appendChild(
+              this.renderProductItem(
+                item.productID,
+                item.Name,
+                item.brandName,
+                item.smallDescription,
+                item.thumbnailUrl,
+                undefined,
+                item.Price
+              )
+            );
+          }
         });
       }
     );
@@ -254,6 +250,7 @@ class ProductDisplay {
     $productContainer.appendChild($productInfoContainer);
     $productContainer.appendChild($productSubContainer);
 
+    this.paginationData.push($productContainer);
     return $productContainer;
   }
 }
