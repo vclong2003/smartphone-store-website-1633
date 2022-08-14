@@ -415,6 +415,12 @@
   display: flex;
   flex-direction: row;
 }
+.productDetail_leftContainer {
+  width: 40%;
+}
+.productDetail_righContainer {
+  width: 60%;
+}
 
 /* Console screen -------------------------------------------------- */
 .consoleContainer {
