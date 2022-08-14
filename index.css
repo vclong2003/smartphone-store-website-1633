@@ -506,6 +506,18 @@
   flex-direction: row;
   animation: zoomIn 0.5s;
 }
+.consoleScreen_edittingLayer {
+  position: fixed;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.473);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}
 .consoleLeftPanel {
   width: 15%;
   display: flex;
@@ -522,6 +534,9 @@
   border-top-right-radius: 18px;
   border-bottom-right-radius: 18px;
   font-size: 18px;
+}
+.activeConsoleTab {
+  background-color: rgba(244, 248, 236, 1);
 }
 .consoleLeftPanel div:hover {
   background-color: rgba(241, 241, 241, 0.633);

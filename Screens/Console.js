@@ -8,6 +8,7 @@ import { storage } from "../firebaseConfig.js";
 import { navigate } from "../navigator.js";
 class Console {
   $container;
+  $edittingLayer;
 
   $leftPanel;
   $rightPanel;
@@ -17,9 +18,6 @@ class Console {
 
   $editTab;
   $editTabContent;
-
-  $viewTab;
-  $viewTabContent;
 
   $exitTab;
 
@@ -31,6 +29,9 @@ class Console {
   $brandNameInput;
   $brandDescriptionInput;
   $addBrandBtn;
+
+  $editCategoryContainer;
+  $editBrandContainer;
 
   $addProductContainer;
   $productCategorySelection;
@@ -57,6 +58,11 @@ class Console {
     this.$container = document.createElement("div");
     this.$container.classList.add("consoleContainer");
 
+    this.$edittingLayer = document.createElement("div");
+    this.$edittingLayer.classList.add("consoleScreen_edittingLayer");
+    this.$edittingLayer.innerHTML = `<div style="width: 200px; height: 200px; background-color: black"></div>`;
+    this.$container.appendChild(this.$edittingLayer);
+
     this.$leftPanel = document.createElement("div");
     this.$rightPanel = document.createElement("div");
     this.$leftPanel.classList.add("consoleLeftPanel");
@@ -64,23 +70,16 @@ class Console {
 
     this.$addTab = document.createElement("div");
     this.$editTab = document.createElement("div");
-    this.$viewTab = document.createElement("div");
     this.$exitTab = document.createElement("div");
-    this.$addTab.style.backgroundColor = "rgba(244, 248, 236, 1)";
 
     this.$addTab.innerHTML = "Add";
     this.$editTab.innerHTML = "Edit";
-    this.$viewTab.innerHTML = "View";
     this.$exitTab.innerHTML = "Exit";
 
     this.$exitTab.id = "consoleExitTab";
-    this.$exitTab.addEventListener("click", () => {
-      navigate("productDisplayScreen");
-    });
 
     this.$leftPanel.appendChild(this.$addTab);
     this.$leftPanel.appendChild(this.$editTab);
-    this.$leftPanel.appendChild(this.$viewTab);
     this.$leftPanel.appendChild(this.$exitTab);
 
     this.$addCategoryContainer = document.createElement("div");
@@ -275,7 +274,39 @@ class Console {
     this.$addTabContent.appendChild(this.$addBrandContainer);
     this.$addTabContent.appendChild(this.$addProductContainer);
 
-    this.$rightPanel.appendChild(this.$addTabContent);
+    this.$editCategoryContainer = document.createElement("div");
+    this.$editCategoryContainer.classList.add("editContentContainer");
+    this.$editTabContent = document.createElement("div");
+    this.$editTabContent.appendChild(this.$editCategoryContainer);
+    this.$editTabContent.classList.add("consoleAddTabContent");
+
+    let previousTab = null;
+    this.$addTab.addEventListener("click", () => {
+      if (previousTab) {
+        previousTab.classList.remove("activeConsoleTab");
+      }
+      this.$rightPanel.innerHTML = "";
+      this.$rightPanel.appendChild(this.$addTabContent);
+      this.$addTab.classList.add("activeConsoleTab");
+      previousTab = this.$addTab;
+    });
+    this.$editTab.addEventListener("click", () => {
+      this.handleCategoryEditItems();
+      if (previousTab) {
+        previousTab.classList.remove("activeConsoleTab");
+      }
+      this.$rightPanel.innerHTML = "";
+      this.$rightPanel.appendChild(this.$editTabContent);
+      this.$editTab.classList.add("activeConsoleTab");
+      previousTab = this.$editTab;
+    });
+    this.$exitTab.addEventListener("click", () => {
+      if (previousTab) {
+        previousTab.classList.remove("activeConsoleTab");
+      }
+      this.$rightPanel.innerHTML = "";
+      navigate("productDisplayScreen");
+    });
   }
 
   render() {
@@ -293,6 +324,21 @@ class Console {
       data: { functionname: "getData", query: query },
       success: function (data) {
         _function(data);
+      },
+    });
+  }
+  deleteData(query, _function) {
+    jQuery.ajax({
+      type: "POST",
+      url: "action.php",
+      dataType: "json",
+      data: {
+        functionname: "addData",
+        query: query,
+      },
+      success: function () {
+        alertify.notify("Successful!", "success");
+        _function();
       },
     });
   }
@@ -327,6 +373,40 @@ class Console {
         this.$productBrandSelection.appendChild($option);
       });
     });
+  }
+  handleCategoryEditItems() {
+    this.getData(
+      "SELECT `category`.*, COUNT(`product`.`productID`) as quantity FROM `category` LEFT JOIN `product`ON `category`.`catID` = `product`.`catID` GROUP BY `category`.`catID`;",
+      (data) => {
+        this.$editCategoryContainer.innerHTML = "";
+        data.map((item) => {
+          const container = document.createElement("div");
+          const title = document.createElement("p");
+          title.innerHTML = item.categoryName + " : " + item.quantity;
+          const editBtn = document.createElement("button");
+          editBtn.innerHTML = "Edit";
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerHTML = "Delete";
+          deleteBtn.addEventListener("click", () => {
+            if (item.quantity == 0) {
+              this.deleteData(
+                "DELETE FROM `category` WHERE catID = " + item.catID,
+                () => {
+                  this.handleCategoryEditItems();
+                }
+              );
+            } else {
+              alertify.notify("Category not empty!", "error");
+            }
+          });
+          container.appendChild(title);
+          container.appendChild(editBtn);
+          container.appendChild(deleteBtn);
+
+          this.$editCategoryContainer.appendChild(container);
+        });
+      }
+    );
   }
 }
 

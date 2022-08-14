@@ -31,8 +31,8 @@ function addData($query)
 
     $conn = new mysqli($servername, $username, $password, $dbname);
     $conn->query("$query");
-
     $conn->close();
+    echo json_encode("done");
 }
 
 if ($_POST['functionname'] == 'getData') {

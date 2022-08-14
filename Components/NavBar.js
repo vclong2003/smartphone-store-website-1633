@@ -95,7 +95,7 @@ class NavBar {
     });
 
     this.$consoleScreenIcon = document.createElement("img");
-    this.$consoleScreenIcon.src = "././Assets/Icons/editor_icon.png";
+    this.$consoleScreenIcon.src = "././Assets/Icons/add_icon.png";
     this.$consoleScreenIcon.addEventListener("click", () => {
       navigate("consoleScreen");
     });
