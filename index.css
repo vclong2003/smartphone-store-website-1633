@@ -394,78 +394,108 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 .productDetailTopBar {
-  width: 100%;
+  width: 98%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  padding: 1%;
 }
-.productDetailBackBtn {
-  width: 5%;
+.productDetailTopBar img {
+  width: 2%;
+  cursor: pointer;
 }
 .productDetailContainer {
-  width: 80%;
+  width: 60%;
   display: flex;
   flex-direction: column;
-  background-color: rgb(238, 237, 237);
+  background-color: rgb(247, 247, 247);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin-bottom: 10%;
+  padding: 2%;
+  padding-bottom: 5%;
+  border-radius: 12px;
+  animation: loadProduct 1s;
 }
 .productDetailContainer_header {
   width: 100%;
   text-align: left;
   font-family: "Poppins", sans-serif;
+  margin-bottom: 1%;
 }
 .productDetail_briefContainer {
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .productDetail_leftContainer {
-  width: 40%;
+  width: 36%;
   display: flex;
   justify-content: center;
+  padding: 2%;
+  background-color: #fff;
+  border-radius: 10px;
+}
+.productDetail_leftContainer img {
+  width: 50%;
 }
 .productDetail_righContainer {
-  width: 60%;
+  width: 57%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 3%;
 }
 .productDetail_nameContainer {
   width: 100%;
   font-family: "Poppins", sans-serif;
+  font-size: 20px;
 }
 .productDetail_smallDesContainer {
   width: 100%;
-  font-family: "Poppins", sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
 }
 .productDetail_priceAndBtnContainer {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin-top: auto;
 }
 .productDetail_price {
   font-family: "Poppins", sans-serif;
+  font-size: 22px;
 }
 .productDetail_addTocardBtn {
   background-color: #6a983c;
   border: 2px solid #46760a;
   font-family: "Poppins", sans-serif;
+  color: white;
+  padding: 1%;
+  border-radius: 10px;
+  cursor: pointer;
 }
 .productDetail_descriptionContainer {
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .productDetail_descriptionContainer img {
-  max-width: 80%;
+  max-width: 90%;
+  margin-bottom: 3%;
+  border-radius: 12px;
 }
 .productDetail_text {
-  font-family: "Poppins", sans-serif;
-  width: 80%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  width: 90%;
+  font-size: 18px;
+  text-align: justify;
 }
 
 /* Console screen -------------------------------------------------- */

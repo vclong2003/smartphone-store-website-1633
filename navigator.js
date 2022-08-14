@@ -3,6 +3,7 @@ import { Login } from "./Screens/Login.js";
 import { ProductDisplay } from "./Screens/ProductDisplay.js";
 import { Register } from "./Screens/Register.js";
 import { Intro } from "./Screens/Intro.js";
+import { ProductDetail } from "./Screens/ProductDetail.js";
 alertify.set("notifier", "position", "top-left");
 
 const registerScreen = new Register();
@@ -10,6 +11,7 @@ const loginScreen = new Login();
 const productDisplayScreen = new ProductDisplay();
 const consoleScreen = new Console();
 const introScreen = new Intro();
+const productDetailScreen = new ProductDetail();
 
 const stack = {
   registerScreen: registerScreen,
@@ -17,28 +19,23 @@ const stack = {
   productDisplayScreen: productDisplayScreen,
   consoleScreen: consoleScreen,
   introScreen: introScreen,
+  productDetailScreen: productDetailScreen,
 };
 
 let currentScreen = null;
 
 const myApp = document.getElementById("myApp");
 
-// function ChangeUrl(title, url) {
-//   if (typeof history.pushState != undefined) {
-//     var obj = { Title: title, Url: url };
-//     history.pushState(obj, obj.Title, obj.Url);
-//   } else {
-//     alert("Browser does not support HTML5.");
-//   }
-// }
-
-const navigate = (screen) => {
+const navigate = (screen, routeParam = null) => {
   if (currentScreen) {
     myApp.removeChild(currentScreen);
   }
   if (stack[screen]) {
-    currentScreen = myApp.appendChild(stack[screen].render());
-    // ChangeUrl(screen, screen + ".html");
+    if (routeParam) {
+      currentScreen = myApp.appendChild(stack[screen].render(routeParam));
+    } else {
+      currentScreen = myApp.appendChild(stack[screen].render());
+    }
   } else {
     alert("Screen not valid!");
   }

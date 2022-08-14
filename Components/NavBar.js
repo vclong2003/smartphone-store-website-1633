@@ -88,6 +88,7 @@ class NavBar {
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
         signOut(auth);
+        this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
       } else {
         navigate("loginScreen");
       }
@@ -118,8 +119,6 @@ class NavBar {
         this.$authStateText.classList.remove("navBarAuthStateTextLoggedIn");
         this.$authStateText.innerHTML = "Login";
         this.authState = false;
-
-        this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
       }
     });
 

@@ -1,6 +1,7 @@
 import { Input } from "../Components/Input.js";
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
+import { navigate } from "../navigator.js";
 class ProductDisplay {
   $viewArea;
   $container;
@@ -227,7 +228,6 @@ class ProductDisplay {
             );
           }
         });
-        console.log(paginationData);
         this.paginateData(paginationData);
       }
     );
@@ -313,8 +313,6 @@ class ProductDisplay {
     $productName.innerHTML = brand + " " + name;
     $productSmallDescription.innerHTML = smallDescription;
     $productPrice.innerHTML = price + "$";
-    $productContainer.dataset.catID = catID;
-    $productContainer.dataset.brandID = brandID;
 
     $productThumbnailContainer.appendChild($productThumbnail);
     $productSubContainer.appendChild($productPrice);
@@ -327,6 +325,10 @@ class ProductDisplay {
 
     $productContainer.appendChild($productInfoContainer);
     $productContainer.appendChild($productSubContainer);
+
+    $productContainer.addEventListener("click", () => {
+      navigate("productDetailScreen", id);
+    });
 
     return $productContainer;
   }
@@ -341,7 +343,6 @@ class ProductDisplay {
     this.$container.appendChild(this.$rightPanel);
     this.$viewArea.appendChild(this.$container);
 
-    history.pushState({ title: "hello" }, "test", "testUrl");
     return this.$viewArea;
   }
 }

@@ -1,3 +1,4 @@
+import { navigate } from "../navigator.js";
 class ProductDetail {
   $container;
 
@@ -24,7 +25,7 @@ class ProductDetail {
   $img;
   $text;
 
-  constructor(id) {
+  constructor(id = "") {
     this.$container = document.createElement("div");
     this.$topBar = document.createElement("div");
     this.$backBtn = document.createElement("img");
@@ -36,7 +37,7 @@ class ProductDetail {
     this.$thumbnailImg = document.createElement("img");
     this.$nameContainer = document.createElement("div");
     this.$smallDesContainer = document.createElement("div");
-    this.$priceAndBtnContainer = document.createElemente("div");
+    this.$priceAndBtnContainer = document.createElement("div");
     this.$price = document.createElement("div");
     this.$addTocardBtn = document.createElement("button");
     this.$descriptionContainer = document.createElement("div");
@@ -63,16 +64,32 @@ class ProductDetail {
     );
     this.$text.classList.add("productDetail_text");
 
-    this.$header.innerHTML = "Category: sdjfsd > Brand: skjdmhjdsfdsd";
-    this.$nameContainer.innerHTML = "Ghgsd shdf shdf 4";
-    this.$smallDesContainer.innerHTML =
-      "dhfjds sjdfh hjfd hsjk hskjdhgdf kjdfhkgjfd jdfkgjhsf gjdfkhgjs hgjsd fkjgsdhfkjs hgjks hgkjfd";
-    this.$price.innerHTML = "1200.00";
     this.$addTocardBtn.innerHTML = "Add to card";
-    this.$text.innerHTML =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mi massa, fringilla at condimentum ut, auctor eu ipsum. Aenean at mauris at magna placerat dapibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin iaculis tortor sodales arcu aliquam, et finibus erat euismod. Vivamus tempus tincidunt nibh, nec mattis diam mollis id. Curabitur malesuada consequat purus eget varius. Nullam convallis mauris at turpis dapibus, id feugiat lectus tincidunt.Quisque ullamcorper libero vitae velit mattis, sed molestie est sollicitudin. Sed viverra est vel vehicula dapibus. Integer nec suscipit dolor, a eleifend dui. Vivamus egestas felis libero, ut interdum urna posuere ac. Nulla vitae sem mi. Suspendisse fermentum viverra enim eget dignissim. Vestibulum gravida laoreet lacus, non egestas elit auctor quis. Donec pretium tempus erat, faucibus maximus nisi vulputate vel. Nam mollis arcu vel urna facilisis viverra. Vestibulum ac enim euismod, consectetur velit id, ullamcorper enim.Sed et sagittis sapien. Sed finibus, nisl ut aliquet finibus, dui velit rhoncus dolor, non pretium lacus ex et ipsum. Duis malesuada risus eget felis porta rutrum. Nulla sed nisi enim. Aliquam gravida, erat vel tincidunt feugiat, nisi nulla vehicula nunc, sit amet laoreet erat sem ac ipsum. Fusce massa elit, lacinia eget pellentesque et, rutrum eu tortor. Duis nunc purus, hendrerit ac urna at, fringilla sodales metus.Aliquam non diam turpis. Ut eu nibh massa. Nullam scelerisque posuere metus non consequat. Maecenas hendrerit felis non risus malesuada, ac interdum elit volutpat. Nullam tempor eros sit amet eros tristique, nec pulvinar erat hendrerit. Donec congue nisl augue, quis congue libero tempus nec. Aenean leo est, commodo quis tellus ac, fermentum sagittis nunc. Vivamus pharetra quis justo id suscipit. Ut nec ligula purus. Proin sodales nisi nec eros tincidunt, eget iaculis ipsum tincidunt. Suspendisse potenti. Phasellus dui mauris, consequat dictum nulla id, porttitor tempus sapien. Nam quis vehicula neque.";
+    this.$backBtn.src = "././Assets/Icons/back_icon.png";
+    this.$backBtn.addEventListener("click", () => {
+      navigate("productDisplayScreen");
+      this.$header.innerHTML = "";
+      this.$thumbnailImg.src = "";
+      this.$nameContainer.innerHTML = "";
+      this.$smallDesContainer.innerHTML = "";
+      this.$price.innerHTML = "";
+      this.$img.src = "";
+      this.$text.innerHTML = "";
+    });
   }
-  render() {
+  getData(query = "", _function) {
+    jQuery.ajax({
+      type: "POST",
+      url: "action.php",
+      dataType: "json",
+      data: { functionname: "getData", query: query },
+      success: function (data) {
+        _function(data);
+      },
+    });
+  }
+  render(id = null) {
+    window.scrollTo(0, 0);
     this.$topBar.appendChild(this.$backBtn);
 
     this.$priceAndBtnContainer.appendChild(this.$price);
@@ -83,6 +100,7 @@ class ProductDetail {
     this.$rightContainer.appendChild(this.$smallDesContainer);
     this.$rightContainer.appendChild(this.$priceAndBtnContainer);
 
+    this.$briefContainer.appendChild(this.$header);
     this.$briefContainer.appendChild(this.$leftContainer);
     this.$briefContainer.appendChild(this.$rightContainer);
 
@@ -93,7 +111,31 @@ class ProductDetail {
     this.$productDetailContainer.appendChild(this.$descriptionContainer);
 
     this.$container.appendChild(this.$topBar);
-    this.$container.appendChild(this.$descriptionContainer);
+    this.$container.appendChild(this.$productDetailContainer);
+
+    if (id) {
+      this.getData(
+        "SELECT `product`.*, `brand`.`brandName`, `category`.`categoryName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` INNER JOIN `category` ON `product`.`catID` = `category`.`catID` WHERE `product`.`productID` = " +
+          id,
+        (data) => {
+          if (data[0] != undefined) {
+            this.$header.innerHTML =
+              "Category: " +
+              data[0].categoryName +
+              " > Brand: " +
+              data[0].brandName;
+            this.$thumbnailImg.src = data[0].thumbnailUrl;
+            this.$nameContainer.innerHTML =
+              data[0].brandName + " " + data[0].Name;
+            this.$smallDesContainer.innerHTML = data[0].smallDescription;
+            this.$price.innerHTML = data[0].Price + "$";
+            this.$img.src = data[0].imageUrl;
+            this.$text.innerHTML = data[0].Description;
+          }
+        }
+      );
+    }
+    return this.$container;
   }
 }
 
