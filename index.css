@@ -386,6 +386,36 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
+/* Product detail screen---------------------------------*/
+.productDetailScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.productDetailTopBar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.productDetailBackBtn {
+  width: 5%;
+}
+.productDetailContainer {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(238, 237, 237);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.productDetail_briefContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
 /* Console screen -------------------------------------------------- */
 .consoleContainer {
   width: 100%;

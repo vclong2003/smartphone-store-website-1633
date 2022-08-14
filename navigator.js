@@ -23,12 +23,22 @@ let currentScreen = null;
 
 const myApp = document.getElementById("myApp");
 
+// function ChangeUrl(title, url) {
+//   if (typeof history.pushState != undefined) {
+//     var obj = { Title: title, Url: url };
+//     history.pushState(obj, obj.Title, obj.Url);
+//   } else {
+//     alert("Browser does not support HTML5.");
+//   }
+// }
+
 const navigate = (screen) => {
   if (currentScreen) {
     myApp.removeChild(currentScreen);
   }
   if (stack[screen]) {
     currentScreen = myApp.appendChild(stack[screen].render());
+    // ChangeUrl(screen, screen + ".html");
   } else {
     alert("Screen not valid!");
   }
@@ -49,19 +59,19 @@ navigate("productDisplayScreen");
 // );
 
 // for testing purpose
-window.onload = () => {
-  jQuery.ajax({
-    type: "POST",
-    url: "action.php",
-    dataType: "json",
-    data: {
-      functionname: "getData",
-      query: "SELECT COUNT(*) FROM `product` WHERE `catID` = 2;",
-    },
-    success: function (data) {
-      console.log(data);
-    },
-  });
-};
+// window.onload = () => {
+//   jQuery.ajax({
+//     type: "POST",
+//     url: "action.php",
+//     dataType: "json",
+//     data: {
+//       functionname: "getData",
+//       query: "SELECT COUNT(*) FROM `product` WHERE `catID` = 2;",
+//     },
+//     success: function (data) {
+//       console.log(data);
+//     },
+//   });
+// };
 
 export { navigate };

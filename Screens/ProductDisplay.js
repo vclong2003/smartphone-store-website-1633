@@ -341,6 +341,7 @@ class ProductDisplay {
     this.$container.appendChild(this.$rightPanel);
     this.$viewArea.appendChild(this.$container);
 
+    history.pushState({ title: "hello" }, "test", "testUrl");
     return this.$viewArea;
   }
 }
