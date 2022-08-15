@@ -83,6 +83,7 @@ class NavBar {
     this.$leftComponentContainer.appendChild(this.$logo);
 
     this.$authStateText = document.createElement("div");
+    this.$authStateText.title = "Click to logout!";
     this.$authStateText.classList.add("navBarAuthStateText");
     this.$contactContainer.appendChild(this.$authStateText);
     this.$authStateText.addEventListener("click", () => {
@@ -95,7 +96,7 @@ class NavBar {
     });
 
     this.$consoleScreenIcon = document.createElement("img");
-    this.$consoleScreenIcon.src = "././Assets/Icons/add_icon.png";
+    this.$consoleScreenIcon.src = "././Assets/Icons/editor_icon.png";
     this.$consoleScreenIcon.addEventListener("click", () => {
       navigate("consoleScreen");
     });

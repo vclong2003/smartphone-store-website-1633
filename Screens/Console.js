@@ -299,7 +299,7 @@ class Console {
   render() {
     this.$container.appendChild(this.$leftPanel);
     this.$container.appendChild(this.$rightPanel);
-    this.$editTab.click();
+    this.$addTab.click();
     return this.$container;
   }
 

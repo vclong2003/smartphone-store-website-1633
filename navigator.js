@@ -4,6 +4,7 @@ import { ProductDisplay } from "./Screens/ProductDisplay.js";
 import { Register } from "./Screens/Register.js";
 import { Intro } from "./Screens/Intro.js";
 import { ProductDetail } from "./Screens/ProductDetail.js";
+import { Cart } from "./Screens/Cart.js";
 alertify.set("notifier", "position", "top-left");
 
 const registerScreen = new Register();
@@ -12,6 +13,7 @@ const productDisplayScreen = new ProductDisplay();
 const consoleScreen = new Console();
 const introScreen = new Intro();
 const productDetailScreen = new ProductDetail();
+const cartScreen = new Cart();
 
 const stack = {
   registerScreen: registerScreen,
@@ -20,6 +22,7 @@ const stack = {
   consoleScreen: consoleScreen,
   introScreen: introScreen,
   productDetailScreen: productDetailScreen,
+  cartScreen: cartScreen,
 };
 
 let currentScreen = null;
@@ -41,7 +44,7 @@ const navigate = (screen, routeParam = null) => {
   }
 };
 
-navigate("consoleScreen");
+navigate("cartScreen");
 
 // alertify.prompt(
 //   "",
@@ -56,19 +59,19 @@ navigate("consoleScreen");
 // );
 
 // for testing purpose
-// window.onload = () => {
-//   jQuery.ajax({
-//     type: "POST",
-//     url: "action.php",
-//     dataType: "json",
-//     data: {
-//       functionname: "getData",
-//       query: "SELECT COUNT(*) FROM `product` WHERE `catID` = 2;",
-//     },
-//     success: function (data) {
-//       console.log(data);
-//     },
-//   });
-// };
+window.onload = () => {
+  jQuery.ajax({
+    type: "POST",
+    url: "action.php",
+    dataType: "json",
+    data: {
+      functionname: "getData",
+      query: "SELECT LAST_INSERT_ID();",
+    },
+    success: function (data) {
+      console.log(data.length);
+    },
+  });
+};
 
 export { navigate };

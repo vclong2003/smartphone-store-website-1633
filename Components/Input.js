@@ -25,5 +25,8 @@ class Input {
       this.$input.style.color = "";
     }
   }
+  addClass(_class) {
+    this.$input.classList.add(_class);
+  }
 }
 export { Input };
