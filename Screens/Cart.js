@@ -1,4 +1,5 @@
 import { Input } from "../Components/Input.js";
+import { navigate } from "../navigator.js";
 
 class Cart {
   $container;
@@ -67,18 +68,25 @@ class Cart {
     this.$rightPanel.classList.add("cartScreen_rightPanel");
     this.$orderSummaryTitle = document.createElement("div");
     this.$orderSummaryTitle.innerHTML = "Order Summary";
+    this.$orderSummaryTitle.classList.add("cartScreen_summaryTitle");
     this.$rightPanel.appendChild(this.$orderSummaryTitle);
     this.$orderItemsContainer = document.createElement("div");
     this.$rightPanel.appendChild(this.$orderItemsContainer);
     this.$checkoutContainer = document.createElement("div");
+    this.$checkoutContainer.classList.add("cartScreen_checkoutContainer");
     this.$orderTotalTitle = document.createElement("div");
     this.$orderTotalTitle.innerHTML = "Total Order";
     this.$orderTotalValue = document.createElement("div");
     this.$orderTotalValue.innerHTML = "1500.00$";
+    this.$orderTotalValue.classList.add("cartScreen_orderTotalValue");
     this.$checkoutContainer.appendChild(this.$orderTotalTitle);
     this.$checkoutContainer.appendChild(this.$orderTotalValue);
     this.$rightPanel.appendChild(this.$checkoutContainer);
     this.$container.appendChild(this.$rightPanel);
+
+    this.$backBtn.addEventListener("click", () => {
+      navigate("productDisplayScreen");
+    });
   }
   render() {
     return this.$container;

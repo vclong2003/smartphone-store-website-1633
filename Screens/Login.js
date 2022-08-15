@@ -1,7 +1,12 @@
 import { Input } from "../Components/Input.js";
 import { auth } from "../firebaseConfig.js";
 import { navigate } from "../navigator.js";
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import { LoadingLayer } from "../Components/LoadingLayer.js";
+import { toggleElement } from "../Components/ToggleElement.js";
 class Login {
   $container;
   $loadingLayer;
@@ -24,6 +29,9 @@ class Login {
   constructor() {
     this.$container = document.createElement("div");
     this.$container.classList.add("authContainer");
+
+    this.$loadingLayer = new LoadingLayer();
+    this.$container.appendChild(this.$loadingLayer.render());
 
     this.$imgContainer = document.createElement("div");
     this.$img = document.createElement("img");
@@ -48,15 +56,19 @@ class Login {
       if (email == "" || password == "") {
         alert("Please enter email and password!");
       } else {
+        toggleElement(this.$loadingLayer.render());
         signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
+            toggleElement(this.$loadingLayer.render());
             navigate("productDisplayScreen");
             // ...
           })
           .catch((error) => {
+            toggleElement(this.$loadingLayer.render());
             const errorCode = error.code;
+            console.log(errorCode);
             const errorMessage = error.message;
           });
       }
@@ -78,6 +90,32 @@ class Login {
 
     this.$createNewAccount.addEventListener("click", () => {
       navigate("registerScreen");
+    });
+    this.$forgotPwd.addEventListener("click", () => {
+      alertify.prompt(
+        "",
+        "Enter your email",
+        "",
+        function (evt, value) {
+          alertify.alert(
+            "",
+            "An email has been sent to your account, please folow the instruction to reser your password!    *remember to check your spam folder"
+          );
+          sendPasswordResetEmail(auth, value)
+            .then(() => {
+              // Password reset email sent!
+              // ..
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              // ..
+            });
+        },
+        function () {
+          alertify.error("Cancelled!", 1);
+        }
+      );
     });
   }
   render() {

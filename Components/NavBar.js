@@ -89,7 +89,11 @@ class NavBar {
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
         signOut(auth);
-        this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
+        if (
+          this.$consoleScreenIcon.parentNode == this.$rightComponentContainer
+        ) {
+          this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
+        }
       } else {
         navigate("loginScreen");
       }
@@ -103,6 +107,14 @@ class NavBar {
     this.$cartIcon = document.createElement("img");
     this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
     this.$rightComponentContainer.appendChild(this.$cartIcon);
+    this.$cartIcon.addEventListener("click", () => {
+      if (this.authState) {
+        navigate("cartScreen");
+      } else {
+        alertify.notify("You need to login to use this function!", "error", 3);
+        navigate("loginScreen");
+      }
+    });
   }
   render() {
     onAuthStateChanged(auth, (user) => {
@@ -113,7 +125,9 @@ class NavBar {
         this.$authStateText.classList.add("navBarAuthStateTextLoggedIn");
         this.authState = true;
 
-        this.$rightComponentContainer.appendChild(this.$consoleScreenIcon);
+        if (user.email == "vclong2003@gmail.com") {
+          this.$rightComponentContainer.appendChild(this.$consoleScreenIcon);
+        }
       } else {
         // User is signed out
         // ...

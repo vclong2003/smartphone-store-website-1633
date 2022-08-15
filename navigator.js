@@ -44,7 +44,7 @@ const navigate = (screen, routeParam = null) => {
   }
 };
 
-navigate("cartScreen");
+navigate("productDisplayScreen");
 
 // alertify.prompt(
 //   "",
