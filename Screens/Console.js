@@ -4,11 +4,13 @@ import {
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
 import { Input } from "../Components/Input.js";
+import { toggleElement } from "../Components/ToggleElement.js";
 import { storage } from "../firebaseConfig.js";
 import { navigate } from "../navigator.js";
 class Console {
   $container;
   $edittingLayer;
+  $edittingPopup;
 
   $leftPanel;
   $rightPanel;
@@ -32,6 +34,7 @@ class Console {
 
   $editCategoryContainer;
   $editBrandContainer;
+  $editProductContainer;
 
   $addProductContainer;
   $productCategorySelection;
@@ -60,8 +63,9 @@ class Console {
 
     this.$edittingLayer = document.createElement("div");
     this.$edittingLayer.classList.add("consoleScreen_edittingLayer");
-    this.$edittingLayer.innerHTML = `<div style="width: 200px; height: 200px; background-color: black"></div>`;
     this.$container.appendChild(this.$edittingLayer);
+    this.$edittingPopup = document.createElement("div");
+    this.$edittingLayer.appendChild(this.$edittingPopup);
 
     this.$leftPanel = document.createElement("div");
     this.$rightPanel = document.createElement("div");
@@ -90,20 +94,14 @@ class Console {
     this.$addCategoryBtn.addEventListener("click", () => {
       const categoryName = this.$categoryNameInput.getValue();
       if (categoryName != "") {
-        jQuery.ajax({
-          type: "POST",
-          url: "action.php",
-          dataType: "json",
-          data: {
-            functionname: "addData",
-            query:
-              "INSERT INTO `category`(`categoryName`) VALUES ('" +
-              categoryName +
-              "')",
-          },
-        });
-        alertify.notify("Successful!", "success");
-        this.updateCategorySelection();
+        this.editData(
+          "INSERT INTO `category`(`categoryName`) VALUES ('" +
+            categoryName +
+            "')",
+          () => {
+            this.updateCategorySelection();
+          }
+        );
       } else {
         alertify.notify("PLease enter category name!", "error", 2);
       }
@@ -122,22 +120,16 @@ class Console {
       const brandName = this.$brandNameInput.getValue();
       const brandDescription = this.$brandDescriptionInput.getValue();
       if (brandName != "") {
-        jQuery.ajax({
-          type: "POST",
-          url: "action.php",
-          dataType: "json",
-          data: {
-            functionname: "addData",
-            query:
-              "INSERT INTO `brand`(`brandName`, `Description`) VALUES ('" +
-              brandName +
-              "','" +
-              brandDescription +
-              "')",
-          },
-        });
-        alertify.notify("Successful!", "success");
-        this.updateBrandSelection();
+        this.editData(
+          "INSERT INTO `brand`(`brandName`, `Description`) VALUES ('" +
+            brandName +
+            "','" +
+            brandDescription +
+            "')",
+          () => {
+            this.updateBrandSelection();
+          }
+        );
       } else {
         alertify.notify("PLease enter brand name!", "error", 2);
       }
@@ -151,15 +143,9 @@ class Console {
     this.$addProductContainer.classList.add("addContentContainer");
 
     this.$productCategorySelection = document.createElement("select");
-    this.$productCategorySelection.addEventListener("change", () => {
-      console.log(`${this.$productCategorySelection.value} selected`);
-    });
     this.updateCategorySelection();
 
     this.$productBrandSelection = document.createElement("select");
-    this.$productBrandSelection.addEventListener("change", () => {
-      console.log(`${this.$productBrandSelection.value} selected`);
-    });
     this.updateBrandSelection();
 
     this.$productNameInput = new Input("Product name");
@@ -216,35 +202,27 @@ class Console {
           if (this.$imageInput.files[0]) {
             this.uploadImage(this.$imageInput.files[0], (url) => {
               imageUrl = url;
-              jQuery.ajax({
-                type: "POST",
-                url: "action.php",
-                dataType: "json",
-                data: {
-                  functionname: "addData",
-                  query:
-                    "INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`, `quantity`) VALUES ('" +
-                    catID +
-                    "','" +
-                    brandID +
-                    "','" +
-                    name +
-                    "','" +
-                    smallDescription +
-                    "','" +
-                    description +
-                    "','" +
-                    thumbnailUrl +
-                    "','" +
-                    imageUrl +
-                    "','" +
-                    price +
-                    "', '" +
-                    quantity +
-                    "')",
-                },
-              });
-              alertify.notify("Successful!", "success");
+              this.editData(
+                "INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`, `quantity`) VALUES ('" +
+                  catID +
+                  "','" +
+                  brandID +
+                  "','" +
+                  name +
+                  "','" +
+                  smallDescription +
+                  "','" +
+                  description +
+                  "','" +
+                  thumbnailUrl +
+                  "','" +
+                  imageUrl +
+                  "','" +
+                  price +
+                  "', '" +
+                  quantity +
+                  "')"
+              );
             });
           }
         });
@@ -275,10 +253,17 @@ class Console {
     this.$addTabContent.appendChild(this.$addProductContainer);
 
     this.$editCategoryContainer = document.createElement("div");
-    this.$editCategoryContainer.classList.add("editContentContainer");
+    this.$editCategoryContainer.classList.add("editCategoryContainer");
+    this.$editBrandContainer = document.createElement("div");
+    this.$editBrandContainer.classList.add("editBrandContainer");
+    this.$editProductContainer = document.createElement("div");
+    this.$editProductContainer.classList.add("editProductContainer");
+
     this.$editTabContent = document.createElement("div");
     this.$editTabContent.appendChild(this.$editCategoryContainer);
-    this.$editTabContent.classList.add("consoleAddTabContent");
+    this.$editTabContent.appendChild(this.$editBrandContainer);
+    this.$editTabContent.appendChild(this.$editProductContainer);
+    this.$editTabContent.classList.add("consoleEditTabContent");
 
     let previousTab = null;
     this.$addTab.addEventListener("click", () => {
@@ -292,6 +277,8 @@ class Console {
     });
     this.$editTab.addEventListener("click", () => {
       this.handleCategoryEditItems();
+      this.handleBrandEditItems();
+      this.handleProductEditItems();
       if (previousTab) {
         previousTab.classList.remove("activeConsoleTab");
       }
@@ -312,7 +299,7 @@ class Console {
   render() {
     this.$container.appendChild(this.$leftPanel);
     this.$container.appendChild(this.$rightPanel);
-
+    this.$editTab.click();
     return this.$container;
   }
 
@@ -327,7 +314,7 @@ class Console {
       },
     });
   }
-  deleteData(query, _function) {
+  editData(query, _function = null) {
     jQuery.ajax({
       type: "POST",
       url: "action.php",
@@ -337,8 +324,10 @@ class Console {
         query: query,
       },
       success: function () {
-        alertify.notify("Successful!", "success");
-        _function();
+        alertify.notify("Successful!", "success", 1);
+        if (_function) {
+          _function();
+        }
       },
     });
   }
@@ -381,22 +370,53 @@ class Console {
         this.$editCategoryContainer.innerHTML = "";
         data.map((item) => {
           const container = document.createElement("div");
+          container.classList.add("console_editItems");
           const title = document.createElement("p");
           title.innerHTML = item.categoryName + " : " + item.quantity;
           const editBtn = document.createElement("button");
           editBtn.innerHTML = "Edit";
+          editBtn.classList.add("console_editItems_editBtn");
           const deleteBtn = document.createElement("button");
           deleteBtn.innerHTML = "Delete";
+
+          editBtn.addEventListener("click", () => {
+            this.$edittingPopup.innerHTML = "";
+            const catNameInput = new Input();
+            catNameInput.setValue(item.categoryName);
+            this.$edittingPopup.appendChild(catNameInput.render());
+            this.renderEditorPopup(
+              () => {
+                this.editData(
+                  "UPDATE `category` SET `categoryName`='" +
+                    catNameInput.getValue() +
+                    "' WHERE `catID` = " +
+                    item.catID,
+                  () => {
+                    this.handleCategoryEditItems();
+                    this.updateCategorySelection();
+                    toggleElement(this.$edittingLayer);
+                  }
+                );
+              },
+              () => {
+                toggleElement(this.$edittingLayer);
+                alertify.notify("Cancelled!", "error", 1);
+              }
+            );
+            toggleElement(this.$edittingLayer);
+          });
+
           deleteBtn.addEventListener("click", () => {
             if (item.quantity == 0) {
-              this.deleteData(
+              this.editData(
                 "DELETE FROM `category` WHERE catID = " + item.catID,
                 () => {
                   this.handleCategoryEditItems();
+                  this.updateCategorySelection();
                 }
               );
             } else {
-              alertify.notify("Category not empty!", "error");
+              alertify.notify("Category not empty!", "error", 1);
             }
           });
           container.appendChild(title);
@@ -407,6 +427,147 @@ class Console {
         });
       }
     );
+  }
+  handleBrandEditItems() {
+    this.getData(
+      "SELECT `brand`.*, COUNT(`product`.`productID`) as quantity FROM `brand` LEFT JOIN `product`ON `brand`.`brandID` = `product`.`brandID` GROUP BY `brand`.`brandID`;",
+      (data) => {
+        this.$editBrandContainer.innerHTML = "";
+        data.map((item) => {
+          const container = document.createElement("div");
+          container.classList.add("console_editItems");
+          const title = document.createElement("p");
+          title.innerHTML = item.brandName + " : " + item.quantity;
+          const editBtn = document.createElement("button");
+          editBtn.innerHTML = "Edit";
+          editBtn.classList.add("console_editItems_editBtn");
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerHTML = "Delete";
+
+          editBtn.addEventListener("click", () => {
+            this.$edittingPopup.innerHTML = "";
+            const brandNameInput = new Input();
+            const brandDescriptionInput = new Input();
+            brandNameInput.setValue(item.brandName);
+            brandDescriptionInput.setValue(item.Description);
+            this.$edittingPopup.appendChild(brandNameInput.render());
+            this.$edittingPopup.appendChild(brandDescriptionInput.render());
+            this.renderEditorPopup(
+              () => {
+                this.editData(
+                  "UPDATE `brand` SET `brandName` = '" +
+                    brandNameInput.getValue() +
+                    "', `Description` = '" +
+                    brandDescriptionInput.getValue() +
+                    "' WHERE `brand`.`brandID` = " +
+                    item.brandID,
+                  () => {
+                    this.handleBrandEditItems();
+                    this.updateBrandSelection();
+                    toggleElement(this.$edittingLayer);
+                  }
+                );
+              },
+              () => {
+                toggleElement(this.$edittingLayer);
+                alertify.notify("Cancelled!", "error", 1);
+              }
+            );
+            toggleElement(this.$edittingLayer);
+          });
+
+          deleteBtn.addEventListener("click", () => {
+            if (item.quantity == 0) {
+              this.editData(
+                "DELETE FROM `brand` WHERE brandID = " + item.brandID,
+                () => {
+                  this.handleBrandEditItems();
+                  this.updateBrandSelection();
+                }
+              );
+            } else {
+              alertify.notify("Brand not empty!", "error", 1);
+            }
+          });
+          container.appendChild(title);
+          container.appendChild(editBtn);
+          container.appendChild(deleteBtn);
+
+          this.$editBrandContainer.appendChild(container);
+        });
+      }
+    );
+  }
+  handleProductEditItems() {
+    this.getData(
+      "SELECT `product`.*, `brand`.`brandName`FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID`;",
+      (data) => {
+        this.$editProductContainer.innerHTML = "";
+        data.map((item) => {
+          const container = document.createElement("div");
+          container.classList.add("console_editItems");
+          const title = document.createElement("p");
+          title.innerHTML = item.brandName + " " + item.Name;
+          const editBtn = document.createElement("button");
+          editBtn.innerHTML = "Edit";
+          editBtn.classList.add("console_editItems_editBtn");
+          const deleteBtn = document.createElement("button");
+
+          editBtn.addEventListener("click", () => {
+            alertify.notify(
+              "Sorry, this function is in development!",
+              "error",
+              3
+            );
+          });
+
+          deleteBtn.innerHTML = "Delete";
+          deleteBtn.addEventListener("click", () => {
+            this.$edittingPopup.innerHTML = "";
+            const confirmText = document.createElement("div");
+            confirmText.innerHTML = "Do you want to delete " + item.Name;
+            this.$edittingPopup.appendChild(confirmText);
+            toggleElement(this.$edittingLayer);
+            this.renderEditorPopup(
+              () => {
+                this.editData(
+                  "DELETE FROM `product` WHERE productID = " + item.productID,
+                  () => {
+                    this.handleProductEditItems();
+                    toggleElement(this.$edittingLayer);
+                  }
+                );
+              },
+              () => {
+                toggleElement(this.$edittingLayer);
+                alertify.notify("Cancelled!", "error", 1);
+              }
+            );
+          });
+          container.appendChild(title);
+          container.appendChild(editBtn);
+          container.appendChild(deleteBtn);
+
+          this.$editProductContainer.appendChild(container);
+        });
+      }
+    );
+  }
+  renderEditorPopup(_submit, _cancel) {
+    const container = document.createElement("div");
+    const submitBtn = document.createElement("button");
+    submitBtn.innerHTML = "Submit";
+    const cancelBtn = document.createElement("button");
+    cancelBtn.innerHTML = "Cancel";
+    container.appendChild(submitBtn);
+    container.appendChild(cancelBtn);
+    this.$edittingPopup.appendChild(container);
+    submitBtn.addEventListener("click", () => {
+      _submit();
+    });
+    cancelBtn.addEventListener("click", () => {
+      _cancel();
+    });
   }
 }
 

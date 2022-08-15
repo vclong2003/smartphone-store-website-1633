@@ -15,7 +15,6 @@ class Register {
 
   $title;
 
-  $nameInput;
   $emailInput;
   $passwordInput;
   $repeatPasswordInput;
@@ -40,7 +39,6 @@ class Register {
     this.$title.innerHTML = "Register";
     this.$title.classList.add("authTitle");
 
-    this.$nameInput = new Input("Name");
     this.$emailInput = new Input("Email");
     this.$passwordInput = new Input("Password", "password");
     this.$repeatPasswordInput = new Input("Repeat password", "password");
@@ -57,7 +55,6 @@ class Register {
     });
 
     this.$registerBtn.addEventListener("click", () => {
-      const name = this.$nameInput.getValue();
       const email = this.$emailInput.getValue();
       const password = this.$passwordInput.getValue();
       const passwordRepeat = this.$repeatPasswordInput.getValue();
@@ -76,13 +73,11 @@ class Register {
     this.$img.src = "./Assets/Img/auth_background.png";
     this.$imgContainer.appendChild(this.$img);
 
-    this.$nameInput.clearValue();
     this.$emailInput.clearValue();
     this.$passwordInput.clearValue();
     this.$repeatPasswordInput.clearValue();
 
     this.$inputAreaContainer.appendChild(this.$title);
-    this.$inputAreaContainer.appendChild(this.$nameInput.render());
     this.$inputAreaContainer.appendChild(this.$emailInput.render());
     this.$inputAreaContainer.appendChild(this.$passwordInput.render());
     this.$inputAreaContainer.appendChild(this.$repeatPasswordInput.render());
