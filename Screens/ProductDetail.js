@@ -1,3 +1,4 @@
+import { NavBar } from "../Components/NavBar.js";
 import { navigate } from "../navigator.js";
 class ProductDetail {
   $container;

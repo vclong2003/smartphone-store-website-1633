@@ -2,8 +2,12 @@ import { Input } from "../Components/Input.js";
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
 import { navigate } from "../navigator.js";
+import { auth } from "../firebaseConfig.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 class ProductDisplay {
+  authState = false;
   $viewArea;
+  $navBar;
   $container;
 
   $leftPanel;
@@ -184,10 +188,10 @@ class ProductDisplay {
 
     this.loadItems();
 
-    const navigationBar = new NavBar((searchValue) => {
+    this.$navBar = new NavBar((searchValue) => {
       this.loadItems(undefined, searchValue);
     });
-    this.$viewArea.appendChild(navigationBar.render());
+    this.$viewArea.appendChild(this.$navBar.render());
   }
 
   loadItems(condition = " 1 = 1 ", searchValue = "") {
@@ -326,14 +330,15 @@ class ProductDisplay {
     $productContainer.appendChild($productInfoContainer);
     $productContainer.appendChild($productSubContainer);
 
-    $productContainer.addEventListener("click", () => {
+    $productInfoContainer.addEventListener("click", () => {
       navigate("productDetailScreen", id);
     });
+    $addToCartBtn.addEventListener("click", () => {});
 
     return $productContainer;
   }
 
-  render() {
+  render(searchValue = null) {
     this.$leftPanel.appendChild(this.$categoryFilterContainer);
     this.$leftPanel.appendChild(this.$brandFilterContainer);
     // this.$leftPanel.appendChild(this.$ratingFilterContainer); // under development
@@ -342,6 +347,10 @@ class ProductDisplay {
     this.$container.appendChild(this.$leftPanel);
     this.$container.appendChild(this.$rightPanel);
     this.$viewArea.appendChild(this.$container);
+
+    if (searchValue) {
+      this.$navBar.triggerSearching(searchValue);
+    }
 
     return this.$viewArea;
   }

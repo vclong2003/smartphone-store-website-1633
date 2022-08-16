@@ -27,7 +27,7 @@ class NavBar {
   $consoleScreenIcon;
   $cartIcon;
 
-  constructor(_searchFunction) {
+  constructor(_searchFunction = null) {
     let searching = false;
     this.$container = document.createElement("div");
     this.$container.classList.add("navBarContainer");
@@ -115,6 +115,10 @@ class NavBar {
         navigate("loginScreen");
       }
     });
+  }
+  triggerSearching(searchValue) {
+    this.$searchInput.value = searchValue;
+    this.$searchIconImg.click();
   }
   render() {
     onAuthStateChanged(auth, (user) => {

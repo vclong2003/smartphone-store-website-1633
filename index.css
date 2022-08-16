@@ -345,6 +345,9 @@
   background-color: rgb(229, 229, 229);
   transform: scale(1.05);
 }
+.productInfoContainer{
+  height: 100%;
+}
 .productThumbnailContainer {
   width: 100%;
   height: 140px;
@@ -385,6 +388,9 @@
   color: white;
   border-radius: 10px;
   cursor: pointer;
+}
+.productSubContainer button:active {
+  transform: scale(0.8);
 }
 
 /* Product detail screen---------------------------------*/
