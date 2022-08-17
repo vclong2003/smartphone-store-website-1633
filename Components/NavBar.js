@@ -89,11 +89,7 @@ class NavBar {
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
         signOut(auth);
-        if (
-          this.$consoleScreenIcon.parentNode == this.$rightComponentContainer
-        ) {
-          this.$rightComponentContainer.removeChild(this.$consoleScreenIcon);
-        }
+        window.location.reload();
       } else {
         navigate("loginScreen");
       }

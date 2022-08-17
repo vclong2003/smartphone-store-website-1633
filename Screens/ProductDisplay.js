@@ -5,7 +5,8 @@ import { navigate } from "../navigator.js";
 import { auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 class ProductDisplay {
-  authState = false;
+  userEmail = null;
+
   $viewArea;
   $navBar;
   $container;
@@ -248,11 +249,26 @@ class ProductDisplay {
       },
     });
   }
+  editData(query, _function = null) {
+    jQuery.ajax({
+      type: "POST",
+      url: "action.php",
+      dataType: "json",
+      data: {
+        functionname: "addData",
+        query: query,
+      },
+      success: function () {
+        if (_function) {
+          _function();
+        }
+      },
+    });
+  }
 
   paginateData(rawData = []) {
     this.$paginationContainer.innerHTML = "";
     let previous = null;
-    let initialpage;
     const splicedData = [];
     while (rawData.length) {
       splicedData.push(rawData.splice(0, 12));
@@ -291,8 +307,6 @@ class ProductDisplay {
     thumbnailUrl,
     rating = 0,
     price,
-    catID,
-    brandID
   ) {
     const $productContainer = document.createElement("div");
     const $productInfoContainer = document.createElement("div");
@@ -333,12 +347,56 @@ class ProductDisplay {
     $productInfoContainer.addEventListener("click", () => {
       navigate("productDetailScreen", id);
     });
-    $addToCartBtn.addEventListener("click", () => {});
+    $addToCartBtn.addEventListener("click", () => {
+      if (this.userEmail) {
+        this.getData(
+          "SELECT COUNT(*) as itemInCart FROM `cart` WHERE `email` = '" +
+            this.userEmail +
+            "' AND productID = " +
+            id,
+          (data) => {
+            if (data[0].itemInCart == 0) {
+              console.log(Number(data[0].itemInCart));
+              this.editData(
+                "INSERT INTO `cart`(`email`, `productID`) VALUES ('" +
+                  this.userEmail +
+                  "','" +
+                  id +
+                  "')",
+                () => {
+                  alertify.notify(
+                    "Item added to cart successfully!",
+                    "success",
+                    2
+                  );
+                }
+              );
+            } else {
+              alertify.notify(
+                "This item is already exist in your cart!",
+                "error",
+                2
+              );
+            }
+          }
+        );
+      } else {
+        alertify.notify("You need to login to use this function!", "error", 2);
+      }
+    });
 
     return $productContainer;
   }
 
-  render(searchValue = null) {
+  render() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.userEmail = user.email;
+      }
+    });
+
     this.$leftPanel.appendChild(this.$categoryFilterContainer);
     this.$leftPanel.appendChild(this.$brandFilterContainer);
     // this.$leftPanel.appendChild(this.$ratingFilterContainer); // under development
@@ -347,10 +405,6 @@ class ProductDisplay {
     this.$container.appendChild(this.$leftPanel);
     this.$container.appendChild(this.$rightPanel);
     this.$viewArea.appendChild(this.$container);
-
-    if (searchValue) {
-      this.$navBar.triggerSearching(searchValue);
-    }
 
     return this.$viewArea;
   }
