@@ -1,3 +1,4 @@
+import { fetchProductInfo } from "../Components/fetchProductInfo.js";
 import { navigate } from "../navigator.js";
 class ProductDetail {
   $container;
@@ -77,17 +78,6 @@ class ProductDetail {
       this.$text.innerHTML = "";
     });
   }
-  fetchProductInfo(id, _callback) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: { functionname: "fetchSingleProduct", productID: id },
-      success: function (data) {
-        _callback(data);
-      },
-    });
-  }
   render(id = null) {
     window.scrollTo(0, 0);
     this.$topBar.appendChild(this.$backBtn);
@@ -114,7 +104,7 @@ class ProductDetail {
     this.$container.appendChild(this.$productDetailContainer);
 
     if (id) {
-      this.fetchProductInfo(id, (data) => {
+      fetchProductInfo(id, (data) => {
         this.$header.innerHTML =
           "Category: " + data.categoryName + " > Brand: " + data.brandName;
         this.$thumbnailImg.src = data.thumbnailUrl;

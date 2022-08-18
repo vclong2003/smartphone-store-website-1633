@@ -8,6 +8,8 @@ import {
   loadItems,
   updateFilterParam,
 } from "../Components/productDisplayHandler.js";
+import { fetchCategoryList } from "../Components/fetchCategoryList.js";
+import { fetchBrandList } from "../Components/fetchBrandList.js";
 class ProductDisplay {
   userEmail = null;
 
@@ -54,7 +56,7 @@ class ProductDisplay {
     this.$categoryFilterLabel = document.createElement("p");
     this.$categoryFilterLabel.innerHTML = "Categories";
     this.$categoryFilterContainer.appendChild(this.$categoryFilterLabel);
-    this.renderCategoryList((data) => {
+    fetchCategoryList((data) => {
       let previous = null;
       data.map((item) => {
         const $itemContainer = document.createElement("div");
@@ -90,7 +92,7 @@ class ProductDisplay {
     this.$brandFilterLabel = document.createElement("p");
     this.$brandFilterLabel.innerHTML = "Brands";
     this.$brandFilterContainer.appendChild(this.$brandFilterLabel);
-    this.renderBrandList((data) => {
+    fetchBrandList((data) => {
       const selectedBrand = [];
       data.map((item) => {
         const $itemContainer = document.createElement("div");
@@ -191,30 +193,6 @@ class ProductDisplay {
     this.$viewArea.appendChild(this.$navBar.render());
   }
 
-  renderCategoryList(_callbackFunction) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: { functionname: "fetchAllCategories" },
-      success: function (data) {
-        _callbackFunction(data);
-      },
-    });
-  }
-
-  renderBrandList(_callbackFunction) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: { functionname: "fetchAllBrands" },
-      success: function (data) {
-        _callbackFunction(data);
-      },
-    });
-  }
-
   getData(query = "", _function) {
     jQuery.ajax({
       type: "POST",
@@ -223,22 +201,6 @@ class ProductDisplay {
       data: { functionname: "getData", query: query },
       success: function (data) {
         _function(data);
-      },
-    });
-  }
-  editData(query, _function = null) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: {
-        functionname: "addData",
-        query: query,
-      },
-      success: function () {
-        if (_function) {
-          _function();
-        }
       },
     });
   }

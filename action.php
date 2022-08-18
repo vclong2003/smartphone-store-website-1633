@@ -56,7 +56,7 @@ function fetchAllBrands()
 {
     global $servername, $username, $password, $dbname;
     $conn = new mysqli($servername, $username, $password, $dbname);
-    $result = $conn->query("SELECT * FROM `brand`");
+    $result = $conn->query("SELECT `brand`.*, COUNT(`product`.`productID`) as quantity FROM `brand` LEFT JOIN `product`ON `brand`.`brandID` = `product`.`brandID` GROUP BY `brand`.`brandID`");
     if ($result->num_rows > 0) {
         echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
     }

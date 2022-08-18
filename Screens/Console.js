@@ -3,6 +3,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
+import { fetchBrandList } from "../Components/fetchBrandList.js";
+import { fetchCategoryList } from "../Components/fetchCategoryList.js";
 import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 import { storage } from "../firebaseConfig.js";
@@ -341,7 +343,7 @@ class Console {
 
   updateCategorySelection() {
     this.$productCategorySelection.innerHTML = "";
-    this.getData("SELECT * FROM `category`", (data = []) => {
+    fetchCategoryList((data) => {
       data.map((item) => {
         const $option = document.createElement("option");
         $option.value = item.catID;
@@ -352,7 +354,7 @@ class Console {
   }
   updateBrandSelection() {
     this.$productBrandSelection.innerHTML = "";
-    this.getData("SELECT * FROM `brand`", (data = []) => {
+    fetchBrandList((data) => {
       data.map((item) => {
         const $option = document.createElement("option");
         $option.value = item.brandID;
@@ -362,139 +364,133 @@ class Console {
     });
   }
   handleCategoryEditItems() {
-    this.getData(
-      "SELECT `category`.*, COUNT(`product`.`productID`) as quantity FROM `category` LEFT JOIN `product`ON `category`.`catID` = `product`.`catID` GROUP BY `category`.`catID`;",
-      (data) => {
-        this.$editCategoryContainer.innerHTML = "";
-        data.map((item) => {
-          const container = document.createElement("div");
-          container.classList.add("console_editItems");
-          const title = document.createElement("p");
-          title.innerHTML = item.categoryName + " : " + item.quantity;
-          const editBtn = document.createElement("button");
-          editBtn.innerHTML = "Edit";
-          editBtn.classList.add("console_editItems_editBtn");
-          const deleteBtn = document.createElement("button");
-          deleteBtn.innerHTML = "Delete";
+    fetchCategoryList((data) => {
+      this.$editCategoryContainer.innerHTML = "";
+      data.map((item) => {
+        const container = document.createElement("div");
+        container.classList.add("console_editItems");
+        const title = document.createElement("p");
+        title.innerHTML = item.categoryName + " : " + item.quantity;
+        const editBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        editBtn.classList.add("console_editItems_editBtn");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Delete";
 
-          editBtn.addEventListener("click", () => {
-            this.$edittingPopup.innerHTML = "";
-            const catNameInput = new Input();
-            catNameInput.setValue(item.categoryName);
-            this.$edittingPopup.appendChild(catNameInput.render());
-            this.renderEditorPopup(
-              () => {
-                this.editData(
-                  "UPDATE `category` SET `categoryName`='" +
-                    catNameInput.getValue() +
-                    "' WHERE `catID` = " +
-                    item.catID,
-                  () => {
-                    this.handleCategoryEditItems();
-                    this.updateCategorySelection();
-                    toggleElement(this.$edittingLayer);
-                  }
-                );
-              },
-              () => {
-                toggleElement(this.$edittingLayer);
-                alertify.notify("Cancelled!", "error", 1);
-              }
-            );
-            toggleElement(this.$edittingLayer);
-          });
-
-          deleteBtn.addEventListener("click", () => {
-            if (item.quantity == 0) {
+        editBtn.addEventListener("click", () => {
+          this.$edittingPopup.innerHTML = "";
+          const catNameInput = new Input();
+          catNameInput.setValue(item.categoryName);
+          this.$edittingPopup.appendChild(catNameInput.render());
+          this.renderEditorPopup(
+            () => {
               this.editData(
-                "DELETE FROM `category` WHERE catID = " + item.catID,
+                "UPDATE `category` SET `categoryName`='" +
+                  catNameInput.getValue() +
+                  "' WHERE `catID` = " +
+                  item.catID,
                 () => {
                   this.handleCategoryEditItems();
                   this.updateCategorySelection();
+                  toggleElement(this.$edittingLayer);
                 }
               );
-            } else {
-              alertify.notify("Category not empty!", "error", 1);
+            },
+            () => {
+              toggleElement(this.$edittingLayer);
+              alertify.notify("Cancelled!", "error", 1);
             }
-          });
-          container.appendChild(title);
-          container.appendChild(editBtn);
-          container.appendChild(deleteBtn);
-
-          this.$editCategoryContainer.appendChild(container);
+          );
+          toggleElement(this.$edittingLayer);
         });
-      }
-    );
-  }
-  handleBrandEditItems() {
-    this.getData(
-      "SELECT `brand`.*, COUNT(`product`.`productID`) as quantity FROM `brand` LEFT JOIN `product`ON `brand`.`brandID` = `product`.`brandID` GROUP BY `brand`.`brandID`;",
-      (data) => {
-        this.$editBrandContainer.innerHTML = "";
-        data.map((item) => {
-          const container = document.createElement("div");
-          container.classList.add("console_editItems");
-          const title = document.createElement("p");
-          title.innerHTML = item.brandName + " : " + item.quantity;
-          const editBtn = document.createElement("button");
-          editBtn.innerHTML = "Edit";
-          editBtn.classList.add("console_editItems_editBtn");
-          const deleteBtn = document.createElement("button");
-          deleteBtn.innerHTML = "Delete";
 
-          editBtn.addEventListener("click", () => {
-            this.$edittingPopup.innerHTML = "";
-            const brandNameInput = new Input();
-            const brandDescriptionInput = new Input();
-            brandNameInput.setValue(item.brandName);
-            brandDescriptionInput.setValue(item.Description);
-            this.$edittingPopup.appendChild(brandNameInput.render());
-            this.$edittingPopup.appendChild(brandDescriptionInput.render());
-            this.renderEditorPopup(
+        deleteBtn.addEventListener("click", () => {
+          if (item.quantity == 0) {
+            this.editData(
+              "DELETE FROM `category` WHERE catID = " + item.catID,
               () => {
-                this.editData(
-                  "UPDATE `brand` SET `brandName` = '" +
-                    brandNameInput.getValue() +
-                    "', `Description` = '" +
-                    brandDescriptionInput.getValue() +
-                    "' WHERE `brand`.`brandID` = " +
-                    item.brandID,
-                  () => {
-                    this.handleBrandEditItems();
-                    this.updateBrandSelection();
-                    toggleElement(this.$edittingLayer);
-                  }
-                );
-              },
-              () => {
-                toggleElement(this.$edittingLayer);
-                alertify.notify("Cancelled!", "error", 1);
+                this.handleCategoryEditItems();
+                this.updateCategorySelection();
               }
             );
-            toggleElement(this.$edittingLayer);
-          });
+          } else {
+            alertify.notify("Category not empty!", "error", 1);
+          }
+        });
+        container.appendChild(title);
+        container.appendChild(editBtn);
+        container.appendChild(deleteBtn);
 
-          deleteBtn.addEventListener("click", () => {
-            if (item.quantity == 0) {
+        this.$editCategoryContainer.appendChild(container);
+      });
+    });
+  }
+  handleBrandEditItems() {
+    fetchBrandList((data) => {
+      this.$editBrandContainer.innerHTML = "";
+      data.map((item) => {
+        const container = document.createElement("div");
+        container.classList.add("console_editItems");
+        const title = document.createElement("p");
+        title.innerHTML = item.brandName + " : " + item.quantity;
+        const editBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        editBtn.classList.add("console_editItems_editBtn");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Delete";
+
+        editBtn.addEventListener("click", () => {
+          this.$edittingPopup.innerHTML = "";
+          const brandNameInput = new Input();
+          const brandDescriptionInput = new Input();
+          brandNameInput.setValue(item.brandName);
+          brandDescriptionInput.setValue(item.Description);
+          this.$edittingPopup.appendChild(brandNameInput.render());
+          this.$edittingPopup.appendChild(brandDescriptionInput.render());
+          this.renderEditorPopup(
+            () => {
               this.editData(
-                "DELETE FROM `brand` WHERE brandID = " + item.brandID,
+                "UPDATE `brand` SET `brandName` = '" +
+                  brandNameInput.getValue() +
+                  "', `Description` = '" +
+                  brandDescriptionInput.getValue() +
+                  "' WHERE `brand`.`brandID` = " +
+                  item.brandID,
                 () => {
                   this.handleBrandEditItems();
                   this.updateBrandSelection();
+                  toggleElement(this.$edittingLayer);
                 }
               );
-            } else {
-              alertify.notify("Brand not empty!", "error", 1);
+            },
+            () => {
+              toggleElement(this.$edittingLayer);
+              alertify.notify("Cancelled!", "error", 1);
             }
-          });
-          container.appendChild(title);
-          container.appendChild(editBtn);
-          container.appendChild(deleteBtn);
-
-          this.$editBrandContainer.appendChild(container);
+          );
+          toggleElement(this.$edittingLayer);
         });
-      }
-    );
+
+        deleteBtn.addEventListener("click", () => {
+          if (item.quantity == 0) {
+            this.editData(
+              "DELETE FROM `brand` WHERE brandID = " + item.brandID,
+              () => {
+                this.handleBrandEditItems();
+                this.updateBrandSelection();
+              }
+            );
+          } else {
+            alertify.notify("Brand not empty!", "error", 1);
+          }
+        });
+        container.appendChild(title);
+        container.appendChild(editBtn);
+        container.appendChild(deleteBtn);
+
+        this.$editBrandContainer.appendChild(container);
+      });
+    });
   }
   handleProductEditItems() {
     this.getData(
