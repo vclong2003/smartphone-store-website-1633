@@ -1,25 +1,22 @@
 <?php
 header('Content-Type: application/json');
 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "smartphonestoredb";
+
 function getData($query)
 {
-    $arr = array();
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "smartphonestoredb";
-
+    global $servername, $username, $password, $dbname;
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     $result = $conn->query("$query");
 
     if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            array_push($arr, $row);
-        }
+        echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
     }
     $conn->close();
-    echo json_encode($arr);
 }
 
 function addData($query)
@@ -35,8 +32,21 @@ function addData($query)
     echo json_encode("done");
 }
 
+function fetchAllProducts()
+{
+    global $servername, $username, $password, $dbname;
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $result = $conn->query("SELECT `product`.*, `brand`.`brandName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` ORDER BY `product`.`Price` DESC;");
+    if ($result->num_rows > 0) {
+        echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
+    }
+    $conn->close();
+}
+
 if ($_POST['functionname'] == 'getData') {
     getData($_POST['query']);
 } else if ($_POST['functionname'] == "addData") {
     addData($_POST['query']);
+} else if ($_POST['functionname'] == 'fetchAllProducts') {
+    fetchAllProducts();
 }

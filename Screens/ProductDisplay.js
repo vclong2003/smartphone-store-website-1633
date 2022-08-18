@@ -4,8 +4,19 @@ import { ratingStar } from "../Components/RatingStart.js";
 import { navigate } from "../navigator.js";
 import { auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import {
+  loadItems,
+  updateFilterParam,
+} from "../Components/productDisplayHandler.js";
 class ProductDisplay {
   userEmail = null;
+  filterParam = {
+    searchValue: "",
+    catID: "",
+    brandID: [],
+    priceLow: "",
+    priceHigh: "",
+  };
 
   $viewArea;
   $navBar;
@@ -179,63 +190,18 @@ class ProductDisplay {
     this.$applyFilterBtn.addEventListener("click", () => {
       this.filterParam.priceLow = this.$minPriceInput.value;
       this.filterParam.priceHigh = this.$maxPriceInput.value;
-      this.loadItems();
+      this.renderItems();
     });
     this.$resetFilterBtn.addEventListener("click", () => {
       this.filterParam.priceLow = this.$minPriceInput.value = "";
       this.filterParam.priceHigh = this.$maxPriceInput.value = "";
-      this.loadItems();
+      this.renderItems();
     });
-
-    this.loadItems();
-
+    this.renderItems();
     this.$navBar = new NavBar((searchValue) => {
       this.loadItems(undefined, searchValue);
     });
     this.$viewArea.appendChild(this.$navBar.render());
-  }
-
-  loadItems(condition = " 1 = 1 ", searchValue = "") {
-    this.$rightPanel.innerHTML = "";
-    this.getData(
-      "SELECT `product`.*, `brand`.`brandName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` WHERE " +
-        condition +
-        " ORDER BY `product`.`Price` DESC;",
-      (data) => {
-        let paginationData = [];
-        data.map((item) => {
-          const itemSearchString = item.brandName + " " + item.Name;
-          if (
-            itemSearchString
-              .toLowerCase()
-              .includes(searchValue.toLowerCase()) &&
-            (this.filterParam.catID == "" ||
-              item.catID == this.filterParam.catID) &&
-            (this.filterParam.brandID.length == 0 ||
-              this.filterParam.brandID.indexOf(item.brandID) > -1) &&
-            (this.filterParam.priceLow == "" ||
-              Number(item.Price) > Number(this.filterParam.priceLow)) &&
-            (this.filterParam.priceHigh == "" ||
-              Number(item.Price) < Number(this.filterParam.priceHigh))
-          ) {
-            paginationData.push(
-              this.renderProductItem(
-                item.productID,
-                item.Name,
-                item.brandName,
-                item.smallDescription,
-                item.thumbnailUrl,
-                undefined,
-                item.Price,
-                item.catID,
-                item.brandID
-              )
-            );
-          }
-        });
-        this.paginateData(paginationData);
-      }
-    );
   }
 
   getData(query = "", _function) {
@@ -266,126 +232,16 @@ class ProductDisplay {
     });
   }
 
-  paginateData(rawData = []) {
-    this.$paginationContainer.innerHTML = "";
-    let previous = null;
-    const splicedData = [];
-    while (rawData.length) {
-      splicedData.push(rawData.splice(0, 12));
-    }
-    splicedData.map((item, index) => {
-      const paginateItem = document.createElement("div");
-      paginateItem.innerHTML = index + 1;
-      paginateItem.id = index;
-      paginateItem.classList.add("paginateItem");
-      paginateItem.addEventListener("click", () => {
-        this.$rightPanel.innerHTML = "";
-        item.map((_item) => {
-          this.$rightPanel.appendChild(_item);
-        });
-        this.$rightPanel.appendChild(this.$paginationContainer);
-        if (previous) {
-          previous.classList.remove("paginateItem_active");
-          window.scrollTo(0, 150);
-        }
-        paginateItem.classList.add("paginateItem_active");
-        previous = paginateItem;
-      });
-      this.$paginationContainer.appendChild(paginateItem);
-      if (paginateItem.id == 0) {
-        paginateItem.click();
+  renderItems() {
+    loadItems(
+      this.$rightPanel,
+      (id) => {
+        navigate("productDetailScreen", id);
+      },
+      (id) => {
+        alert("add" + id);
       }
-    });
-    this.$rightPanel.appendChild(this.$paginationContainer);
-  }
-
-  renderProductItem(
-    id,
-    name,
-    brand,
-    smallDescription,
-    thumbnailUrl,
-    rating = 0,
-    price,
-  ) {
-    const $productContainer = document.createElement("div");
-    const $productInfoContainer = document.createElement("div");
-    const $productThumbnailContainer = document.createElement("div");
-    const $productThumbnail = document.createElement("img");
-    const $productName = document.createElement("div");
-    const $productSmallDescription = document.createElement("div");
-    const $productRatingContainer = document.createElement("div");
-
-    const $productSubContainer = document.createElement("div");
-    const $productPrice = document.createElement("div");
-    const $addToCartBtn = document.createElement("button");
-
-    $productContainer.classList.add("productContainer");
-    $productInfoContainer.classList.add("productInfoContainer");
-    $productThumbnailContainer.classList.add("productThumbnailContainer");
-    $productName.classList.add("productItemName");
-    $productSmallDescription.classList.add("productSmallDescription");
-    $productSubContainer.classList.add("productSubContainer");
-
-    $productThumbnail.src = thumbnailUrl;
-    $productName.innerHTML = brand + " " + name;
-    $productSmallDescription.innerHTML = smallDescription;
-    $productPrice.innerHTML = price + "$";
-
-    $productThumbnailContainer.appendChild($productThumbnail);
-    $productSubContainer.appendChild($productPrice);
-    $productSubContainer.appendChild($addToCartBtn);
-    $addToCartBtn.innerHTML = "Add to cart";
-
-    $productInfoContainer.appendChild($productThumbnailContainer);
-    $productInfoContainer.appendChild($productName);
-    $productInfoContainer.appendChild($productSmallDescription);
-
-    $productContainer.appendChild($productInfoContainer);
-    $productContainer.appendChild($productSubContainer);
-
-    $productInfoContainer.addEventListener("click", () => {
-      navigate("productDetailScreen", id);
-    });
-    $addToCartBtn.addEventListener("click", () => {
-      if (this.userEmail) {
-        this.getData(
-          "SELECT COUNT(*) as itemInCart FROM `cart` WHERE `email` = '" +
-            this.userEmail +
-            "' AND productID = " +
-            id,
-          (data) => {
-            if (data[0].itemInCart == 0) {
-              console.log(Number(data[0].itemInCart));
-              this.editData(
-                "INSERT INTO `cart`(`email`, `productID`) VALUES ('" +
-                  this.userEmail +
-                  "','" +
-                  id +
-                  "')",
-                () => {
-                  alertify.notify(
-                    "Item added to cart successfully!",
-                    "success",
-                    2
-                  );
-                }
-              );
-            } else {
-              alertify.notify(
-                "This item is already exist in your cart!",
-                "error",
-                2
-              );
-            }
-          }
-        );
-      } else {
-        alertify.notify("You need to login to use this function!", "error", 2);
-      }
-    });
-
-    return $productContainer;
+    );
   }
 
   render() {
@@ -396,7 +252,6 @@ class ProductDisplay {
         this.userEmail = user.email;
       }
     });
-
     this.$leftPanel.appendChild(this.$categoryFilterContainer);
     this.$leftPanel.appendChild(this.$brandFilterContainer);
     // this.$leftPanel.appendChild(this.$ratingFilterContainer); // under development

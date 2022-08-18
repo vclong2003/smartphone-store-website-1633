@@ -46,32 +46,19 @@ const navigate = (screen, routeParam = null) => {
 
 navigate("productDisplayScreen");
 
-// alertify.prompt(
-//   "",
-//   "Enter category name",
-//   "test",
-//   function (evt, value) {
-//     alertify.success("You entered: " + value);
-//   },
-//   function () {
-//     alertify.error("Cancel");
-//   }
-// );
-
 // for testing purpose
-window.onload = () => {
-  jQuery.ajax({
-    type: "POST",
-    url: "action.php",
-    dataType: "json",
-    data: {
-      functionname: "getData",
-      query: "SELECT LAST_INSERT_ID();",
-    },
-    success: function (data) {
-      console.log(data.length);
-    },
-  });
-};
+// window.onload = () => {
+//   jQuery.ajax({
+//     type: "POST",
+//     url: "action.php",
+//     dataType: "json",
+//     data: {
+//       functionname: "fetchAllProducts",
+//     },
+//     success: function (data) {
+//       console.log(data);
+//     },
+//   });
+// };
 
 export { navigate };

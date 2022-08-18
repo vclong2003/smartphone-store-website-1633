@@ -27,7 +27,7 @@ class NavBar {
   $consoleScreenIcon;
   $cartIcon;
 
-  constructor(_searchFunction = null) {
+  constructor() {
     let searching = false;
     this.$container = document.createElement("div");
     this.$container.classList.add("navBarContainer");
@@ -66,20 +66,9 @@ class NavBar {
     this.$searchIconImg.style = "cursor: pointer;";
     this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
     this.$searchBox.appendChild(this.$searchIconImg);
-    this.$searchIconImg.addEventListener("click", () => {
-      if (!searching) {
-        searching = true;
-        this.$searchIconImg.src = "././Assets/Icons/cancel_icon.png";
-        _searchFunction(this.$searchInput.value);
-      } else {
-        searching = false;
-        this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
-        this.$searchInput.value = "";
-        _searchFunction("");
-      }
-    });
 
     this.$logo = document.createElement("img");
+    this.$logo.src = "././Assets/Img/VCL-logos_black.png";
     this.$leftComponentContainer.appendChild(this.$logo);
 
     this.$authStateText = document.createElement("div");
@@ -112,11 +101,7 @@ class NavBar {
       }
     });
   }
-  triggerSearching(searchValue) {
-    this.$searchInput.value = searchValue;
-    this.$searchIconImg.click();
-  }
-  render() {
+  render(_searchFunction = null) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -136,9 +121,18 @@ class NavBar {
         this.authState = false;
       }
     });
-
-    this.$logo.src = "././Assets/Img/VCL-logos_black.png";
-
+    this.$searchIconImg.addEventListener("click", () => {
+      if (!searching) {
+        searching = true;
+        this.$searchIconImg.src = "././Assets/Icons/cancel_icon.png";
+        _searchFunction(this.$searchInput.value);
+      } else {
+        searching = false;
+        this.$searchIconImg.src = "././Assets/Icons/search_icon.png";
+        this.$searchInput.value = "";
+        _searchFunction("");
+      }
+    });
     this.$container.appendChild(this.$contactContainer);
     this.$container.appendChild(this.$componentContainer);
 
