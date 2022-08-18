@@ -52,8 +52,6 @@ class Console {
   $productQuantityInput;
   $addProductBtn;
 
-  //<input type="file" accept="image/*">
-
   $test;
   $testBtn;
 

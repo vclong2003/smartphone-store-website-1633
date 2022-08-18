@@ -7,25 +7,25 @@ let filterParam = {
 };
 
 const updateFilterParam = (
-  _searchValue = null,
-  _catID = null,
-  _brandID = null,
-  _priceLow = null,
-  _priceHigh = null
+  _searchValue = undefined,
+  _catID = undefined,
+  _brandID = undefined,
+  _priceLow = undefined,
+  _priceHigh = undefined
 ) => {
-  if (_searchValue) {
+  if (_searchValue != undefined) {
     filterParam.searchValue = _searchValue;
   }
-  if (_catID) {
+  if (_catID != undefined) {
     filterParam.catID = _catID;
   }
-  if (_brandID) {
+  if (_brandID != undefined) {
     filterParam.brandID = [..._brandID];
   }
-  if (_priceLow) {
+  if (_priceLow != undefined) {
     filterParam.priceLow = _priceLow;
   }
-  if (_priceHigh) {
+  if (_priceHigh != undefined) {
     filterParam.priceHigh = _priceHigh;
   }
 };

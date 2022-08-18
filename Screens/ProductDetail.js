@@ -1,4 +1,3 @@
-import { NavBar } from "../Components/NavBar.js";
 import { navigate } from "../navigator.js";
 class ProductDetail {
   $container;
@@ -78,14 +77,14 @@ class ProductDetail {
       this.$text.innerHTML = "";
     });
   }
-  getData(query = "", _function) {
+  fetchProductInfo(id, _callback) {
     jQuery.ajax({
       type: "POST",
       url: "action.php",
       dataType: "json",
-      data: { functionname: "getData", query: query },
+      data: { functionname: "fetchSingleProduct", productID: id },
       success: function (data) {
-        _function(data);
+        _callback(data);
       },
     });
   }
@@ -115,27 +114,18 @@ class ProductDetail {
     this.$container.appendChild(this.$productDetailContainer);
 
     if (id) {
-      this.getData(
-        "SELECT `product`.*, `brand`.`brandName`, `category`.`categoryName` FROM `product` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` INNER JOIN `category` ON `product`.`catID` = `category`.`catID` WHERE `product`.`productID` = " +
-          id,
-        (data) => {
-          if (data[0] != undefined) {
-            this.$header.innerHTML =
-              "Category: " +
-              data[0].categoryName +
-              " > Brand: " +
-              data[0].brandName;
-            this.$thumbnailImg.src = data[0].thumbnailUrl;
-            this.$nameContainer.innerHTML =
-              data[0].brandName + " " + data[0].Name;
-            this.$smallDesContainer.innerHTML = data[0].smallDescription;
-            this.$price.innerHTML = data[0].Price + "$";
-            this.$img.src = data[0].imageUrl;
-            this.$text.innerHTML = data[0].Description;
-          }
-        }
-      );
+      this.fetchProductInfo(id, (data) => {
+        this.$header.innerHTML =
+          "Category: " + data.categoryName + " > Brand: " + data.brandName;
+        this.$thumbnailImg.src = data.thumbnailUrl;
+        this.$nameContainer.innerHTML = data.brandName + " " + data.Name;
+        this.$smallDesContainer.innerHTML = data.smallDescription;
+        this.$price.innerHTML = data.Price + "$";
+        this.$img.src = data.imageUrl;
+        this.$text.innerHTML = data.Description;
+      });
     }
+
     return this.$container;
   }
 }
