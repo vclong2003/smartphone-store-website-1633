@@ -47,16 +47,16 @@ const navigate = (screen, routeParam = null) => {
 navigate("productDisplayScreen");
 
 // for testing purpose
-window.onload = () => {
-  jQuery.ajax({
-    type: "POST",
-    url: "action.php",
-    dataType: "json",
-    data: { functionname: "fetchSingleProduct", productID: "40" },
-    success: function (data) {
-      console.log( typeof data);
-    },
-  });
-};
+// window.onload = () => {
+//   jQuery.ajax({
+//     type: "POST",
+//     url: "action.php",
+//     dataType: "json",
+//     data: { functionname: "fetchSingleProduct", productID: "40" },
+//     success: function (data) {
+//       console.log( typeof data);
+//     },
+//   });
+// };
 
 export { navigate };

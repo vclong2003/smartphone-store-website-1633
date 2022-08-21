@@ -5,26 +5,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/js/splide.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/css/splide.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.4.2/dist/js/splide-extension-auto-scroll.min.js"></script>
     <title>Test</title>
   </head>
   <body>
-    <div class="left" id="left">
-      <div class="testBtn" id="testBtn"></div>
-    </div>
-    <div class="right"></div>
+    <section class="splide">
+      <div class="splide__track">
+        <ul class="splide__list">
+          <li class="splide__slide" data-splide-interval="1000">
+            <img
+              src="../Assets/Img/hero_1_static__feiuc1zaeiaa_large.jpg"
+              alt=""
+            />
+          </li>
+          <li class="splide__slide">
+            <img src="../Assets/Img/original.webp" alt="" />
+          </li>
+          <li class="splide__slide">
+            <img src="../Assets/Img/Google-Tensor-Info-scaled.jpg" alt="" />
+          </li>
+          <li class="splide__slide">
+            <img src="../Assets/Img/sony.jpg" alt="" />
+          </li>
+          <li class="splide__slide">
+            <img src="../Assets/Img/services.jpg" alt="" />
+          </li>
+        </ul>
+      </div>
+    </section>
   </body>
   <script>
-    const left = document.getElementById("left");
-    const btn = document.getElementById("testBtn");
-    let opened = false;
-    btn.addEventListener("click", () => {
-      if (!opened) {
-        left.classList.add("open");
-        opened = true;
-      } else {
-        left.classList.remove("open");
-        opened = false;
-      }
-    });
+    new Splide(".splide", {
+      type: "loop",
+      autoplay: true,
+      interval: 3000,
+    }).mount();
   </script>
 </html>

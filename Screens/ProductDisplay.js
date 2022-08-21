@@ -1,4 +1,3 @@
-import { Input } from "../Components/Input.js";
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
 import { navigate } from "../navigator.js";
