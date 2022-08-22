@@ -1,4 +1,4 @@
-import { fetchProductInfo } from "../Components/fetchProductInfo.js";
+import { fetchProductInfo } from "../Components/handleProduct.js";
 import { getUrlParam } from "../navigator.js";
 class ProductDetail {
   $container;

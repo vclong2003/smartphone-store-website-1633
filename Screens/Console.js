@@ -10,7 +10,7 @@ import { toggleElement } from "../Components/ToggleElement.js";
 import { storage, auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { changeScreen } from "../navigator.js";
-import { fetchProducts } from "../Components/fetchProducts.js";
+import { fetchProducts } from "../Components/handleProduct.js";
 class Console {
   $container;
   $edittingLayer;

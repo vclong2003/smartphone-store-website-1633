@@ -1,5 +1,5 @@
 import { getUrlParam } from "../navigator.js";
-import { fetchProducts } from "./fetchProducts.js";
+import { fetchProducts } from "./handleProduct.js";
 
 let filterParam = {
   searchValue: "",
