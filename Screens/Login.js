@@ -85,7 +85,6 @@ class Login {
     this.$cancel.title = "Cancel";
     this.$cancel.classList.add("authMoreActionText", "authCancelBtn");
     this.$cancel.addEventListener("click", () => {
-  
       changeScreen("productDisplayScreen");
     });
 
@@ -120,6 +119,7 @@ class Login {
     });
   }
   render() {
+    document.title = "Login";
     this.$img.src = "./Assets/Img/auth_background.png";
     this.$imgContainer.appendChild(this.$img);
 

@@ -115,7 +115,11 @@ const paginate = (rawData = [{}], $container) => {
     });
     $paginationContainer.appendChild(paginateItem);
     if (getUrlParam("page")) {
-      if (getUrlParam("page") == paginateItem.id) {
+      if (Number(getUrlParam("page")) > splicedData.length) {
+        if (paginateItem.id == 1) {
+          paginateItem.click();
+        }
+      } else if (getUrlParam("page") == paginateItem.id) {
         paginateItem.click();
       }
     } else {

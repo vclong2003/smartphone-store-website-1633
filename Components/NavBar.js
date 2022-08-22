@@ -1,5 +1,4 @@
 import { changeScreen } from "../navigator.js";
-import { toggleElement } from "./ToggleElement.js";
 import {
   onAuthStateChanged,
   signOut,

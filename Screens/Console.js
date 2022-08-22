@@ -298,6 +298,7 @@ class Console {
   }
 
   render() {
+    document.title = "Console";
     this.$container.innerHTML = "";
 
     const mockElement = document.createElement("div");

@@ -89,6 +89,7 @@ class Cart {
     });
   }
   render() {
+    document.title = "Cart";
     return this.$container;
   }
 }

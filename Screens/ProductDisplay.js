@@ -181,6 +181,8 @@ class ProductDisplay {
       this.renderItems();
     });
     this.$resetFilterBtn.addEventListener("click", () => {
+      this.$minPriceInput.value = "";
+      this.$maxPriceInput.value = "";
       updateFilterParam(undefined, undefined, undefined, "", "");
       this.renderItems();
     });
@@ -223,6 +225,7 @@ class ProductDisplay {
   }
 
   render() {
+    document.title = "Products";
     this.$leftPanel.appendChild(this.$categoryFilterContainer);
     this.$leftPanel.appendChild(this.$brandFilterContainer);
     // this.$leftPanel.appendChild(this.$ratingFilterContainer); // under development

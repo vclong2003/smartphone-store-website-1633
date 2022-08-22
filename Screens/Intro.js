@@ -304,6 +304,7 @@ class Intro {
     this.$container.appendChild(this.$script);
   }
   render() {
+    document.title = "Intro";
     return this.$container;
   }
 }

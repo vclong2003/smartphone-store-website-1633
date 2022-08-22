@@ -61,7 +61,10 @@ class ProductDetail {
     this.$addTocardBtn.innerHTML = "Add to card";
   }
   render() {
+    document.title = "Product detail";
     this.$container.innerHTML = "";
+    this.$img.src = "././Assets/Img/placeholder_product_img.png";
+
     const id = getUrlParam("productID");
     window.scrollTo(0, 0);
 
@@ -91,6 +94,7 @@ class ProductDetail {
           "Category: " + data.categoryName + " > Brand: " + data.brandName;
         this.$thumbnailImg.src = data.thumbnailUrl;
         this.$nameContainer.innerHTML = data.brandName + " " + data.Name;
+        document.title = data.brandName + " " + data.Name;
         this.$smallDesContainer.innerHTML = data.smallDescription;
         this.$price.innerHTML = data.Price + "$";
         this.$img.src = data.imageUrl;

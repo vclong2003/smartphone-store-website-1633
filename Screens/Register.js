@@ -70,6 +70,7 @@ class Register {
   }
 
   render() {
+    document.title = "Register";
     this.$img.src = "./Assets/Img/auth_background.png";
     this.$imgContainer.appendChild(this.$img);
 
