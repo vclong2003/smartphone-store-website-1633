@@ -1,4 +1,4 @@
-import { navigate } from "../navigator.js";
+import { changeScreen, navigate } from "../navigator.js";
 import { toggleElement } from "./ToggleElement.js";
 import {
   onAuthStateChanged,
@@ -87,6 +87,10 @@ class NavBar {
 
     this.$logo = document.createElement("img");
     this.$logo.src = "././Assets/Img/VCL-logos_black.png";
+    this.$logo.addEventListener("click", () => {
+      history.pushState(undefined, undefined, `?screen=productDisplayScreen`);
+      location.reload();
+    });
     this.$leftComponentContainer.appendChild(this.$logo);
 
     this.$authStateText = document.createElement("div");
@@ -96,9 +100,10 @@ class NavBar {
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
         signOut(auth);
-        window.location.reload();
+        location.reload();
       } else {
-        navigate("loginScreen");
+        // navigate("loginScreen");
+        changeScreen("productDisplayScreen");
       }
     });
 

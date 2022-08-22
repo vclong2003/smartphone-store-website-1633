@@ -1,6 +1,6 @@
 import { Input } from "../Components/Input.js";
 import { auth } from "../firebaseConfig.js";
-import { navigate } from "../navigator.js";
+import { changeScreen, navigate } from "../navigator.js";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -62,7 +62,7 @@ class Login {
             // Signed in
             const user = userCredential.user;
             toggleElement(this.$loadingLayer.render());
-            navigate("productDisplayScreen");
+            changeScreen("productDisplayScreen");
             // ...
           })
           .catch((error) => {
@@ -85,11 +85,12 @@ class Login {
     this.$cancel.title = "Cancel";
     this.$cancel.classList.add("authMoreActionText", "authCancelBtn");
     this.$cancel.addEventListener("click", () => {
-      navigate("productDisplayScreen");
+      // navigate("productDisplayScreen");
+      changeScreen("productDisplayScreen");
     });
 
     this.$createNewAccount.addEventListener("click", () => {
-      navigate("registerScreen");
+      changeScreen("registerScreen");
     });
     this.$forgotPwd.addEventListener("click", () => {
       alertify.prompt(
