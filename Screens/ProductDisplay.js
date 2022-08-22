@@ -233,6 +233,7 @@ class ProductDisplay {
     this.$viewArea.appendChild(this.$container);
 
     this.renderItems();
+
     return this.$viewArea;
   }
 }
