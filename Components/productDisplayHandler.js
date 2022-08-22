@@ -1,4 +1,5 @@
 import { getUrlParam } from "../navigator.js";
+import { fetchProducts } from "./fetchProducts.js";
 
 let filterParam = {
   searchValue: "",
@@ -113,7 +114,9 @@ const paginate = (rawData = [{}], $container) => {
         `?screen=${getUrlParam("screen")}&page=${index + 1}`
       );
     });
+
     $paginationContainer.appendChild(paginateItem);
+
     if (getUrlParam("page")) {
       if (Number(getUrlParam("page")) > splicedData.length) {
         if (paginateItem.id == 1) {
@@ -134,35 +137,27 @@ const paginate = (rawData = [{}], $container) => {
 const loadItems = (container, clickCallBack, addToCardCallback) => {
   container.innerHTML = "";
   let paginationData = [];
-  jQuery.ajax({
-    type: "POST",
-    url: "action.php",
-    dataType: "json",
-    data: {
-      functionname: "fetchAllProducts",
-    },
-    success: function (data) {
-      data.map((item) => {
-        const itemSearchString = item.brandName + " " + item.Name;
-        if (
-          itemSearchString
-            .toLowerCase()
-            .includes(filterParam.searchValue.toLowerCase()) &&
-          (filterParam.catID == "" || item.catID == filterParam.catID) &&
-          (filterParam.brandID.length == 0 ||
-            filterParam.brandID.indexOf(item.brandID) > -1) &&
-          (filterParam.priceLow == "" ||
-            Number(item.Price) > Number(filterParam.priceLow)) &&
-          (filterParam.priceHigh == "" ||
-            Number(item.Price) < Number(filterParam.priceHigh))
-        ) {
-          paginationData.push(
-            renderHtmlElement(item, clickCallBack, addToCardCallback)
-          );
-        }
-      });
-      paginate(paginationData, container);
-    },
+  fetchProducts((data) => {
+    data.map((item) => {
+      const itemSearchString = item.brandName + " " + item.Name;
+      if (
+        itemSearchString
+          .toLowerCase()
+          .includes(filterParam.searchValue.toLowerCase()) &&
+        (filterParam.catID == "" || item.catID == filterParam.catID) &&
+        (filterParam.brandID.length == 0 ||
+          filterParam.brandID.indexOf(item.brandID) > -1) &&
+        (filterParam.priceLow == "" ||
+          Number(item.Price) > Number(filterParam.priceLow)) &&
+        (filterParam.priceHigh == "" ||
+          Number(item.Price) < Number(filterParam.priceHigh))
+      ) {
+        paginationData.push(
+          renderHtmlElement(item, clickCallBack, addToCardCallback)
+        );
+      }
+    });
+    paginate(paginationData, container);
   });
 };
 

@@ -72,6 +72,42 @@ function fetchSingleProduct($id)
     }
     $conn->close();
 }
+function addProduct($catID, $brandID, $Name, $smallDescription, $Description, $thumbnailUrl, $imageUrl, $Price, $quantity)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("INSERT INTO `product`(`catID`, `brandID`, `Name`, `smallDescription`, `Description`, `thumbnailUrl`, `imageUrl`, `Price`, `quantity`) VALUES ('$catID', '$brandID', '$Name', '$smallDescription', '$Description', '$thumbnailUrl',' $imageUrl', '$Price', '$quantity')");
+    $conn->close();
+    echo json_encode("done");
+}
+function addCategory($catName)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("INSERT INTO `category`(`categoryName`) VALUES ('$catName')");
+    $conn->close();
+    echo json_encode("done");
+}
+function addBrand($brandName, $desc)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("INSERT INTO `brand`(`brandName`, `Description`) VALUES ('$brandName', '$desc')");
+    $conn->close();
+    echo json_encode("done");
+}
+function customQuery($query)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("$query");
+    $conn->close();
+    echo json_encode("Query sent!");
+}
 
 if ($_POST['functionname'] == 'getData') {
     getData($_POST['query']);
@@ -85,4 +121,10 @@ if ($_POST['functionname'] == 'getData') {
     fetchAllBrands();
 } else if ($_POST['functionname'] == 'fetchSingleProduct') {
     fetchSingleProduct($_POST['productID']);
+} else if ($_POST['functionname'] == 'addProduct') {
+    addProduct($_POST['catID'], $_POST['brandID'], $_POST['Name'], $_POST['smallDescription'], $_POST['Description'], $_POST['thumbnailUrl'], $_POST['imageUrl'], $_POST['Price'], $_POST['quantity']);
+} else if ($_POST['functionname'] == 'addCategory') {
+    addCategory($_POST['catName']);
+} else if ($_POST['functionname'] == 'addBrand') {
+    addBrand($_POST['brandName'], $_POST['desc']);
 }

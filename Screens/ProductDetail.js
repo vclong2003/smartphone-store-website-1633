@@ -94,7 +94,7 @@ class ProductDetail {
           "Category: " + data.categoryName + " > Brand: " + data.brandName;
         this.$thumbnailImg.src = data.thumbnailUrl;
         this.$nameContainer.innerHTML = data.brandName + " " + data.Name;
-        document.title = data.brandName + " " + data.Name;
+        document.title = data.Name;
         this.$smallDesContainer.innerHTML = data.smallDescription;
         this.$price.innerHTML = data.Price + "$";
         this.$img.src = data.imageUrl;

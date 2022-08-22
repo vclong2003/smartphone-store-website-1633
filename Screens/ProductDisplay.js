@@ -194,18 +194,6 @@ class ProductDisplay {
     this.$viewArea.appendChild(this.$navBar.render());
   }
 
-  getData(query = "", _function) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: { functionname: "getData", query: query },
-      success: function (data) {
-        _function(data);
-      },
-    });
-  }
-
   renderItems() {
     loadItems(
       this.$rightPanel,
