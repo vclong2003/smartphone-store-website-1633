@@ -1,6 +1,6 @@
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
-import { navigate } from "../navigator.js";
+import { changeScreen } from "../navigator.js";
 import { auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import {
@@ -208,7 +208,7 @@ class ProductDisplay {
     loadItems(
       this.$rightPanel,
       (id) => {
-        navigate("productDetailScreen", id);
+        changeScreen("productDetailScreen", `productID=${id}`);
       },
       (id) => {
         onAuthStateChanged(auth, (user) => {

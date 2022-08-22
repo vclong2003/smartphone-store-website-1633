@@ -1,10 +1,7 @@
 import { fetchProductInfo } from "../Components/fetchProductInfo.js";
-import { navigate } from "../navigator.js";
+import { getUrlParam } from "../navigator.js";
 class ProductDetail {
   $container;
-
-  $topBar;
-  $backBtn;
 
   $productDetailContainer;
 
@@ -28,8 +25,6 @@ class ProductDetail {
 
   constructor(id = "") {
     this.$container = document.createElement("div");
-    this.$topBar = document.createElement("div");
-    this.$backBtn = document.createElement("img");
     this.$productDetailContainer = document.createElement("div");
     this.$header = document.createElement("div");
     this.$briefContainer = document.createElement("div");
@@ -46,8 +41,6 @@ class ProductDetail {
     this.$text = document.createElement("div");
 
     this.$container.classList.add("productDetailScreen");
-    this.$topBar.classList.add("productDetailTopBar");
-    this.$backBtn.classList.add("productDetailBackBtn");
     this.$productDetailContainer.classList.add("productDetailContainer");
     this.$header.classList.add("productDetailContainer_header");
     this.$briefContainer.classList.add("productDetail_briefContainer");
@@ -66,21 +59,11 @@ class ProductDetail {
     this.$text.classList.add("productDetail_text");
 
     this.$addTocardBtn.innerHTML = "Add to card";
-    this.$backBtn.src = "././Assets/Icons/back_icon.png";
-    this.$backBtn.addEventListener("click", () => {
-      navigate("productDisplayScreen");
-      this.$header.innerHTML = "";
-      this.$thumbnailImg.src = "";
-      this.$nameContainer.innerHTML = "";
-      this.$smallDesContainer.innerHTML = "";
-      this.$price.innerHTML = "";
-      this.$img.src = "";
-      this.$text.innerHTML = "";
-    });
   }
-  render(id = null) {
+  render() {
+    this.$container.innerHTML = "";
+    const id = getUrlParam("productID");
     window.scrollTo(0, 0);
-    this.$topBar.appendChild(this.$backBtn);
 
     this.$priceAndBtnContainer.appendChild(this.$price);
     this.$priceAndBtnContainer.appendChild(this.$addTocardBtn);
@@ -100,7 +83,6 @@ class ProductDetail {
     this.$productDetailContainer.appendChild(this.$briefContainer);
     this.$productDetailContainer.appendChild(this.$descriptionContainer);
 
-    this.$container.appendChild(this.$topBar);
     this.$container.appendChild(this.$productDetailContainer);
 
     if (id) {

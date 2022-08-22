@@ -1,4 +1,4 @@
-import { changeScreen, navigate } from "../navigator.js";
+import { changeScreen } from "../navigator.js";
 import { toggleElement } from "./ToggleElement.js";
 import {
   onAuthStateChanged,
@@ -102,25 +102,24 @@ class NavBar {
         signOut(auth);
         location.reload();
       } else {
-        // navigate("loginScreen");
-        changeScreen("productDisplayScreen");
+        changeScreen("loginScreen");
       }
     });
 
     this.$consoleScreenIcon = document.createElement("img");
     this.$consoleScreenIcon.src = "././Assets/Icons/editor_icon.png";
     this.$consoleScreenIcon.addEventListener("click", () => {
-      navigate("consoleScreen");
+      changeScreen("consoleScreen");
     });
     this.$cartIcon = document.createElement("img");
     this.$cartIcon.src = "././Assets/Icons/ic-ecommerce-basket.png";
     this.$rightComponentContainer.appendChild(this.$cartIcon);
     this.$cartIcon.addEventListener("click", () => {
       if (this.authState) {
-        navigate("cartScreen");
+        changeScreen("cartScreen");
       } else {
         alertify.notify("You need to login to use this function!", "error", 3);
-        navigate("loginScreen");
+        changeScreen("loginScreen");
       }
     });
   }

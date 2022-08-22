@@ -8,7 +8,6 @@ import { fetchCategoryList } from "../Components/fetchCategoryList.js";
 import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 import { storage } from "../firebaseConfig.js";
-import { navigate } from "../navigator.js";
 class Console {
   $container;
   $edittingLayer;
@@ -292,7 +291,7 @@ class Console {
         previousTab.classList.remove("activeConsoleTab");
       }
       this.$rightPanel.innerHTML = "";
-      navigate("productDisplayScreen");
+      history.back();
     });
   }
 

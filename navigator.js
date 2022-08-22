@@ -8,27 +8,6 @@ import { Cart } from "./Screens/Cart.js";
 import { User } from "./Screens/User.js";
 alertify.set("notifier", "position", "top-left");
 
-const changeScreen = (screen) => {
-  history.pushState(undefined, undefined, `?screen=${screen}`);
-};
-
-const getUrlParam = (key) => {
-  const fullUrlParam = window.location.search.substring(1);
-  const urlParamsArr = fullUrlParam.split("&");
-
-  for (let i = 0; i < urlParamsArr.length; i++) {
-    const paramKeyValuePair = urlParamsArr[i].split("=");
-    if (paramKeyValuePair[0] == key) {
-      return paramKeyValuePair[1];
-    }
-  }
-  return null;
-};
-
-if (getUrlParam("screen") == null) {
-  changeScreen("productDisplayScreen");
-}
-
 const registerScreen = new Register();
 const loginScreen = new Login();
 const productDisplayScreen = new ProductDisplay();
@@ -68,7 +47,33 @@ const navigate = (screen, routeParam = null) => {
   }
 };
 
+const getUrlParam = (key) => {
+  const fullUrlParam = window.location.search.substring(1);
+  const urlParamsArr = fullUrlParam.split("&");
+
+  for (let i = 0; i < urlParamsArr.length; i++) {
+    const paramKeyValuePair = urlParamsArr[i].split("=");
+    if (paramKeyValuePair[0] == key) {
+      return paramKeyValuePair[1];
+    }
+  }
+  return null;
+};
+
+const changeScreen = (screen, param = null) => {
+  let url = `?screen=${screen}`;
+  if (param) {
+    url += `&${param}`;
+  }
+  history.pushState(undefined, undefined, url);
+  navigate(getUrlParam("screen"));
+};
+
+if (getUrlParam("screen") == null) {
+  changeScreen("productDisplayScreen");
+}
 navigate(getUrlParam("screen"));
+
 window.addEventListener("popstate", () => {
   navigate(getUrlParam("screen"));
 });
@@ -102,4 +107,4 @@ window.addEventListener("popstate", () => {
 //   });
 // };
 
-export { navigate, getUrlParam, changeScreen };
+export { getUrlParam, changeScreen };

@@ -1,6 +1,6 @@
 import { Input } from "../Components/Input.js";
 import { auth } from "../firebaseConfig.js";
-import { changeScreen, navigate } from "../navigator.js";
+import { changeScreen } from "../navigator.js";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -85,7 +85,7 @@ class Login {
     this.$cancel.title = "Cancel";
     this.$cancel.classList.add("authMoreActionText", "authCancelBtn");
     this.$cancel.addEventListener("click", () => {
-      // navigate("productDisplayScreen");
+  
       changeScreen("productDisplayScreen");
     });
 

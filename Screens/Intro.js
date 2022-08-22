@@ -298,9 +298,9 @@ class Intro {
       `;
     this.$script = document.createElement("script");
     this.$script.type = "module";
-    this.$script.innerHTML = `import {navigate} from './navigator.js'
+    this.$script.innerHTML = `import {changeScreen} from './navigator.js'
       document.getElementById("enterBtn").addEventListener("click", () => {
-      navigate("productDisplayScreen"); });`;
+        changeScreen("productDisplayScreen"); });`;
     this.$container.appendChild(this.$script);
   }
   render() {

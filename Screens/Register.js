@@ -1,4 +1,4 @@
-import { navigate } from "../navigator.js";
+import { changeScreen } from "../navigator.js";
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { auth } from "../firebaseConfig.js";
 import { Input } from "../Components/Input.js";
@@ -51,7 +51,7 @@ class Register {
     this.$backToLogin.classList.add("authMoreActionText");
 
     this.$backToLogin.addEventListener("click", () => {
-      navigate("loginScreen");
+      changeScreen("loginScreen");
     });
 
     this.$registerBtn.addEventListener("click", () => {
@@ -98,7 +98,7 @@ class Register {
         // Signed in
         const user = userCredential.user;
         toggleElement(this.$loadingLayer.render());
-        navigate("introScreen");
+        changeScreen("introScreen");
         // ...
       })
       .catch((error) => {

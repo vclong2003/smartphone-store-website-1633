@@ -1,3 +1,5 @@
+import { getUrlParam } from "../navigator.js";
+
 let filterParam = {
   searchValue: "",
   catID: "",
@@ -91,6 +93,7 @@ const paginate = (rawData = [{}], $container) => {
   splicedData.map((item, index) => {
     const paginateItem = document.createElement("div");
     paginateItem.innerHTML = index + 1;
+    paginateItem.id = index + 1;
     paginateItem.classList.add("paginateItem");
     paginateItem.addEventListener("click", () => {
       $container.innerHTML = "";
@@ -104,10 +107,21 @@ const paginate = (rawData = [{}], $container) => {
       }
       paginateItem.classList.add("paginateItem_active");
       previous = paginateItem;
+      history.pushState(
+        undefined,
+        undefined,
+        `?screen=${getUrlParam("screen")}&page=${index + 1}`
+      );
     });
     $paginationContainer.appendChild(paginateItem);
-    if (paginateItem.innerHTML == 1) {
-      paginateItem.click();
+    if (getUrlParam("page")) {
+      if (getUrlParam("page") == paginateItem.id) {
+        paginateItem.click();
+      }
+    } else {
+      if (paginateItem.id == 1) {
+        paginateItem.click();
+      }
     }
   });
   $container.appendChild($paginationContainer);

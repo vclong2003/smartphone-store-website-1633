@@ -1,5 +1,5 @@
 import { Input } from "../Components/Input.js";
-import { navigate } from "../navigator.js";
+import { changeScreen } from "../navigator.js";
 
 class Cart {
   $container;
@@ -85,7 +85,7 @@ class Cart {
     this.$container.appendChild(this.$rightPanel);
 
     this.$backBtn.addEventListener("click", () => {
-      navigate("productDisplayScreen");
+      console.log("ok");
     });
   }
   render() {
