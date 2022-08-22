@@ -98,8 +98,7 @@ class NavBar {
     this.$contactContainer.appendChild(this.$authStateText);
     this.$authStateText.addEventListener("click", () => {
       if (this.authState) {
-        signOut(auth);
-        location.reload();
+        changeScreen("userScreen");
       } else {
         changeScreen("loginScreen");
       }

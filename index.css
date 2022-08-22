@@ -728,25 +728,7 @@
   flex-wrap: wrap;
   justify-content: center;
   animation: slideFromRight 0.8s;
-}
-.cartScreen_header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-top: 1%;
-  padding-left: 1%;
-  width: 100%;
-  margin-bottom: 2%;
-}
-.cartScreen_header img {
-  width: 2%;
-  cursor: pointer;
-}
-.cartScreen_header div {
-  font-family: "Poppins", sans-serif;
-  font-size: 35px;
-  text-align: center;
-  margin-left: 3%;
+  padding-top: 5%;
 }
 .cartScreen_leftPanel {
   width: 40%;

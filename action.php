@@ -6,6 +6,15 @@ $username = "root";
 $password = "";
 $dbname = "smartphonestoredb";
 
+function customQuery($query)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("$query");
+    $conn->close();
+    echo json_encode("Query sent!");
+}
 function addData($query)
 {
     $servername = "localhost";
@@ -86,15 +95,6 @@ function addBrand($brandName, $desc)
     $conn->close();
     echo json_encode("done");
 }
-function customQuery($query)
-{
-    global $servername, $username, $password, $dbname;
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    $conn->query("$query");
-    $conn->close();
-    echo json_encode("Query sent!");
-}
 function addItemToCart($email, $productID)
 {
     global $servername, $username, $password, $dbname;
@@ -104,8 +104,9 @@ function addItemToCart($email, $productID)
     $conn->close();
     echo json_encode("Query sent!");
 }
-
-if ($_POST['functionname'] == "addData") {
+if ($_POST['functionname'] == "customQuery") {
+    customQuery($_POST['query']);
+} else if ($_POST['functionname'] == "addData") {
     addData($_POST['query']);
 } else if ($_POST['functionname'] == 'fetchAllProducts') {
     fetchAllProducts();

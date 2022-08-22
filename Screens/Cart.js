@@ -1,12 +1,7 @@
 import { Input } from "../Components/Input.js";
-import { changeScreen } from "../navigator.js";
 
 class Cart {
   $container;
-
-  $header;
-  $backBtn;
-  $title;
 
   $leftPanel;
   $nameInput;
@@ -26,16 +21,6 @@ class Cart {
   constructor() {
     this.$container = document.createElement("div");
     this.$container.classList.add("cartScreen_container");
-
-    this.$header = document.createElement("div");
-    this.$header.classList.add("cartScreen_header");
-    this.$backBtn = document.createElement("img");
-    this.$backBtn.src = "././Assets/Icons/back_icon.png";
-    this.$title = document.createElement("div");
-    this.$title.innerHTML = "Cart";
-    this.$header.appendChild(this.$backBtn);
-    this.$header.appendChild(this.$title);
-    this.$container.appendChild(this.$header);
 
     this.$leftPanel = document.createElement("div");
     this.$leftPanel.classList.add("cartScreen_leftPanel");
@@ -83,10 +68,6 @@ class Cart {
     this.$checkoutContainer.appendChild(this.$orderTotalValue);
     this.$rightPanel.appendChild(this.$checkoutContainer);
     this.$container.appendChild(this.$rightPanel);
-
-    this.$backBtn.addEventListener("click", () => {
-      console.log("ok");
-    });
   }
   render() {
     document.title = "Cart";
