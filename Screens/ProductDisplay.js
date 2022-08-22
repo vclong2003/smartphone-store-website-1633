@@ -7,8 +7,8 @@ import {
   loadItems,
   updateFilterParam,
 } from "../Components/productDisplayHandler.js";
-import { fetchCategoryList } from "../Components/fetchCategoryList.js";
-import { fetchBrandList } from "../Components/fetchBrandList.js";
+import { fetchCategoryList } from "../Components/handleCategory.js";
+import { fetchBrandList } from "../Components/handleBrands.js";
 class ProductDisplay {
   userEmail = null;
 

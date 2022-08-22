@@ -3,8 +3,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
-import { fetchBrandList } from "../Components/fetchBrandList.js";
-import { fetchCategoryList } from "../Components/fetchCategoryList.js";
+import { fetchBrandList } from "../Components/handleBrands.js";
+import { fetchCategoryList } from "../Components/handleCategory.js";
 import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 import { storage, auth } from "../firebaseConfig.js";

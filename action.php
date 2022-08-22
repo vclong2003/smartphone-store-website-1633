@@ -6,19 +6,6 @@ $username = "root";
 $password = "";
 $dbname = "smartphonestoredb";
 
-function getData($query)
-{
-    global $servername, $username, $password, $dbname;
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    $result = $conn->query("$query");
-
-    if ($result->num_rows > 0) {
-        echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
-    }
-    $conn->close();
-}
-
 function addData($query)
 {
     $servername = "localhost";
@@ -108,10 +95,17 @@ function customQuery($query)
     $conn->close();
     echo json_encode("Query sent!");
 }
+function addItemToCart($email, $productID)
+{
+    global $servername, $username, $password, $dbname;
 
-if ($_POST['functionname'] == 'getData') {
-    getData($_POST['query']);
-} else if ($_POST['functionname'] == "addData") {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("INSERT INTO `cart`(`email`, `productID`) VALUES ('$email','$productID')");
+    $conn->close();
+    echo json_encode("Query sent!");
+}
+
+if ($_POST['functionname'] == "addData") {
     addData($_POST['query']);
 } else if ($_POST['functionname'] == 'fetchAllProducts') {
     fetchAllProducts();
@@ -127,4 +121,6 @@ if ($_POST['functionname'] == 'getData') {
     addCategory($_POST['catName']);
 } else if ($_POST['functionname'] == 'addBrand') {
     addBrand($_POST['brandName'], $_POST['desc']);
+} else if ($_POST['functionname'] == 'addItemToCart') {
+    addItemToCart($_POST['email'], $_POST['productID']);
 }
