@@ -7,7 +7,9 @@ import { fetchBrandList } from "../Components/fetchBrandList.js";
 import { fetchCategoryList } from "../Components/fetchCategoryList.js";
 import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
-import { storage } from "../firebaseConfig.js";
+import { storage, auth } from "../firebaseConfig.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import { changeScreen } from "../navigator.js";
 class Console {
   $container;
   $edittingLayer;
@@ -296,9 +298,25 @@ class Console {
   }
 
   render() {
-    this.$container.appendChild(this.$leftPanel);
-    this.$container.appendChild(this.$rightPanel);
-    this.$addTab.click();
+    this.$container.innerHTML = "";
+
+    const mockElement = document.createElement("div");
+    mockElement.innerHTML = "You are not authorized to view this page!";
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.email == "vclong2003@gmail.com") {
+          this.$container.appendChild(this.$leftPanel);
+          this.$container.appendChild(this.$rightPanel);
+          this.$addTab.click();
+        } else {
+          this.$container.appendChild(mockElement);
+        }
+      } else {
+        this.$container.appendChild(mockElement);
+      }
+    });
+
     return this.$container;
   }
 
