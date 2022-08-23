@@ -503,6 +503,8 @@ class Console {
       });
     });
   }
+
+  //product
   handleProductEditItems() {
     fetchProducts((data) => {
       this.$editProductContainer.innerHTML = "";
@@ -517,11 +519,32 @@ class Console {
         const deleteBtn = document.createElement("button");
 
         editBtn.addEventListener("click", () => {
-          alertify.notify(
-            "Sorry, this function is in development!",
-            "error",
-            3
-          );
+          this.$edittingPopup.innerHTML = "";
+          let thumbnailUrl = "";
+          let imageUrl = "";
+          const categorySelection = document.createElement("select");
+          const brandSelection = document.createElement("select");
+          const name = new Input();
+          const smallDescription = new Input();
+          const description = new Input();
+          const thumbnailUpload = document.createElement("input");
+          thumbnailUpload.type = "file";
+          thumbnailUpload.accept = "image/*";
+          const imageUpload = document.createElement("input");
+          imageUpload.type = "file";
+          imageUpload.accept = "image/*";
+          const price = new Input();
+          const quantity = new Input();
+
+          this.$edittingPopup.appendChild(categorySelection);
+          this.$edittingPopup.appendChild(brandSelection);
+          this.$edittingPopup.appendChild(name.render());
+          this.$edittingPopup.appendChild(smallDescription.render());
+          this.$edittingPopup.appendChild(description.render());
+          this.$edittingPopup.appendChild(thumbnailUpload);
+          this.$edittingPopup.appendChild(imageUpload);
+          this.$edittingPopup.appendChild(price.render());
+          this.$edittingPopup.appendChild(quantity.render());
         });
 
         deleteBtn.innerHTML = "Delete";

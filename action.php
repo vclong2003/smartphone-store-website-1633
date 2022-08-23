@@ -86,6 +86,15 @@ function addCategory($catName)
     $conn->close();
     echo json_encode("done");
 }
+function updateCategory()
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("");
+    $conn->close();
+    echo json_encode("done");
+}
 function addBrand($brandName, $desc)
 {
     global $servername, $username, $password, $dbname;
