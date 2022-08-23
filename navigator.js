@@ -6,6 +6,10 @@ import { Intro } from "./Screens/Intro.js";
 import { ProductDetail } from "./Screens/ProductDetail.js";
 import { Cart } from "./Screens/Cart.js";
 import { User } from "./Screens/User.js";
+import {
+  checkCartItemExistance,
+  fetchCartItems,
+} from "./Components/handleOrders.js";
 alertify.set("notifier", "position", "top-left");
 
 const registerScreen = new Register();

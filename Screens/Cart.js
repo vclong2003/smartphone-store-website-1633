@@ -1,4 +1,7 @@
 import { Input } from "../Components/Input.js";
+import { auth } from "../firebaseConfig.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import { fetchCartItems, removeCartItem } from "../Components/handleOrders.js";
 
 class Cart {
   $container;
@@ -47,7 +50,6 @@ class Cart {
     this.$submitBtn.innerHTML = "Submit Order";
     this.$submitBtn.classList.add("cartScreen_submitBtn");
     this.$leftPanel.appendChild(this.$submitBtn);
-    this.$container.appendChild(this.$leftPanel);
 
     this.$rightPanel = document.createElement("div");
     this.$rightPanel.classList.add("cartScreen_rightPanel");
@@ -56,21 +58,82 @@ class Cart {
     this.$orderSummaryTitle.classList.add("cartScreen_summaryTitle");
     this.$rightPanel.appendChild(this.$orderSummaryTitle);
     this.$orderItemsContainer = document.createElement("div");
+    this.$orderItemsContainer.classList.add("cartScreen_orderItemsContainer");
     this.$rightPanel.appendChild(this.$orderItemsContainer);
     this.$checkoutContainer = document.createElement("div");
     this.$checkoutContainer.classList.add("cartScreen_checkoutContainer");
     this.$orderTotalTitle = document.createElement("div");
     this.$orderTotalTitle.innerHTML = "Total Order";
     this.$orderTotalValue = document.createElement("div");
-    this.$orderTotalValue.innerHTML = "1500.00$";
     this.$orderTotalValue.classList.add("cartScreen_orderTotalValue");
     this.$checkoutContainer.appendChild(this.$orderTotalTitle);
     this.$checkoutContainer.appendChild(this.$orderTotalValue);
     this.$rightPanel.appendChild(this.$checkoutContainer);
-    this.$container.appendChild(this.$rightPanel);
+  }
+  renderCartItem(thumbnailUrl, itemName, itemPrice, _removeFunction) {
+    const container = document.createElement("div");
+    container.classList.add("cart_itemComtainer");
+    const leftContainer = document.createElement("div");
+    leftContainer.classList.add("cart_itemComtainer_left");
+    const rightContainer = document.createElement("div");
+    rightContainer.classList.add("cart_itemComtainer_right");
+    const thumbnail = document.createElement("img");
+    thumbnail.src = thumbnailUrl;
+    const name = document.createElement("div");
+    name.classList.add("cart_item_name");
+    name.innerHTML = itemName;
+    const price = document.createElement("div");
+    price.classList.add("cart_item_price");
+    price.innerHTML = itemPrice + "$";
+    const removeBtn = document.createElement("button");
+    removeBtn.innerHTML = "Remove";
+    removeBtn.addEventListener("click", () => {
+      _removeFunction();
+    });
+    leftContainer.appendChild(thumbnail);
+    rightContainer.appendChild(name);
+    rightContainer.appendChild(price);
+    rightContainer.appendChild(removeBtn);
+    container.appendChild(leftContainer);
+    container.appendChild(rightContainer);
+
+    return container;
+  }
+  renderAllCartItems(email) {
+    let totalPrice = 0;
+    this.$orderTotalValue.innerHTML = "00.00$";
+    this.$orderItemsContainer.innerHTML = "";
+    fetchCartItems(email, (data) => {
+      data.map((item) => {
+        totalPrice += Number(item.Price);
+        this.$orderItemsContainer.appendChild(
+          this.renderCartItem(item.thumbnailUrl, item.Name, item.Price, () => {
+            removeCartItem(email, item.productID, () => {
+              this.renderAllCartItems(email);
+            });
+          })
+        );
+        this.$orderTotalValue.innerHTML = totalPrice.toFixed(2) + "$";
+      });
+    });
   }
   render() {
     document.title = "Cart";
+    document.title = "Console";
+    this.$container.innerHTML = "";
+
+    const mockElement = document.createElement("div");
+    mockElement.innerHTML = "You must login view this page!";
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.renderAllCartItems(user.email);
+        this.$container.appendChild(this.$leftPanel);
+        this.$container.appendChild(this.$rightPanel);
+      } else {
+        this.$container.appendChild(mockElement);
+      }
+    });
     return this.$container;
   }
 }

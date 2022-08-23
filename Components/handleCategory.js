@@ -10,4 +10,16 @@ const fetchCategoryList = (_callbackFunction) => {
   });
 };
 
-export { fetchCategoryList };
+const addCategory = (catName, _callback) => {
+  jQuery.ajax({
+    type: "POST",
+    url: "action.php",
+    dataType: "json",
+    data: { functionname: "addCategory", catName: catName },
+    success: function (data) {
+      _callback(data);
+    },
+  });
+};
+
+export { fetchCategoryList, addCategory };

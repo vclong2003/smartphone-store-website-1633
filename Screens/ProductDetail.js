@@ -1,6 +1,13 @@
 import { fetchProductInfo } from "../Components/handleProduct.js";
 import { getUrlParam } from "../navigator.js";
+import { auth } from "../firebaseConfig.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import {
+  addItemToCart,
+  checkCartItemExistance,
+} from "../Components/handleOrders.js";
 class ProductDetail {
+  currentID = null;
   $container;
 
   $productDetailContainer;
@@ -23,7 +30,7 @@ class ProductDetail {
   $img;
   $text;
 
-  constructor(id = "") {
+  constructor() {
     this.$container = document.createElement("div");
     this.$productDetailContainer = document.createElement("div");
     this.$header = document.createElement("div");
@@ -59,6 +66,25 @@ class ProductDetail {
     this.$text.classList.add("productDetail_text");
 
     this.$addTocardBtn.innerHTML = "Add to card";
+    this.$addTocardBtn.addEventListener("click", () => {
+      if (this.currentID) {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            checkCartItemExistance(user.email, this.currentID, (data) => {
+              if (data.count == 0) {
+                addItemToCart(user.email, this.currentID, () => {
+                  alertify.notify("Item added to cart!", "success", 2);
+                });
+              } else {
+                alertify.notify("Item existed in your cart", "error", 2);
+              }
+            });
+          } else {
+            alertify.notify("You must login to use this function!", "error", 2);
+          }
+        });
+      }
+    });
   }
   render() {
     document.title = "Product detail";
@@ -90,6 +116,7 @@ class ProductDetail {
 
     if (id) {
       fetchProductInfo(id, (data) => {
+        this.currentID = id;
         this.$header.innerHTML =
           "Category: " + data.categoryName + " > Brand: " + data.brandName;
         this.$thumbnailImg.src = data.thumbnailUrl;

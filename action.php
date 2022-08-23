@@ -104,6 +104,35 @@ function addItemToCart($email, $productID)
     $conn->close();
     echo json_encode("Query sent!");
 }
+function fetchCartItems($email)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $result = $conn->query("SELECT `cart`.*, `product`.*, `brand`.`brandName` FROM `cart` INNER JOIN `product` ON `product`.`productID` = `cart`.`productID` INNER JOIN `brand` ON `product`.`brandID` = `brand`.`brandID` WHERE `cart`.`email` = '$email'");
+    if ($result->num_rows > 0) {
+        echo json_encode(mysqli_fetch_all($result, MYSQLI_ASSOC));
+    }
+    $conn->close();
+}
+function removeCartItem($email, $productID)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->query("DELETE FROM `cart` WHERE `email` = '$email' AND `productID`= '$productID'");
+    $conn->close();
+    echo json_encode("Query sent!");
+}
+function checkCartItemExistance($email, $productID)
+{
+    global $servername, $username, $password, $dbname;
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $result = $conn->query("SELECT COUNT(*) as `count` FROM `cart` WHERE email = '$email' AND productID = '$productID'");
+    echo json_encode(mysqli_fetch_assoc($result));
+    $conn->close();
+}
 if ($_POST['functionname'] == "customQuery") {
     customQuery($_POST['query']);
 } else if ($_POST['functionname'] == "addData") {
@@ -124,4 +153,10 @@ if ($_POST['functionname'] == "customQuery") {
     addBrand($_POST['brandName'], $_POST['desc']);
 } else if ($_POST['functionname'] == 'addItemToCart') {
     addItemToCart($_POST['email'], $_POST['productID']);
+} else if ($_POST['functionname'] == 'fetchCartItems') {
+    fetchCartItems($_POST['email']);
+} else if ($_POST['functionname'] == 'removeCartItem') {
+    removeCartItem($_POST['email'], $_POST['productID']);
+} else if ($_POST['functionname'] == 'checkCartItemExistance') {
+    checkCartItemExistance($_POST['email'], $_POST['productID']);
 }

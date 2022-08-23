@@ -9,6 +9,10 @@ import {
 } from "../Components/productDisplayHandler.js";
 import { fetchCategoryList } from "../Components/handleCategory.js";
 import { fetchBrandList } from "../Components/handleBrands.js";
+import {
+  addItemToCart,
+  checkCartItemExistance,
+} from "../Components/handleOrders.js";
 class ProductDisplay {
   userEmail = null;
 
@@ -200,7 +204,23 @@ class ProductDisplay {
       (id) => {
         changeScreen("productDetailScreen", `productID=${id}`);
       },
-      (id) => {}
+      (id) => {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            checkCartItemExistance(user.email, id, (data) => {
+              if (Number(data.count) == 0) {
+                addItemToCart(user.email, id, () => {
+                  alertify.notify("Item added to cart!", "success", 2);
+                });
+              } else {
+                alertify.notify("Item existed in your cart", "error", 2);
+              }
+            });
+          } else {
+            alertify.notify("You must login to use this function!", "error", 2);
+          }
+        });
+      }
     );
   }
 

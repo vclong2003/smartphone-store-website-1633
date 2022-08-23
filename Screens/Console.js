@@ -3,16 +3,21 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
-import { fetchBrandList } from "../Components/handleBrands.js";
-import { fetchCategoryList } from "../Components/handleCategory.js";
+import { addBrand, fetchBrandList } from "../Components/handleBrands.js";
+import {
+  addCategory,
+  fetchCategoryList,
+} from "../Components/handleCategory.js";
 import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 import { storage, auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { changeScreen } from "../navigator.js";
 import { fetchProducts } from "../Components/handleProduct.js";
+import { LoadingLayer } from "../Components/LoadingLayer.js";
 class Console {
   $container;
+  $loadingLayer;
   $edittingLayer;
   $edittingPopup;
 
@@ -63,6 +68,8 @@ class Console {
     this.$container = document.createElement("div");
     this.$container.classList.add("consoleContainer");
 
+    this.$loadingLayer = new LoadingLayer();
+
     this.$edittingLayer = document.createElement("div");
     this.$edittingLayer.classList.add("consoleScreen_edittingLayer");
     this.$container.appendChild(this.$edittingLayer);
@@ -97,16 +104,9 @@ class Console {
     this.$addCategoryBtn.addEventListener("click", () => {
       const categoryName = this.$categoryNameInput.getValue();
       if (categoryName != "") {
-        jQuery.ajax({
-          type: "POST",
-          url: "action.php",
-          dataType: "json",
-          data: { functionname: "addCategory", catName: categoryName },
-          success: function (data) {
-            console.log(data);
-            alertify.notify("Successful!", "success", 1);
-            this.updateCategorySelection();
-          },
+        addCategory(categoryName, () => {
+          alertify.notify("Successful!", "success", 1);
+          this.updateCategorySelection();
         });
       } else {
         alertify.notify("PLease enter category name!", "error", 2);
@@ -126,20 +126,9 @@ class Console {
       const brandName = this.$brandNameInput.getValue();
       const brandDescription = this.$brandDescriptionInput.getValue();
       if (brandName != "") {
-        jQuery.ajax({
-          type: "POST",
-          url: "action.php",
-          dataType: "json",
-          data: {
-            functionname: "addBrand",
-            brandName: brandName,
-            desc: brandDescription,
-          },
-          success: function (data) {
-            console.log(data);
-            alertify.notify("Successful!", "success", 1);
-            this.updateBrandSelection();
-          },
+        addBrand(brandName, brandDescription, () => {
+          alertify.notify("Successful!", "success", 1);
+          this.updateBrandSelection();
         });
       } else {
         alertify.notify("PLease enter brand name!", "error", 2);
@@ -317,6 +306,7 @@ class Console {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         if (user.email == "vclong2003@gmail.com") {
+          this.$container.appendChild(this.$loadingLayer.render());
           this.$container.appendChild(this.$edittingLayer);
           this.$container.appendChild(this.$leftPanel);
           this.$container.appendChild(this.$rightPanel);
@@ -351,9 +341,11 @@ class Console {
   }
 
   uploadImage(file, _function) {
+    toggleElement(this.$loadingLayer.render());
     const storageRef = ref(storage, "productImages/" + file.name);
     uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
+        toggleElement(this.$loadingLayer.render());
         _function(downloadURL);
       });
     });

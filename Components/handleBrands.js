@@ -9,4 +9,19 @@ const fetchBrandList = (_callbackFunction) => {
     },
   });
 };
-export { fetchBrandList };
+const addBrand = (name, desc, _callback) => {
+  jQuery.ajax({
+    type: "POST",
+    url: "action.php",
+    dataType: "json",
+    data: {
+      functionname: "addBrand",
+      brandName: name,
+      desc: desc,
+    },
+    success: function (data) {
+      _callback(data);
+    },
+  });
+};
+export { fetchBrandList, addBrand };

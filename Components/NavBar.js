@@ -1,8 +1,5 @@
 import { changeScreen } from "../navigator.js";
-import {
-  onAuthStateChanged,
-  signOut,
-} from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { auth } from "../firebaseConfig.js";
 class NavBar {
   $container;
@@ -124,18 +121,13 @@ class NavBar {
   render() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
         this.$authStateText.innerHTML = user.email;
         this.$authStateText.classList.add("navBarAuthStateTextLoggedIn");
         this.authState = true;
-
         if (user.email == "vclong2003@gmail.com") {
           this.$rightComponentContainer.appendChild(this.$consoleScreenIcon);
         }
       } else {
-        // User is signed out
-        // ...
         this.$authStateText.classList.remove("navBarAuthStateTextLoggedIn");
         this.$authStateText.innerHTML = "Login";
         this.authState = false;
