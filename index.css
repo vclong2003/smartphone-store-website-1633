@@ -874,9 +874,6 @@
 .cart_item_price {
   font-family: "Poppins", sans-serif;
 }
-.cart_item_name {
-  cursor: pointer;
-}
 .cart_item_price {
   margin-top: 1%;
   color: #6a983c;
