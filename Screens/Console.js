@@ -298,7 +298,6 @@ class Console {
       history.back();
     });
   }
-
   uploadImage(file, _function) {
     toggleElement(this.$loadingLayer.render());
     const storageRef = ref(storage, "productImages/" + file.name);
@@ -309,7 +308,6 @@ class Console {
       });
     });
   }
-
   updateCategorySelection() {
     this.$productCategorySelection.innerHTML = "";
     fetchCategoryList((data) => {
@@ -461,8 +459,6 @@ class Console {
       });
     });
   }
-
-  //product
   handleProductEditItems() {
     fetchProducts((data) => {
       this.$editProductContainer.innerHTML = "";
@@ -631,7 +627,6 @@ class Console {
       });
     });
   }
-
   renderEditorPopup(_submit, _cancel) {
     const container = document.createElement("div");
     const submitBtn = document.createElement("button");
