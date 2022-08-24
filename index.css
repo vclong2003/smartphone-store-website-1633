@@ -852,6 +852,9 @@
 }
 .cart_itemComtainer_left {
   width: 25%;
+  height: 100px;
+  padding-top: 1%;
+  padding-bottom: 1%;
   background-color: #fff;
   display: flex;
   align-items: center;
@@ -859,9 +862,8 @@
   border-radius: 10px;
 }
 .cart_itemComtainer_left img {
-  height: 90px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  max-width: 100%;
+  max-height: 100%;
 }
 .cart_itemComtainer_right {
   width: 70%;
@@ -871,6 +873,9 @@
 .cart_item_name,
 .cart_item_price {
   font-family: "Poppins", sans-serif;
+}
+.cart_item_name {
+  cursor: pointer;
 }
 .cart_item_price {
   margin-top: 1%;
