@@ -299,50 +299,6 @@ class Console {
     });
   }
 
-  render() {
-    document.title = "Console";
-    this.$container.innerHTML = "";
-
-    const mockElement = document.createElement("div");
-    mockElement.innerHTML = "You are not authorized to view this page!";
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (user.email == "vclong2003@gmail.com") {
-          this.$container.appendChild(this.$loadingLayer.render());
-          this.$container.appendChild(this.$edittingLayer);
-          this.$container.appendChild(this.$leftPanel);
-          this.$container.appendChild(this.$rightPanel);
-          this.$addTab.click();
-        } else {
-          this.$container.appendChild(mockElement);
-        }
-      } else {
-        this.$container.appendChild(mockElement);
-      }
-    });
-
-    return this.$container;
-  }
-
-  editData(query, _function = null) {
-    jQuery.ajax({
-      type: "POST",
-      url: "action.php",
-      dataType: "json",
-      data: {
-        functionname: "addData",
-        query: query,
-      },
-      success: function () {
-        alertify.notify("Successful!", "success", 1);
-        if (_function) {
-          _function();
-        }
-      },
-    });
-  }
-
   uploadImage(file, _function) {
     toggleElement(this.$loadingLayer.render());
     const storageRef = ref(storage, "productImages/" + file.name);
@@ -391,14 +347,13 @@ class Console {
         deleteBtn.innerHTML = "Delete";
 
         editBtn.addEventListener("click", () => {
-          console.log("ok");
           this.$edittingPopup.innerHTML = "";
-          const catNameInput = new Input();
+          const catNameInput = new Input("Name");
           catNameInput.setValue(item.categoryName);
           this.$edittingPopup.appendChild(catNameInput.render());
           this.renderEditorPopup(
             () => {
-              this.editData(
+              customQuery(
                 "UPDATE `category` SET `categoryName`='" +
                   catNameInput.getValue() +
                   "' WHERE `catID` = " +
@@ -420,7 +375,7 @@ class Console {
 
         deleteBtn.addEventListener("click", () => {
           if (item.quantity == 0) {
-            this.editData(
+            customQuery(
               "DELETE FROM `category` WHERE catID = " + item.catID,
               () => {
                 this.handleCategoryEditItems();
@@ -455,15 +410,15 @@ class Console {
 
         editBtn.addEventListener("click", () => {
           this.$edittingPopup.innerHTML = "";
-          const brandNameInput = new Input();
-          const brandDescriptionInput = new Input();
+          const brandNameInput = new Input("Name");
+          const brandDescriptionInput = new Input("Description");
           brandNameInput.setValue(item.brandName);
           brandDescriptionInput.setValue(item.Description);
           this.$edittingPopup.appendChild(brandNameInput.render());
           this.$edittingPopup.appendChild(brandDescriptionInput.render());
           this.renderEditorPopup(
             () => {
-              this.editData(
+              customQuery(
                 "UPDATE `brand` SET `brandName` = '" +
                   brandNameInput.getValue() +
                   "', `Description` = '" +
@@ -487,7 +442,7 @@ class Console {
 
         deleteBtn.addEventListener("click", () => {
           if (item.quantity == 0) {
-            this.editData(
+            customQuery(
               "DELETE FROM `brand` WHERE brandID = " + item.brandID,
               () => {
                 this.handleBrandEditItems();
@@ -654,7 +609,7 @@ class Console {
           toggleElement(this.$edittingLayer);
           this.renderEditorPopup(
             () => {
-              this.editData(
+              customQuery(
                 "DELETE FROM `product` WHERE productID = " + item.productID,
                 () => {
                   this.handleProductEditItems();
@@ -692,6 +647,31 @@ class Console {
     cancelBtn.addEventListener("click", () => {
       _cancel();
     });
+  }
+  render() {
+    document.title = "Console";
+    this.$container.innerHTML = "";
+
+    const mockElement = document.createElement("div");
+    mockElement.innerHTML = "You are not authorized to view this page!";
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.email == "vclong2003@gmail.com") {
+          this.$container.appendChild(this.$loadingLayer.render());
+          this.$container.appendChild(this.$edittingLayer);
+          this.$container.appendChild(this.$leftPanel);
+          this.$container.appendChild(this.$rightPanel);
+          this.$addTab.click();
+        } else {
+          this.$container.appendChild(mockElement);
+        }
+      } else {
+        this.$container.appendChild(mockElement);
+      }
+    });
+
+    return this.$container;
   }
 }
 

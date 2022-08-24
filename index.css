@@ -536,6 +536,7 @@
   flex-direction: column;
   border-radius: 12px;
   align-content: flex-start;
+  font-family: "Poppins", sans-serif;
 }
 .consoleScreen_edittingPopup select {
   outline: none;
@@ -560,10 +561,11 @@
   border-radius: 10px;
   border: none;
   outline: none;
-  background-color: #6fa03e;
+  background-color: #82ac58;
   margin-right: 2%;
   cursor: pointer;
   margin-top: 2%;
+  color: white;
 }
 .consoleLeftPanel {
   width: 15%;
