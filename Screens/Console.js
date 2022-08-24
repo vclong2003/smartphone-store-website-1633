@@ -12,7 +12,6 @@ import { Input } from "../Components/Input.js";
 import { toggleElement } from "../Components/ToggleElement.js";
 import { storage, auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
-import { changeScreen } from "../navigator.js";
 import {
   fetchProductInfo,
   fetchProducts,
@@ -552,8 +551,6 @@ class Console {
           this.$edittingPopup.appendChild(price.render());
           this.$edittingPopup.appendChild(quantity.render());
           fetchProductInfo(item.productID, (data) => {
-            console.log(data);
-
             fetchCategoryList((catData) => {
               categorySelection.innerHTML = "";
               catData.map((item) => {
@@ -582,39 +579,63 @@ class Console {
               quantity.setValue(data.quantity);
               thumbnailUrl = data.thumbnailUrl;
               imageUrl = data.imageUrl;
-              
+
+              const sendQuery = () => {
+                customQuery(
+                  "UPDATE `product` SET `catID` = '" +
+                    categorySelection.value +
+                    "', `brandID` = '" +
+                    brandSelection.value +
+                    "', `Name` = '" +
+                    name.getValue().replace(`'`, `''`) +
+                    "', `smallDescription` = '" +
+                    smallDescription.getValue().replace(`'`, `''`) +
+                    "', `Description` = '" +
+                    description.getValue().replace(`'`, `''`) +
+                    "', `thumbnailUrl` = '" +
+                    thumbnailUrl +
+                    "', `imageUrl` = '" +
+                    imageUrl +
+                    "', `Price` = '" +
+                    price.getValue() +
+                    "', `quantity` = '" +
+                    quantity.getValue() +
+                    "' WHERE `product`.`productID` = " +
+                    data.productID,
+                  () => {
+                    toggleElement(this.$edittingLayer);
+                    alertify.notify("Done!", "success", 1);
+                  }
+                );
+              };
 
               this.renderEditorPopup(
                 () => {
-                  customQuery(
-                    "UPDATE `product` SET `catID` = '" +
-                      categorySelection.value +
-                      "', `brandID` = '" +
-                      brandSelection.value +
-                      "', `Name` = '" +
-                      name.getValue() +
-                      "', `smallDescription` = '" +
-                      smallDescription.getValue() +
-                      "', `Description` = '" +
-                      description.getValue() +
-                      "', `thumbnailUrl` = '" +
-                      thumbnailUrl +
-                      "', `imageUrl` = '" +
-                      imageUrl +
-                      "', `Price` = '" +
-                      price.getValue() +
-                      "', `quantity` = '" +
-                      quantity.getValue() +
-                      "' WHERE `product`.`productID` = 75",
-                    () => {
-                      toggleElement(this.$edittingLayer);
-                      console.log("editted");
-                    }
-                  );
+                  if (thumbnailUpload.files[0] && imageUpload.files[0]) {
+                    this.uploadImage(thumbnailUpload.files[0], (url) => {
+                      thumbnailUrl = url;
+                      this.uploadImage(imageUpload.files[0], (_url) => {
+                        imageUrl = _url;
+                        sendQuery();
+                      });
+                    });
+                  } else if (thumbnailUpload.files[0]) {
+                    this.uploadImage(thumbnailUpload.files[0], (url) => {
+                      thumbnailUrl = url;
+                      sendQuery();
+                    });
+                  } else if (imageUpload.files[0]) {
+                    this.uploadImage(imageUpload.files[0], (url) => {
+                      imageUrl = url;
+                      sendQuery();
+                    });
+                  } else {
+                    sendQuery();
+                  }
                 },
                 () => {
                   toggleElement(this.$edittingLayer);
-                  console.log("cancel");
+                  alertify.notify("Cancelled!", "error", 1);
                 }
               );
               toggleElement(this.$edittingLayer);
@@ -653,6 +674,7 @@ class Console {
       });
     });
   }
+
   renderEditorPopup(_submit, _cancel) {
     const container = document.createElement("div");
     const submitBtn = document.createElement("button");
