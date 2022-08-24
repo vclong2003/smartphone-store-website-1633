@@ -13,8 +13,12 @@ import { toggleElement } from "../Components/ToggleElement.js";
 import { storage, auth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { changeScreen } from "../navigator.js";
-import { fetchProducts } from "../Components/handleProduct.js";
+import {
+  fetchProductInfo,
+  fetchProducts,
+} from "../Components/handleProduct.js";
 import { LoadingLayer } from "../Components/LoadingLayer.js";
+import { customQuery } from "../Components/customQuery.js";
 class Console {
   $container;
   $loadingLayer;
@@ -520,21 +524,23 @@ class Console {
 
         editBtn.addEventListener("click", () => {
           this.$edittingPopup.innerHTML = "";
+
           let thumbnailUrl = "";
           let imageUrl = "";
+
           const categorySelection = document.createElement("select");
           const brandSelection = document.createElement("select");
-          const name = new Input();
-          const smallDescription = new Input();
-          const description = new Input();
+          const name = new Input("Name", "text");
+          const smallDescription = new Input("Small description", "text");
+          const description = new Input("Description", "text");
           const thumbnailUpload = document.createElement("input");
           thumbnailUpload.type = "file";
           thumbnailUpload.accept = "image/*";
           const imageUpload = document.createElement("input");
           imageUpload.type = "file";
           imageUpload.accept = "image/*";
-          const price = new Input();
-          const quantity = new Input();
+          const price = new Input("Price", "text");
+          const quantity = new Input("Quantity", "text");
 
           this.$edittingPopup.appendChild(categorySelection);
           this.$edittingPopup.appendChild(brandSelection);
@@ -545,6 +551,75 @@ class Console {
           this.$edittingPopup.appendChild(imageUpload);
           this.$edittingPopup.appendChild(price.render());
           this.$edittingPopup.appendChild(quantity.render());
+          fetchProductInfo(item.productID, (data) => {
+            console.log(data);
+
+            fetchCategoryList((catData) => {
+              categorySelection.innerHTML = "";
+              catData.map((item) => {
+                const $option = document.createElement("option");
+                $option.value = item.catID;
+                $option.innerHTML = item.categoryName;
+                categorySelection.appendChild($option);
+                categorySelection.value = data.catID;
+              });
+
+              fetchBrandList((brandData) => {
+                brandSelection.innerHTML = "";
+                brandData.map((item) => {
+                  const $option = document.createElement("option");
+                  $option.value = item.brandID;
+                  $option.innerHTML = item.brandName;
+                  brandSelection.appendChild($option);
+                  brandSelection.value = data.brandID;
+                });
+              });
+
+              name.setValue(data.Name);
+              smallDescription.setValue(data.smallDescription);
+              description.setValue(data.Description);
+              price.setValue(data.Price);
+              quantity.setValue(data.quantity);
+              thumbnailUrl = data.thumbnailUrl;
+              imageUrl = data.imageUrl;
+              
+
+              this.renderEditorPopup(
+                () => {
+                  customQuery(
+                    "UPDATE `product` SET `catID` = '" +
+                      categorySelection.value +
+                      "', `brandID` = '" +
+                      brandSelection.value +
+                      "', `Name` = '" +
+                      name.getValue() +
+                      "', `smallDescription` = '" +
+                      smallDescription.getValue() +
+                      "', `Description` = '" +
+                      description.getValue() +
+                      "', `thumbnailUrl` = '" +
+                      thumbnailUrl +
+                      "', `imageUrl` = '" +
+                      imageUrl +
+                      "', `Price` = '" +
+                      price.getValue() +
+                      "', `quantity` = '" +
+                      quantity.getValue() +
+                      "' WHERE `product`.`productID` = 75",
+                    () => {
+                      toggleElement(this.$edittingLayer);
+                      console.log("editted");
+                    }
+                  );
+                },
+                () => {
+                  toggleElement(this.$edittingLayer);
+                  console.log("cancel");
+                }
+              );
+              toggleElement(this.$edittingLayer);
+            });
+          });
         });
 
         deleteBtn.innerHTML = "Delete";
