@@ -535,9 +535,11 @@ class Console {
           const thumbnailUpload = document.createElement("input");
           thumbnailUpload.type = "file";
           thumbnailUpload.accept = "image/*";
+          thumbnailUpload.title = "Thumbnail";
           const imageUpload = document.createElement("input");
           imageUpload.type = "file";
           imageUpload.accept = "image/*";
+          imageUpload.title = "Image";
           const price = new Input("Price", "text");
           const quantity = new Input("Quantity", "text");
 
