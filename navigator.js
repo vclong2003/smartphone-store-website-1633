@@ -5,8 +5,7 @@ import { Register } from "./Screens/Register.js";
 import { Intro } from "./Screens/Intro.js";
 import { ProductDetail } from "./Screens/ProductDetail.js";
 import { Cart } from "./Screens/Cart.js";
-import { User } from "./Screens/User.js";
-import { fetchProducts } from "./Components/handleProduct.js";
+import { User } from "./Screens/User.js"; 
 alertify.set("notifier", "position", "top-left");
 
 const registerScreen = new Register();
@@ -76,11 +75,6 @@ navigate(getUrlParam("screen"));
 window.addEventListener("popstate", () => {
   navigate(getUrlParam("screen"));
 });
-
-fetchProducts((data) => {
-  console.log(data);
-});
-
 // for testing purpose
 
 // var getUrlParameter = function getUrlParameter(sParam) {

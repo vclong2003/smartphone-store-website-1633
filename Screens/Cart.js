@@ -70,7 +70,13 @@ class Cart {
     this.$checkoutContainer.appendChild(this.$orderTotalValue);
     this.$rightPanel.appendChild(this.$checkoutContainer);
   }
-  renderCartItem(thumbnailUrl, itemName, itemPrice, _removeFunction) {
+  renderCartItem(
+    thumbnailUrl,
+    brandName,
+    itemName,
+    itemPrice,
+    _removeFunction
+  ) {
     const container = document.createElement("div");
     container.classList.add("cart_itemComtainer");
     const leftContainer = document.createElement("div");
@@ -81,7 +87,7 @@ class Cart {
     thumbnail.src = thumbnailUrl;
     const name = document.createElement("div");
     name.classList.add("cart_item_name");
-    name.innerHTML = itemName;
+    name.innerHTML = brandName + " " + itemName;
     const price = document.createElement("div");
     price.classList.add("cart_item_price");
     price.innerHTML = itemPrice + "$";
@@ -107,11 +113,17 @@ class Cart {
       data.map((item) => {
         totalPrice += Number(item.Price);
         this.$orderItemsContainer.appendChild(
-          this.renderCartItem(item.thumbnailUrl, item.Name, item.Price, () => {
-            removeCartItem(email, item.productID, () => {
-              this.renderAllCartItems(email);
-            });
-          })
+          this.renderCartItem(
+            item.thumbnailUrl,
+            item.brandName,
+            item.Name,
+            item.Price,
+            () => {
+              removeCartItem(email, item.productID, () => {
+                this.renderAllCartItems(email);
+              });
+            }
+          )
         );
         this.$orderTotalValue.innerHTML = totalPrice.toFixed(2) + "$";
       });

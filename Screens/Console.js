@@ -153,7 +153,9 @@ class Console {
 
     this.$productNameInput = new Input("Product name");
     this.$productSmallDescriptionInput = new Input("Small description");
-    this.$productDescriptionInput = new Input("Product description");
+    this.$productDescriptionInput = document.createElement("textarea");
+    this.$productDescriptionInput.rows = "10";
+    this.$productDescriptionInput.placeholder = "Description";
 
     this.$productThumbnailUploadContainer = document.createElement("div");
     this.$productThumbnailUploadContainer.classList.add(
@@ -193,8 +195,8 @@ class Console {
       const smallDescription = this.$productSmallDescriptionInput
         .getValue()
         .replace(`'`, `''`);
-      const description = this.$productDescriptionInput
-        .getValue()
+      const description = this.$productDescriptionInput.value
+        .replace(/\r\n|\r|\n/g, "<br />")
         .replace(`'`, `''`);
       const price = this.$productPriceInput.getValue();
       const quantity = this.$productQuantityInput.getValue();
@@ -238,9 +240,7 @@ class Console {
     this.$addProductContainer.appendChild(
       this.$productSmallDescriptionInput.render()
     );
-    this.$addProductContainer.appendChild(
-      this.$productDescriptionInput.render()
-    );
+    this.$addProductContainer.appendChild(this.$productDescriptionInput);
     this.$addProductContainer.appendChild(
       this.$productThumbnailUploadContainer
     );
@@ -482,7 +482,8 @@ class Console {
           const brandSelection = document.createElement("select");
           const name = new Input("Name", "text");
           const smallDescription = new Input("Small description", "text");
-          const description = new Input("Description", "text");
+          const description = document.createElement("textarea");
+          description.rows = "10";
           const thumbnailUpload = document.createElement("input");
           thumbnailUpload.type = "file";
           thumbnailUpload.accept = "image/*";
@@ -498,7 +499,7 @@ class Console {
           this.$edittingPopup.appendChild(brandSelection);
           this.$edittingPopup.appendChild(name.render());
           this.$edittingPopup.appendChild(smallDescription.render());
-          this.$edittingPopup.appendChild(description.render());
+          this.$edittingPopup.appendChild(description);
           this.$edittingPopup.appendChild(thumbnailUpload);
           this.$edittingPopup.appendChild(imageUpload);
           this.$edittingPopup.appendChild(price.render());
@@ -527,7 +528,7 @@ class Console {
 
               name.setValue(data.Name);
               smallDescription.setValue(data.smallDescription);
-              description.setValue(data.Description);
+              description.value = data.Description;
               price.setValue(data.Price);
               quantity.setValue(data.quantity);
               thumbnailUrl = data.thumbnailUrl;
@@ -544,7 +545,9 @@ class Console {
                     "', `smallDescription` = '" +
                     smallDescription.getValue().replace(`'`, `''`) +
                     "', `Description` = '" +
-                    description.getValue().replace(`'`, `''`) +
+                    description.value
+                      .replace(/\r\n|\r|\n/g, "<br />")
+                      .replace(`'`, `''`) +
                     "', `thumbnailUrl` = '" +
                     thumbnailUrl +
                     "', `imageUrl` = '" +
