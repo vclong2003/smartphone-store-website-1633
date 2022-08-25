@@ -89,6 +89,7 @@ class ProductDetail {
   render() {
     document.title = "Product detail";
     this.$container.innerHTML = "";
+    this.$thumbnailImg.src = "././Assets/Img/IconPlaceHolder.jpg";
     this.$img.src = "././Assets/Img/placeholder_product_img.png";
 
     const id = getUrlParam("productID");

@@ -16,6 +16,13 @@ import {
 class ProductDisplay {
   $viewArea;
   $navBar;
+
+  $splideContainer;
+  $splideTrack;
+  $splideList;
+  $splideSlide;
+  $splideImg;
+
   $container;
 
   $leftPanel;
@@ -42,6 +49,35 @@ class ProductDisplay {
   $resetFilterBtn;
   constructor() {
     this.$viewArea = document.createElement("div");
+
+    this.$splideContainer = document.createElement("div");
+    this.$splideContainer.classList.add("splide");
+
+    this.$splideTrack = document.createElement("div");
+    this.$splideTrack.classList.add("splide__track");
+
+    this.$splideList = document.createElement("ul");
+    this.$splideList.classList.add("splide__list");
+
+    this.$splideSlide = document.createElement("li");
+    this.$splideSlide.classList.add("splide__slide");
+
+    this.$splideImg = document.createElement("img");
+    this.$splideImg.src = "././Assets/Img/placeholder_product_img.png";
+
+    this.$splideContainer.appendChild(this.$splideTrack);
+    this.$splideTrack.appendChild(this.$splideList);
+
+    this.$splideList.appendChild(this.$splideSlide);
+    this.$splideSlide.appendChild(this.$splideImg);
+    this.$viewArea.appendChild(this.$splideContainer);
+
+    new Splide(".splide", {
+      type: "loop",
+      autoplay: true,
+      interval: 2000,
+    }).mount();
+
     this.$container = document.createElement("div");
     this.$container.classList.add("productDisplayContainer");
 
