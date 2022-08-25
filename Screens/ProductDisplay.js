@@ -17,6 +17,7 @@ class ProductDisplay {
   $viewArea;
   $navBar;
 
+  $bannerArea;
   $splideContainer;
   $splideTrack;
   $splideList;
@@ -50,6 +51,9 @@ class ProductDisplay {
   constructor() {
     this.$viewArea = document.createElement("div");
 
+    this.$bannerArea = document.createElement("div");
+    this.$bannerArea.classList.add("productDisplayScreen_bannerArea");
+
     this.$splideContainer = document.createElement("div");
     this.$splideContainer.classList.add("splide");
 
@@ -63,20 +67,15 @@ class ProductDisplay {
     this.$splideSlide.classList.add("splide__slide");
 
     this.$splideImg = document.createElement("img");
-    this.$splideImg.src = "././Assets/Img/placeholder_product_img.png";
+    this.$splideImg.src = "././Assets/Img/Google-Tensor-Info-scaled.jpg";
 
     this.$splideContainer.appendChild(this.$splideTrack);
     this.$splideTrack.appendChild(this.$splideList);
 
     this.$splideList.appendChild(this.$splideSlide);
     this.$splideSlide.appendChild(this.$splideImg);
-    this.$viewArea.appendChild(this.$splideContainer);
 
-    new Splide(".splide", {
-      type: "loop",
-      autoplay: true,
-      interval: 2000,
-    }).mount();
+    this.$bannerArea.appendChild(this.$splideContainer);
 
     this.$container = document.createElement("div");
     this.$container.classList.add("productDisplayContainer");
@@ -230,6 +229,13 @@ class ProductDisplay {
       this.renderItems();
     });
     this.$viewArea.appendChild(this.$navBar.render());
+
+    // this.$viewArea.appendChild(this.$bannerArea);
+    // new Splide(this.$splideContainer, {
+    //   type: "loop",
+    //   autoplay: true,
+    //   interval: 2000,
+    // }).mount();
   }
 
   renderItems() {
