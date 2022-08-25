@@ -14,8 +14,6 @@ import {
   checkCartItemExistance,
 } from "../Components/handleOrders.js";
 class ProductDisplay {
-  userEmail = null;
-
   $viewArea;
   $navBar;
   $container;

@@ -30,9 +30,7 @@ const stack = {
 };
 
 let currentScreen = null;
-
 const myApp = document.getElementById("myApp");
-
 const navigate = (screen, routeParam = null) => {
   if (currentScreen) {
     myApp.removeChild(currentScreen);
@@ -44,7 +42,7 @@ const navigate = (screen, routeParam = null) => {
       currentScreen = myApp.appendChild(stack[screen].render());
     }
   } else {
-    alert("Screen not valid!");
+    console.log("Screen not valid!");
   }
 };
 
