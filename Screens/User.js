@@ -1,19 +1,18 @@
-import { Input } from "../Components/Input.js";
 import { auth } from "../firebaseConfig.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+import {
+  onAuthStateChanged,
+  signOut,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import { changeScreen } from "../navigator.js";
 class User {
   $container;
 
-  $changePwdLayer;
-  $changePwdPopUp;
-  $pwdInput;
-  $repeatPwdInput;
-  $changeBtn;
-  $cancelBtn;
-
   $userInfoContainer;
   $userEmail;
+  emailValue;
 
   $userActionContainer;
   $changePwdButton;
@@ -25,24 +24,6 @@ class User {
   constructor() {
     this.$container = document.createElement("div");
     this.$container.classList.add("userScreen_container");
-
-    this.$changePwdLayer = document.createElement("div");
-    this.$changePwdLayer.classList.add("userScreen_changePwdLayer");
-    this.$changePwdPopUp = document.createElement("div");
-    this.$changePwdPopUp.classList.add("userScreen_changePwdPopup");
-    this.$pwdInput = new Input("Password", "password");
-    this.$repeatPwdInput = new Input("Reapeat password", "password");
-    this.$changeBtn = document.createElement("button");
-    this.$changeBtn.classList.add("userScreen_changeBtn");
-    this.$changeBtn.innerHTML = "Change";
-    this.$cancelBtn = document.createElement("button");
-    this.$cancelBtn.classList.add("userScreen_cancelBtn");
-    this.$cancelBtn.innerHTML = "Cancel";
-    this.$changePwdPopUp.appendChild(this.$pwdInput.render());
-    this.$changePwdPopUp.appendChild(this.$repeatPwdInput.render());
-    this.$changePwdPopUp.appendChild(this.$changeBtn);
-    this.$changePwdPopUp.appendChild(this.$cancelBtn);
-    this.$changePwdLayer.appendChild(this.$changePwdPopUp);
 
     this.$userInfoContainer = document.createElement("div");
     this.$userInfoContainer.classList.add("userScreen_userInfoContainer");
@@ -65,6 +46,50 @@ class User {
     this.$ordersContainerTitle.innerHTML = "Orders";
     this.$ordersContainer.appendChild(this.$ordersContainerTitle);
 
+    this.$changePwdButton.addEventListener("click", () => {
+      alertify.prompt(
+        "",
+        "Enter current password",
+        "",
+        function (evt, value) {
+          const credential = EmailAuthProvider.credential(
+            auth.currentUser.email,
+            value
+          );
+          reauthenticateWithCredential(auth.currentUser, credential)
+            .then(() => {
+              // User re-authenticated.
+              alertify.prompt(
+                "",
+                "Enter new password",
+                "",
+                function (evt, value) {
+                  updatePassword(auth.currentUser, value)
+                    .then(() => {
+                      // Update successful.
+                      alertify.success("Password updated successfully!", 3);
+                    })
+                    .catch((error) => {
+                      // An error ocurred
+                      console.log(error.code);
+                    });
+                },
+                function () {
+                  alertify.error("Cancelled!", 1);
+                }
+              );
+            })
+            .catch((error) => {
+              // An error ocurred
+              console.log(error.code);
+            });
+        },
+        function () {
+          alertify.error("Cancelled!", 1);
+        }
+      );
+    });
+
     this.$logoutBtn.addEventListener("click", () => {
       signOut(auth)
         .then(() => {
@@ -83,8 +108,8 @@ class User {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.$userEmail.innerHTML = user.email;
-        this.$container.appendChild(this.$changePwdLayer);
+        this.emailValue = user.email;
+        this.$userEmail.innerHTML = this.emailValue;
         this.$container.appendChild(this.$userInfoContainer);
         this.$container.appendChild(this.$userActionContainer);
         this.$container.appendChild(this.$ordersContainer);

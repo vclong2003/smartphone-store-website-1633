@@ -170,7 +170,7 @@
   flex-direction: row;
   justify-content: center;
 }
-.productDisplayScreen_bannerArea{
+.productDisplayScreen_bannerArea {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -423,18 +423,6 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-}
-.productDetailTopBar {
-  width: 98%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 1%;
-}
-.productDetailTopBar img {
-  width: 2%;
-  cursor: pointer;
 }
 .productDetailContainer {
   width: 60%;
@@ -942,71 +930,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.userScreen_topbar {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 3%;
-  padding-top: 1%;
-}
-.userScreen_topbar img {
-  width: 2%;
-  cursor: pointer;
-}
-.userScreen_changePwdLayer {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  background-color: #00000071;
-  visibility: hidden;
-}
-.userScreen_changePwdPopup {
-  width: 20%;
-  display: flex;
-  flex-direction: row;
-  background-color: rgb(231, 240, 214);
-  padding: 1%;
-  border-radius: 18px;
-  flex-wrap: wrap;
-}
-.userScreen_changePwdPopup input {
-  border: none;
-  outline: none;
-  padding: 3%;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  margin-bottom: 4%;
-  border-radius: 14px;
-  width: 94%;
-}
-.userScreen_changePwdPopup button {
-  border: none;
-  outline: none;
-  padding-top: 2%;
-  padding-bottom: 2%;
-  padding-left: 5%;
-  padding-right: 5%;
-  font-family: "Poppins", sans-serif;
-  margin-right: 3%;
-  border-radius: 12px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-}
-.userScreen_changeBtn {
-  background-color: #6a983c;
-  color: white;
-}
-.userScreen_cancelBtn {
-  background-color: rgb(231, 230, 230);
 }
 .userScreen_userInfoContainer {
   padding-top: 1%;

@@ -95,19 +95,14 @@ class Register {
   createNewAccount(email, password) {
     toggleElement(this.$loadingLayer.render());
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
+      .then(() => {
         toggleElement(this.$loadingLayer.render());
         changeScreen("introScreen");
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
+        console.log(errorCode);
         toggleElement(this.$loadingLayer.render());
-        // ..
       });
   }
 }

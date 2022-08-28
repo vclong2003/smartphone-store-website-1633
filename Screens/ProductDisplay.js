@@ -230,12 +230,12 @@ class ProductDisplay {
     });
     this.$viewArea.appendChild(this.$navBar.render());
 
-    // this.$viewArea.appendChild(this.$bannerArea);
-    // new Splide(this.$splideContainer, {
-    //   type: "loop",
-    //   autoplay: true,
-    //   interval: 2000,
-    // }).mount();
+    this.$viewArea.appendChild(this.$bannerArea);
+    new Splide(this.$splideContainer, {
+      type: "loop",
+      autoplay: true,
+      interval: 2000,
+    }).mount();
   }
 
   renderItems() {

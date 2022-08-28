@@ -104,7 +104,7 @@ const paginate = (rawData = [{}], $container) => {
       $container.appendChild($paginationContainer);
       if (previous) {
         previous.classList.remove("paginateItem_active");
-        window.scrollTo(0, 150);
+        window.scrollTo(0, 650);
       }
       paginateItem.classList.add("paginateItem_active");
       previous = paginateItem;
