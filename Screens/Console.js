@@ -64,8 +64,10 @@ class Console {
   $productQuantityInput;
   $addProductBtn;
 
-  $test;
-  $testBtn;
+  $addCarouselContainer;
+  $carouselNameInput;
+  $carouselImgUpload;
+  $addCarouselBtn;
 
   constructor() {
     this.$container = document.createElement("div");
@@ -249,11 +251,25 @@ class Console {
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
     this.$addProductContainer.appendChild(this.$addProductBtn);
 
+    this.$addCarouselContainer = document.createElement("div");
+    this.$addCarouselContainer.classList.add("addContentContainer");
+    this.$carouselNameInput = new Input("Name");
+    this.$carouselImgUpload = document.createElement("input");
+    this.$carouselImgUpload.type = "file";
+    this.$carouselImgUpload.accept = "image/*";
+    this.$addCarouselBtn = document.createElement("button");
+    this.$addCarouselBtn.innerHTML = "Add carousel image";
+
+    this.$addCarouselContainer.appendChild(this.$carouselNameInput);
+    this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
+    this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
+
     this.$addTabContent = document.createElement("div");
     this.$addTabContent.classList.add("consoleAddTabContent");
     this.$addTabContent.appendChild(this.$addCategoryContainer);
     this.$addTabContent.appendChild(this.$addBrandContainer);
     this.$addTabContent.appendChild(this.$addProductContainer);
+    this.$addTabContent.appendChild(this.$addCarouselContainer);
 
     this.$editCategoryContainer = document.createElement("div");
     this.$editCategoryContainer.classList.add("editCategoryContainer");
