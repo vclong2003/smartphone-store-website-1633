@@ -252,32 +252,32 @@ class Console {
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
     this.$addProductContainer.appendChild(this.$addProductBtn);
 
-    this.$addCarouselContainer = document.createElement("div");
-    this.$addCarouselContainer.classList.add("addContentContainer");
-    this.$carouselNameInput = new Input("Name");
-    this.$carouselImgUpload = document.createElement("input");
-    this.$carouselImgUpload.type = "file";
-    this.$carouselImgUpload.accept = "image/*";
-    this.$addCarouselBtn = document.createElement("button");
-    this.$addCarouselBtn.innerHTML = "Add carousel image";
-    this.$addCarouselBtn.addEventListener("click", () => {
-      if (this.$carouselImgUpload.files[0]) {
-        this.uploadCarouselImage(this.$carouselImgUpload.files[0], (url) => {
-          console.log(url);
-        });
-      }
-    });
+    // this.$addCarouselContainer = document.createElement("div");
+    // this.$addCarouselContainer.classList.add("addContentContainer");
+    // this.$carouselNameInput = new Input("Name");
+    // this.$carouselImgUpload = document.createElement("input");
+    // this.$carouselImgUpload.type = "file";
+    // this.$carouselImgUpload.accept = "image/*";
+    // this.$addCarouselBtn = document.createElement("button");
+    // this.$addCarouselBtn.innerHTML = "Add carousel image";
+    // this.$addCarouselBtn.addEventListener("click", () => {
+    //   if (this.$carouselImgUpload.files[0]) {
+    //     this.uploadCarouselImage(this.$carouselImgUpload.files[0], (url) => {
+    //       console.log(url);
+    //     });
+    //   }
+    // });
 
-    this.$addCarouselContainer.appendChild(this.$carouselNameInput.render());
-    this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
-    this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
+    // this.$addCarouselContainer.appendChild(this.$carouselNameInput.render());
+    // this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
+    // this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
 
     this.$addTabContent = document.createElement("div");
     this.$addTabContent.classList.add("consoleAddTabContent");
     this.$addTabContent.appendChild(this.$addCategoryContainer);
     this.$addTabContent.appendChild(this.$addBrandContainer);
     this.$addTabContent.appendChild(this.$addProductContainer);
-    this.$addTabContent.appendChild(this.$addCarouselContainer);
+    // this.$addTabContent.appendChild(this.$addCarouselContainer);
 
     this.$editCategoryContainer = document.createElement("div");
     this.$editCategoryContainer.classList.add("editCategoryContainer");
@@ -342,20 +342,20 @@ class Console {
       });
     });
   }
-  async deleteImgFromFirebase(imgUrl, _callback) {
-    toggleElement(this.$loadingLayer.render());
-    const imgRef = await ref(storage, imgUrl);
-    await  deleteObject(imgRef)
-      .then(() => {
-        toggleElement(this.$loadingLayer.render());
-        _callback();
-      })
-      .catch((error) => {
-        toggleElement(this.$loadingLayer.render());
-        console.log(error);
-        _callback();
-      });
-  }
+  // `async deleteImgFromFirebase(imgUrl, _callback) {
+  //   toggleElement(this.$loadingLayer.render());
+  //   const imgRef = await ref(storage, imgUrl);
+  //   await  deleteObject(imgRef)
+  //     .then(() => {
+  //       toggleElement(this.$loadingLayer.render());
+  //       _callback();
+  //     })
+  //     .catch((error) => {
+  //       toggleElement(this.$loadingLayer.render());
+  //       console.log(error);
+  //       _callback();
+  //     });
+  // }`
   updateCategorySelection() {
     this.$productCategorySelection.innerHTML = "";
     fetchCategoryList((data) => {
@@ -656,17 +656,25 @@ class Console {
           toggleElement(this.$edittingLayer);
           this.renderEditorPopup(
             () => {
-              this.deleteImgFromFirebase(item.thumbnailUrl, () => {
-                this.deleteImgFromFirebase(item.imageUrl, () => {
-                  customQuery(
-                    "DELETE FROM `product` WHERE productID = " + item.productID,
-                    () => {
-                      this.handleProductEditItems();
-                      toggleElement(this.$edittingLayer);
-                    }
-                  );
-                });
-              });
+              // this.deleteImgFromFirebase(item.thumbnailUrl, () => {
+              //   this.deleteImgFromFirebase(item.imageUrl, () => {
+              //     customQuery(
+              //       "DELETE FROM `product` WHERE productID = " + item.productID,
+              //       () => {
+              //         this.handleProductEditItems();
+              //         toggleElement(this.$edittingLayer);
+              //       }
+              //     );
+              //   });
+              // });
+              toggleElement(this.$edittingLayer);
+              customQuery(
+                "DELETE FROM `product` WHERE productID = " + item.productID,
+                () => {
+                  this.handleProductEditItems();
+                  toggleElement(this.$edittingLayer);
+                }
+              );
             },
             () => {
               toggleElement(this.$edittingLayer);

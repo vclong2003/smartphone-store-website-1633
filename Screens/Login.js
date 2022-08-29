@@ -117,7 +117,7 @@ class Login {
   }
   render() {
     document.title = "Login";
-    this.$img.src = "./Assets/Img/auth_background.png";
+    this.$img.src = "./Assets/Img/auth_background_resized.png";
     this.$imgContainer.appendChild(this.$img);
 
     this.$emailInput.clearValue();
