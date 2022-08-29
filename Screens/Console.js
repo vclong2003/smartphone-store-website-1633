@@ -2,6 +2,7 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
+  deleteObject,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
 import { addBrand, fetchBrandList } from "../Components/handleBrands.js";
 import {
@@ -259,8 +260,15 @@ class Console {
     this.$carouselImgUpload.accept = "image/*";
     this.$addCarouselBtn = document.createElement("button");
     this.$addCarouselBtn.innerHTML = "Add carousel image";
+    this.$addCarouselBtn.addEventListener("click", () => {
+      if (this.$carouselImgUpload.files[0]) {
+        this.uploadCarouselImage(this.$carouselImgUpload.files[0], (url) => {
+          console.log(url);
+        });
+      }
+    });
 
-    this.$addCarouselContainer.appendChild(this.$carouselNameInput);
+    this.$addCarouselContainer.appendChild(this.$carouselNameInput.render());
     this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
     this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
 
@@ -323,6 +331,30 @@ class Console {
         _function(downloadURL);
       });
     });
+  }
+  uploadCarouselImage(file, _function) {
+    toggleElement(this.$loadingLayer.render());
+    const storageRef = ref(storage, "carouselImgs/" + file.name);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        toggleElement(this.$loadingLayer.render());
+        _function(downloadURL);
+      });
+    });
+  }
+  async deleteImgFromFirebase(imgUrl, _callback) {
+    toggleElement(this.$loadingLayer.render());
+    const imgRef = await ref(storage, imgUrl);
+    await  deleteObject(imgRef)
+      .then(() => {
+        toggleElement(this.$loadingLayer.render());
+        _callback();
+      })
+      .catch((error) => {
+        toggleElement(this.$loadingLayer.render());
+        console.log(error);
+        _callback();
+      });
   }
   updateCategorySelection() {
     this.$productCategorySelection.innerHTML = "";
@@ -624,13 +656,17 @@ class Console {
           toggleElement(this.$edittingLayer);
           this.renderEditorPopup(
             () => {
-              customQuery(
-                "DELETE FROM `product` WHERE productID = " + item.productID,
-                () => {
-                  this.handleProductEditItems();
-                  toggleElement(this.$edittingLayer);
-                }
-              );
+              this.deleteImgFromFirebase(item.thumbnailUrl, () => {
+                this.deleteImgFromFirebase(item.imageUrl, () => {
+                  customQuery(
+                    "DELETE FROM `product` WHERE productID = " + item.productID,
+                    () => {
+                      this.handleProductEditItems();
+                      toggleElement(this.$edittingLayer);
+                    }
+                  );
+                });
+              });
             },
             () => {
               toggleElement(this.$edittingLayer);
