@@ -1,7 +1,7 @@
 import { NavBar } from "../Components/NavBar.js";
 import { ratingStar } from "../Components/RatingStart.js";
 import { changeScreen } from "../navigator.js";
-import { auth } from "../firebaseConfig.js";
+import { auth} from "../firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
 import {
   loadItems,
@@ -51,31 +51,31 @@ class ProductDisplay {
   constructor() {
     this.$viewArea = document.createElement("div");
 
-    this.$bannerArea = document.createElement("div");
-    this.$bannerArea.classList.add("productDisplayScreen_bannerArea");
+    // this.$bannerArea = document.createElement("div");
+    // this.$bannerArea.classList.add("productDisplayScreen_bannerArea");
 
-    this.$splideContainer = document.createElement("div");
-    this.$splideContainer.classList.add("splide");
+    // this.$splideContainer = document.createElement("div");
+    // this.$splideContainer.classList.add("splide");
 
-    this.$splideTrack = document.createElement("div");
-    this.$splideTrack.classList.add("splide__track");
+    // this.$splideTrack = document.createElement("div");
+    // this.$splideTrack.classList.add("splide__track");
 
-    this.$splideList = document.createElement("ul");
-    this.$splideList.classList.add("splide__list");
+    // this.$splideList = document.createElement("ul");
+    // this.$splideList.classList.add("splide__list");
 
-    this.$splideSlide = document.createElement("li");
-    this.$splideSlide.classList.add("splide__slide");
+    // this.$splideSlide = document.createElement("li");
+    // this.$splideSlide.classList.add("splide__slide");
 
-    this.$splideImg = document.createElement("img");
-    this.$splideImg.src = "././Assets/Img/Google-Tensor-Info-scaled.jpg";
+    // this.$splideImg = document.createElement("img");
+    // this.$splideImg.src = "././Assets/Img/Google-Tensor-Info-scaled.jpg";
 
-    this.$splideContainer.appendChild(this.$splideTrack);
-    this.$splideTrack.appendChild(this.$splideList);
+    // this.$splideContainer.appendChild(this.$splideTrack);
+    // this.$splideTrack.appendChild(this.$splideList);
 
-    this.$splideList.appendChild(this.$splideSlide);
-    this.$splideSlide.appendChild(this.$splideImg);
+    // this.$splideList.appendChild(this.$splideSlide);
+    // this.$splideSlide.appendChild(this.$splideImg);
 
-    this.$bannerArea.appendChild(this.$splideContainer);
+    // this.$bannerArea.appendChild(this.$splideContainer);
 
     this.$container = document.createElement("div");
     this.$container.classList.add("productDisplayContainer");

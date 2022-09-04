@@ -3,6 +3,7 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
+  listAll,
 } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-storage.js";
 import { addBrand, fetchBrandList } from "../Components/handleBrands.js";
 import {
@@ -252,32 +253,32 @@ class Console {
     this.$addProductContainer.appendChild(this.$productQuantityInput.render());
     this.$addProductContainer.appendChild(this.$addProductBtn);
 
-    // this.$addCarouselContainer = document.createElement("div");
-    // this.$addCarouselContainer.classList.add("addContentContainer");
-    // this.$carouselNameInput = new Input("Name");
-    // this.$carouselImgUpload = document.createElement("input");
-    // this.$carouselImgUpload.type = "file";
-    // this.$carouselImgUpload.accept = "image/*";
-    // this.$addCarouselBtn = document.createElement("button");
-    // this.$addCarouselBtn.innerHTML = "Add carousel image";
-    // this.$addCarouselBtn.addEventListener("click", () => {
-    //   if (this.$carouselImgUpload.files[0]) {
-    //     this.uploadCarouselImage(this.$carouselImgUpload.files[0], (url) => {
-    //       console.log(url);
-    //     });
-    //   }
-    // });
+    this.$addCarouselContainer = document.createElement("div");
+    this.$addCarouselContainer.classList.add("addContentContainer");
+    this.$carouselNameInput = new Input("Name");
+    this.$carouselImgUpload = document.createElement("input");
+    this.$carouselImgUpload.type = "file";
+    this.$carouselImgUpload.accept = "image/*";
+    this.$addCarouselBtn = document.createElement("button");
+    this.$addCarouselBtn.innerHTML = "Add carousel image";
+    this.$addCarouselBtn.addEventListener("click", () => {
+      if (this.$carouselImgUpload.files[0]) {
+        this.uploadCarouselImage(this.$carouselImgUpload.files[0], (url) => {
+          console.log(url);
+        });
+      }
+    });
 
-    // this.$addCarouselContainer.appendChild(this.$carouselNameInput.render());
-    // this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
-    // this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
+    this.$addCarouselContainer.appendChild(this.$carouselNameInput.render());
+    this.$addCarouselContainer.appendChild(this.$carouselImgUpload);
+    this.$addCarouselContainer.appendChild(this.$addCarouselBtn);
 
     this.$addTabContent = document.createElement("div");
     this.$addTabContent.classList.add("consoleAddTabContent");
     this.$addTabContent.appendChild(this.$addCategoryContainer);
     this.$addTabContent.appendChild(this.$addBrandContainer);
     this.$addTabContent.appendChild(this.$addProductContainer);
-    // this.$addTabContent.appendChild(this.$addCarouselContainer);
+    this.$addTabContent.appendChild(this.$addCarouselContainer);
 
     this.$editCategoryContainer = document.createElement("div");
     this.$editCategoryContainer.classList.add("editCategoryContainer");
@@ -322,6 +323,17 @@ class Console {
       history.back();
     });
   }
+  checkImgExistance(fileName = "", _callback) {
+    listAll(ref(storage, "productImages/"))
+      .then((res) => {
+        res.items.map((item) => {
+          console.log(item._location.path_);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   uploadImage(file, _function) {
     toggleElement(this.$loadingLayer.render());
     const storageRef = ref(storage, "productImages/" + file.name);
@@ -342,20 +354,19 @@ class Console {
       });
     });
   }
-  // `async deleteImgFromFirebase(imgUrl, _callback) {
-  //   toggleElement(this.$loadingLayer.render());
-  //   const imgRef = await ref(storage, imgUrl);
-  //   await  deleteObject(imgRef)
-  //     .then(() => {
-  //       toggleElement(this.$loadingLayer.render());
-  //       _callback();
-  //     })
-  //     .catch((error) => {
-  //       toggleElement(this.$loadingLayer.render());
-  //       console.log(error);
-  //       _callback();
-  //     });
-  // }`
+  deleteImgFromFirebase(fileRef, _callback) {
+    toggleElement(this.$loadingLayer.render());
+    deleteObject(fileRef)
+      .then(() => {
+        toggleElement(this.$loadingLayer.render());
+        _callback();
+      })
+      .catch((error) => {
+        toggleElement(this.$loadingLayer.render());
+        console.log(error);
+        _callback();
+      });
+  }
   updateCategorySelection() {
     this.$productCategorySelection.innerHTML = "";
     fetchCategoryList((data) => {
@@ -656,29 +667,30 @@ class Console {
           toggleElement(this.$edittingLayer);
           this.renderEditorPopup(
             () => {
-              // this.deleteImgFromFirebase(item.thumbnailUrl, () => {
-              //   this.deleteImgFromFirebase(item.imageUrl, () => {
-              //     customQuery(
-              //       "DELETE FROM `product` WHERE productID = " + item.productID,
-              //       () => {
-              //         this.handleProductEditItems();
-              //         toggleElement(this.$edittingLayer);
-              //       }
-              //     );
-              //   });
-              // });
-              toggleElement(this.$edittingLayer);
-              customQuery(
-                "DELETE FROM `product` WHERE productID = " + item.productID,
+              this.deleteImgFromFirebase(
+                ref(storage, item.thumbnailUrl),
                 () => {
-                  this.handleProductEditItems();
-                  toggleElement(this.$edittingLayer);
+                  this.deleteImgFromFirebase(
+                    ref(storage, item.imageUrl),
+                    () => {
+                      customQuery(
+                        "DELETE FROM `product` WHERE productID = " +
+                          item.productID,
+                        () => {
+                          this.handleProductEditItems();
+                          toggleElement(this.$edittingLayer);
+                        }
+                      );
+                    }
+                  );
                 }
               );
             },
             () => {
               toggleElement(this.$edittingLayer);
               alertify.notify("Cancelled!", "error", 1);
+              console.log("thumb", ref(storage, item.thumbnailUrl));
+              console.log("img", ref(storage, item.imageUrl));
             }
           );
         });
