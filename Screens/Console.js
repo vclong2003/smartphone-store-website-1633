@@ -175,6 +175,19 @@ class Console {
     );
     this.$productThumbnailUploadContainer.appendChild(this.$thumbnailInput);
 
+    // this.$thumbnailInput.addEventListener("change", () => {
+    //   console.log(this.$thumbnailInput.files[0].name);
+    //   this.checkImgExistance(
+    //     this.$thumbnailInput.files[0].name,
+    //     () => {
+    //       console.log("existed");
+    //     },
+    //     () => {
+    //       console.log("not existed");
+    //     }
+    //   );
+    // });
+
     this.$productImageUploadContainer = document.createElement("div");
     this.$productImageUploadContainer.classList.add(
       "productImageUploadContainer"
@@ -206,35 +219,51 @@ class Console {
       const quantity = this.$productQuantityInput.getValue();
 
       if (this.$thumbnailInput.files[0]) {
-        this.uploadImage(this.$thumbnailInput.files[0], (url) => {
-          thumbnailUrl = url;
-          if (this.$imageInput.files[0]) {
-            this.uploadImage(this.$imageInput.files[0], (url) => {
-              imageUrl = url;
-              jQuery.ajax({
-                type: "POST",
-                url: "action.php",
-                dataType: "json",
-                data: {
-                  functionname: "addProduct",
-                  catID: catID,
-                  brandID: brandID,
-                  Name: name,
-                  smallDescription: smallDescription,
-                  Description: description,
-                  thumbnailUrl: thumbnailUrl,
-                  imageUrl: imageUrl,
-                  Price: price,
-                  quantity: quantity,
+        this.checkImgExistance(
+          this.$thumbnailInput.files[0].name,
+          () => {
+            if (this.$imageInput.files[0]) {
+              this.checkImgExistance(
+                this.$imageInput.files[0].name,
+                () => {
+                  this.uploadImage(this.$thumbnailInput.files[0], (url) => {
+                    thumbnailUrl = url;
+                    this.uploadImage(this.$imageInput.files[0], (url) => {
+                      imageUrl = url;
+                      jQuery.ajax({
+                        type: "POST",
+                        url: "action.php",
+                        dataType: "json",
+                        data: {
+                          functionname: "addProduct",
+                          catID: catID,
+                          brandID: brandID,
+                          Name: name,
+                          smallDescription: smallDescription,
+                          Description: description,
+                          thumbnailUrl: thumbnailUrl,
+                          imageUrl: imageUrl,
+                          Price: price,
+                          quantity: quantity,
+                        },
+                        success: function (data) {
+                          alertify.notify("Successful!", "success", 1);
+                          console.log(data);
+                        },
+                      });
+                    });
+                  });
                 },
-                success: function (data) {
-                  alertify.notify("Successful!", "success", 1);
-                  console.log(data);
-                },
-              });
-            });
+                () => {
+                  alertify.notify("Image exited in the database!", "error", 2);
+                }
+              );
+            }
+          },
+          () => {
+            alertify.notify("Thumbnail exited in the database!", "error", 2);
           }
-        });
+        );
       }
     });
 
@@ -323,12 +352,20 @@ class Console {
       history.back();
     });
   }
-  checkImgExistance(fileName = "", _callback) {
+  checkImgExistance(fileName = "", _notExistedCallback, _existedCallback) {
     listAll(ref(storage, "productImages/"))
       .then((res) => {
+        let exist = false;
         res.items.map((item) => {
-          console.log(item._location.path_);
+          if (item._location.path_.includes(fileName)) {
+            exist = true;
+          }
         });
+        if (exist) {
+          _existedCallback();
+        } else {
+          _notExistedCallback();
+        }
       })
       .catch((error) => {
         console.log(error);
